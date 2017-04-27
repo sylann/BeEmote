@@ -242,5 +242,5 @@ ModelManifest.xml
 .fake/
 
 # Custom Credential Data
-TemporaryDatabase.json
-exampleResponse.json
+*.sql
+Credentials.cs

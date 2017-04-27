@@ -95,6 +95,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeEmote.Core\BeEmote.Core.csproj">
+      <Project>{53842a7f-b2eb-44b3-ab29-4215b8559fda}</Project>
+      <Name>BeEmote.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BeEmote.Services\BeEmote.Services.csproj">
+      <Project>{a6ed0062-53fd-4030-a090-68e23d6f6bbd}</Project>
+      <Name>BeEmote.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

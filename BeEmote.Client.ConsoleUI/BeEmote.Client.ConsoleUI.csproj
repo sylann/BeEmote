@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{53842A7F-B2EB-44B3-AB29-4215B8559FDA}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BeEmote.Core</RootNamespace>
-    <AssemblyName>BeEmote.Core</AssemblyName>
+    <ProjectGuid>{F2EB9F51-CEED-49D4-A5D0-4271BB059E81}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>BeEmote.Client.ConsoleUI</RootNamespace>
+    <AssemblyName>BeEmote.Client.ConsoleUI</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,9 +32,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,28 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\JsonExamples.cs" />
-    <Compile Include="EmotionApi\Base\Emotion.cs" />
-    <Compile Include="EmotionApi\Base\Emotions.cs" />
-    <Compile Include="EmotionApi\Base\Scores.cs" />
-    <Compile Include="EmotionApi\Face.cs" />
-    <Compile Include="EmotionApi\EmotionApiResponse.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EmotionApi\Base\FaceRectangle.cs" />
-    <Compile Include="TextAnalyticsApi\Language.cs" />
-    <Compile Include="TextAnalyticsApi\TextAnalyticsApiResponse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\EmotionApiResponse1.json" />
-    <None Include="Data\EmotionApiResponse2.json" />
-    <None Include="packages.config" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BeEmote.Core\BeEmote.Core.csproj">
+      <Project>{53842a7f-b2eb-44b3-ab29-4215b8559fda}</Project>
+      <Name>BeEmote.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BeEmote.Services\BeEmote.Services.csproj">
+      <Project>{a6ed0062-53fd-4030-a090-68e23d6f6bbd}</Project>
+      <Name>BeEmote.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

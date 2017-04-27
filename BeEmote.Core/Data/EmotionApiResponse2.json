@@ -1,0 +1,74 @@
+[
+  {
+    "faceRectangle": {
+      "height": 113,
+      "left": 215,
+      "top": 432,
+      "width": 113
+    },
+    "scores": {
+      "anger": 0.00007885037,
+      "contempt": 1.76995655e-7,
+      "disgust": 0.0000102558142,
+      "fear": 6.92683155e-9,
+      "happiness": 0.9999098,
+      "neutral": 6.21828e-7,
+      "sadness": 1.526979e-8,
+      "surprise": 2.82483484e-7
+    }
+  },
+  {
+    "faceRectangle": {
+      "height": 111,
+      "left": 322,
+      "top": 207,
+      "width": 111
+    },
+    "scores": {
+      "anger": 3.129956e-13,
+      "contempt": 1.925739e-11,
+      "disgust": 6.617225e-13,
+      "fear": 5.770226e-17,
+      "happiness": 1,
+      "neutral": 1.25565336e-10,
+      "sadness": 2.19273384e-14,
+      "surprise": 8.63892128e-13
+    }
+  },
+  {
+    "faceRectangle": {
+      "height": 96,
+      "left": 191,
+      "top": 99,
+      "width": 96
+    },
+    "scores": {
+      "anger": 0.000128725776,
+      "contempt": 2.58404185e-7,
+      "disgust": 0.000016522341,
+      "fear": 1.03438637e-7,
+      "happiness": 0.999853551,
+      "neutral": 5.45430964e-7,
+      "sadness": 1.79227754e-7,
+      "surprise": 1.35705847e-7
+    }
+  },
+  {
+    "faceRectangle": {
+      "height": 92,
+      "left": 434,
+      "top": 214,
+      "width": 92
+    },
+    "scores": {
+      "anger": 5.87925e-11,
+      "contempt": 9.444531e-11,
+      "disgust": 4.01519484e-10,
+      "fear": 4.57860034e-14,
+      "happiness": 1,
+      "neutral": 2.43707787e-9,
+      "sadness": 1.86669582e-12,
+      "surprise": 5.28587035e-11
+    }
+  }
+]
