@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeEmote.Core;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -9,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BeEmote.Services
 {
+    /// <summary>
+    /// Dedicated to preparing and sending requests to the API
+    /// </summary>
     public class RequestManager
     {
         #region Public Methods
@@ -21,7 +22,7 @@ namespace BeEmote.Services
         public async Task<string> MakeEmotionRequest(string ImagePath)
         {
             return await MakeRequest(new RequestConfiguration(
-                "emotion/v1.0/recognize",
+                "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize",
                 GetImageAsByteArray(ImagePath),
                 "application/octet-stream",
                 Credentials.EmotionKey));
@@ -36,7 +37,7 @@ namespace BeEmote.Services
         public async Task<string> MakeTextAnalyticsRequest(string Query, string JsonBody)
         {
             return await MakeRequest(new RequestConfiguration(
-                $"text/analytics/v2.0/{Query}",
+                $"https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/{Query}",
                 GetJsonAsByteArray(JsonBody),
                 "application/json",
                 Credentials.TextAnalyticsKey

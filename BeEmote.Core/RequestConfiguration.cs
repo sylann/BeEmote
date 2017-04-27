@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BeEmote.Services
+namespace BeEmote.Core
 {
     /// <summary>
     /// Configuration to use with a Request to the Microsoft Congnitive Services
@@ -34,21 +34,16 @@ namespace BeEmote.Services
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="query">The lacking part of the URI after the host</param>
+        /// <param name="Uri"></param>
         /// <param name="Data"></param>
         /// <param name="ContentType"></param>
         /// <param name="CredentialKey"></param>
-        public RequestConfiguration(string query, byte[] Data, string ContentType, string CredentialKey)
+        public RequestConfiguration(string Uri, byte[] Data, string ContentType, string CredentialKey)
         {
-            Uri = $"{host}{query}";
+            this.Uri = Uri;
             this.Data = Data;
             this.ContentType = ContentType;
             this.CredentialKey = CredentialKey;
         }
-
-        /// <summary>
-        /// Host of the Microsoft Cognitive services.
-        /// </summary>
-        private string host = "https://westus.api.cognitive.microsoft.com/";
     }
 }

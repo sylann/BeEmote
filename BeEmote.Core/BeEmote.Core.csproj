@@ -51,6 +51,7 @@
     <Compile Include="EmotionApi\EmotionApiResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmotionApi\Base\FaceRectangle.cs" />
+    <Compile Include="RequestConfiguration.cs" />
     <Compile Include="TextAnalyticsApi\Language.cs" />
     <Compile Include="TextAnalyticsApi\TextAnalyticsApiResponse.cs" />
   </ItemGroup>
