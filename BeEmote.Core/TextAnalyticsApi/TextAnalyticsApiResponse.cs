@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeEmote.Core
 {
@@ -20,58 +16,40 @@ namespace BeEmote.Core
         /// <summary>
         /// The detected language of the text. Only one can be detected.
         /// </summary>
-        public Language Language { get; private set; }
+        public Language Language { get; set; }
 
         /// <summary>
         /// The key phrases found in the text are the expressions
         /// transporting the most part of the sens in the text.
         /// Requires that the language be known. Not every languages are supported.
         /// </summary>
-        public List<string> KeyPhrases { get; private set; }
+        public List<string> KeyPhrases { get; set; }
 
         /// <summary>
         /// The sentiment score for the analysed text.
         /// A higher value means the text feels more positive and reciprocally.
         /// Requires that the language be known. Not every languages are supported.
         /// </summary>
-        public double Score { get; private set; }
+        public double Score { get; set; }
 
         #endregion
 
         #region Public Methods
 
-        /// <summary>
-        /// Default constructor.
-        /// Parse the detectedLanguages from the response body into the Language property.
-        /// </summary>
-        public TextAnalyticsApiResponse(string json)
+
+        public void Describe()
         {
-            // Phase 1: Get the language from the Text Analytics Cognitive service
-            JObject raw = JObject.Parse(json);
-            Language = raw["documents"][0]["detectedLanguages"][0].ToObject<Language>();
+            Console.WriteLine($"\n==========================\nText Analytics API Result:\n");
+            Console.WriteLine($"Language detected: {Language.Name}[{Language.Iso6391Name}] ({HumanReadable(Language.Score)})");
+            Console.WriteLine($"Sentiment: {HumanReadable(Score)}");
+            Console.WriteLine($"Key phrases:\n{KeyPhrases.Aggregate((result, phrase) => result == null ? $"'{phrase}'" : $"{result}, '{phrase}'")}");
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="json"></param>
-        public void UpdateKeyPhrases(string json)
-        {
-            // Phase 2: Get the Key Phrases from the Text Analytics Cognitive service
-            JObject raw = JObject.Parse(json);
-            KeyPhrases = raw["documents"][0]["keyPhrases"].ToObject<List<string>>();
-        }
+        #endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="json"></param>
-        public void UpdateScore(string json)
-        {
-            // Phase 3: Get the Sentiment from the Text Analytics Cognitive service
-            JObject raw = JObject.Parse(json);
-            Score = (double)raw["documents"][0]["score"];
-        }
+        #region Private Methods
+
+        private string HumanReadable(double score) => $"{Math.Round(score * 100, 2)}%";
 
         #endregion
     }

@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BeEmote.Core
@@ -32,10 +32,16 @@ namespace BeEmote.Core
         /// </summary>
         public void Describe()
         {
-            System.Console.WriteLine($"{NbFaces} trouvé(s)\n");
+            Console.WriteLine($"\n===================\nEmotion API Result:\n");
+            if (Faces.Count == 0)
+                Console.WriteLine($"Oow. No face were found in your image.\n");
+            else
+            {
+                Console.WriteLine($"{NbFaces} face(s) found!\n");
+                foreach (Face face in Faces)
+                    face.Describe();
+            }
 
-            foreach (Face face in Faces)
-                face.Describe();
         }
 
         #endregion
@@ -46,10 +52,9 @@ namespace BeEmote.Core
         /// Default Constructor.
         /// Deserialize the json response into this composite class.
         /// </summary>
-        public EmotionApiResponse(string json)
+        public EmotionApiResponse(List<Face> Faces)
         {
-            // Deserialize the json (instanciate classes)
-            Faces = JsonConvert.DeserializeObject<List<Face>>(json);
+            this.Faces = Faces;
         }
 
         #endregion

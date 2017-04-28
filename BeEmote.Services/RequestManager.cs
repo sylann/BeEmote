@@ -63,6 +63,7 @@ namespace BeEmote.Services
             // Send request
             using (var request = new ByteArrayContent(Config.Data))
             {
+                System.Console.WriteLine($"Sending request to {Config.Uri}...");
                 request.Headers.ContentType = new MediaTypeHeaderValue(Config.ContentType);
                 return await (await client.PostAsync(Config.Uri, request)).Content.ReadAsStringAsync();
             }

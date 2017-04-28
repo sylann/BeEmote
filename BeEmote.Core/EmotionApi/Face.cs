@@ -52,14 +52,14 @@ namespace BeEmote.Core
             Console.WriteLine($"  Left:   { FaceRectangle.Left   }");
             Console.WriteLine($"  Top:    { FaceRectangle.Top    }");
             Console.WriteLine($"  Width:  { FaceRectangle.Width  }");
-            Console.WriteLine($"  Anger:     { Scores.Anger     }");
-            Console.WriteLine($"  Contempt:  { Scores.Contempt  }");
-            Console.WriteLine($"  Disgust:   { Scores.Disgust   }");
-            Console.WriteLine($"  Fear:      { Scores.Fear      }");
-            Console.WriteLine($"  Happiness: { Scores.Happiness }");
-            Console.WriteLine($"  Neutral:   { Scores.Neutral   }");
-            Console.WriteLine($"  Sadness:   { Scores.Sadness   }");
-            Console.WriteLine($"  Surprise:  { Scores.Surprise  }\n");
+            Console.WriteLine($"  Anger:     { Scores.AngerHR     }");
+            Console.WriteLine($"  Contempt:  { Scores.ContemptHR  }");
+            Console.WriteLine($"  Disgust:   { Scores.DisgustHR   }");
+            Console.WriteLine($"  Fear:      { Scores.FearHR      }");
+            Console.WriteLine($"  Happiness: { Scores.HappinessHR }");
+            Console.WriteLine($"  Neutral:   { Scores.NeutralHR   }");
+            Console.WriteLine($"  Sadness:   { Scores.SadnessHR   }");
+            Console.WriteLine($"  Surprise:  { Scores.SurpriseHR  }\n");
         }
 
         #endregion
