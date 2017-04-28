@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{15
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Client.ConsoleUI", "BeEmote.Client.ConsoleUI\BeEmote.Client.ConsoleUI.csproj", "{F2EB9F51-CEED-49D4-A5D0-4271BB059E81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Services.Tests", "BeEmote.Services.Tests\BeEmote.Services.Tests.csproj", "{81DA6F07-C2F7-47B8-AA8D-43CAA2BBB10A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{F2EB9F51-CEED-49D4-A5D0-4271BB059E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2EB9F51-CEED-49D4-A5D0-4271BB059E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2EB9F51-CEED-49D4-A5D0-4271BB059E81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81DA6F07-C2F7-47B8-AA8D-43CAA2BBB10A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81DA6F07-C2F7-47B8-AA8D-43CAA2BBB10A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81DA6F07-C2F7-47B8-AA8D-43CAA2BBB10A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81DA6F07-C2F7-47B8-AA8D-43CAA2BBB10A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

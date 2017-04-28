@@ -17,6 +17,7 @@ namespace BeEmote.Services
 
         private RequestManager _RequestManager;
         private TextAnalyticsApiResponse _TextAnalytics;
+        private EmotionApiResponse _Emotion;
         private JObject _Request;
 
         #endregion
@@ -39,8 +40,6 @@ namespace BeEmote.Services
         public void Init()
         {
             _RequestManager = new RequestManager();
-            _TextAnalytics = new TextAnalyticsApiResponse();
-
             // Put dummy data until the interface allows us to set it for real
             TextToAnalyse = JsonExamples.GetEnglishText();
             ImagePath = @"G:\MyPics\self\20161214_124159.jpg";
@@ -52,6 +51,8 @@ namespace BeEmote.Services
         /// </summary>
         public async void StartTextAnalytics()
         {
+            // Resets the data
+            _TextAnalytics = new TextAnalyticsApiResponse();
             // Initialization
             InitRequest();
             // Phase 1
@@ -77,10 +78,10 @@ namespace BeEmote.Services
             List<Face> faces = JsonConvert.DeserializeObject<List<Face>>(json);
 
             // Instanciates the Emotion API Response model
-            EmotionApiResponse Response = new EmotionApiResponse(faces);
+            _Emotion = new EmotionApiResponse(faces);
 
             // Prints results in the console
-            Response.Describe();
+            _Emotion.Describe();
         }
 
         #endregion
