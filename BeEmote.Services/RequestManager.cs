@@ -56,15 +56,15 @@ namespace BeEmote.Services
         /// <returns>Task(string) JSON data about the image</returns>
         private async Task<string> MakeRequest(RequestConfiguration Config)
         {
-            // Configure Request
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", Config.CredentialKey);
-
-            // Send request
-            using (var request = new ByteArrayContent(Config.Data))
+            using (var client = new HttpClient())
             {
-                System.Console.WriteLine($"Sending request to {Config.Uri}...");
+                // Configure
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", Config.CredentialKey);
+                var request = new ByteArrayContent(Config.Data);
                 request.Headers.ContentType = new MediaTypeHeaderValue(Config.ContentType);
+
+                // Send
+                System.Console.WriteLine($"Sending request to {Config.Uri}...");
                 return await (await client.PostAsync(Config.Uri, request)).Content.ReadAsStringAsync();
             }
         }
