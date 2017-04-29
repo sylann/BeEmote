@@ -5,8 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BeEmote.Client.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" WindowStartupLocation="CenterScreen">
+        Title="MainWindow"
+        Height="500" MinHeight="500"
+        Width="750" MinWidth="750"
+        WindowStartupLocation="CenterScreen">
+
     <Grid>
-        
+
+        <!-- CONTENT OF PAGES -->
+        <Frame x:Name="MainFrame"
+               Background="#70CCFB"
+               Margin="0,30,0,0"
+               NavigationUIVisibility="Hidden" MouseDown="MainFrame_MouseDown"/>
+
+        <!-- NAVIGATION BAR -->
+        <Grid x:Name="NavBar"
+              Height="30"
+              VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox Grid.Column="0" Text="Be-Em☻te"
+                     FontFamily="Lucida Handwriting"
+                     FontStyle="Italic"
+                     FontSize="20"
+                     Foreground="#FF83C5FA" 
+                     Background="White"
+                     BorderBrush="#FFC1ECFF"
+                     BorderThickness="0"
+                     HorizontalContentAlignment="Left"
+                     VerticalContentAlignment="Center"
+                     Padding="20,0,0,0" />
+            
+            <Button x:Name="EmotionButton" Grid.Column="1" Content="Emotion"
+                    FontFamily="Lucida Handwriting"
+                    FontStyle="Italic"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="#FF83C5FA"
+                    Background="White"
+                    BorderBrush="#FFC1ECFF"
+                    BorderThickness="2,0,0,0"
+                    Click="EmotionButton_Click"/>
+            
+            <Button x:Name="TextAnalyticsButton" Grid.Column="2" Content="Text Analytics"
+                    FontFamily="Lucida Handwriting"
+                    FontStyle="Italic"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="#FF83C5FA"
+                    Background="White"
+                    BorderBrush="#FFC1ECFF"
+                    BorderThickness="2,0,0,0"
+                    Click="TextAnalyticsButton_Click" />
+        </Grid>
+
     </Grid>
 </Window>
