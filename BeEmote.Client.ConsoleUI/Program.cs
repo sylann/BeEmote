@@ -1,5 +1,4 @@
-﻿using BeEmote.Core;
-using BeEmote.Services;
+﻿using BeEmote.Services;
 using System;
 
 namespace BeEmote.Client.ConsoleUI
@@ -7,6 +6,8 @@ namespace BeEmote.Client.ConsoleUI
 
     class Program
     {
+        #region Private Members
+
         /// <summary>
         /// Possible choices of action for the user in hte menu.
         /// </summary>
@@ -32,7 +33,9 @@ namespace BeEmote.Client.ConsoleUI
         /// Indicates the current user choice between possible <see cref="UserChoices"/>.
         /// </summary>
         private static UserChoices UserChoice = UserChoices.None;
-        
+
+        #endregion
+
         /// <summary>
         /// Main Program.
         /// </summary>
@@ -61,7 +64,7 @@ namespace BeEmote.Client.ConsoleUI
             // - if nothing entered, back to choice of service
             while (SessionIsNotOver)
             {
-                DebugWarning("Enter session lBoop");
+                DebugWarning("Enter session loop");
                 // Set the user choice if none is actually set.
                 // This allows the main loop to flow at the end of a service
                 // until the user explicitely chose to change service
@@ -88,6 +91,8 @@ namespace BeEmote.Client.ConsoleUI
             // The program ends.
         }
 
+        #region Main Methods
+
         /// <summary>
         /// Inform the user that he needs to enter some text,
         /// to send it to the Text Analytics API, so that he can get information on it.
@@ -95,12 +100,8 @@ namespace BeEmote.Client.ConsoleUI
         /// - No text entered => get out of this service
         /// - text entered => starts service and then ask again when response received
         /// </summary>
-        private static void AskTextFromUser()
+        private static async void AskTextFromUser()
         {
-            // Do not start the service if it's already waiting for a response
-            if (Application.AwaitingServiceResponse)
-                return;
-
             Console.WriteLine("You chosed, Text Analytics...");
             Console.WriteLine("Please enter your text (type nothing and press enter to get back to menu):");
             string input = Console.ReadLine();
@@ -112,7 +113,7 @@ namespace BeEmote.Client.ConsoleUI
             {
                 // Start the application with the input text
                 Application.TextToAnalyse = input;
-                Application.StartTextAnalytics();
+                await Application.StartTextAnalytics();
             }
         }
 
@@ -122,20 +123,17 @@ namespace BeEmote.Client.ConsoleUI
         /// - No path entered => get out of this service
         /// - path entered => starts the service and then ask again when response is received
         /// </summary>
-        private static void AskImagePathFromUser()
+        private static async void AskImagePathFromUser()
         {
-            // Do not start the service if it's already waiting for a response
-            if (Application.AwaitingServiceResponse)
-                return;
-
             Console.WriteLine("You chosed, Emotion...");
 
             // Valid examples
             // "http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg";
             // @"G:\MyPics\self\20161214_124159";
 
-            Console.Write("Please enter a valid image path (type nothing and press enter to get back to menu): ");
-            while(true) {
+            Console.WriteLine("Please enter a valid image path (type nothing and press enter to get back to menu):");
+            while (true)
+            {
                 DebugWarning("Enter image path loop");
                 string input = Console.ReadLine();
                 // If nothing entered, quit back to the menu
@@ -148,13 +146,17 @@ namespace BeEmote.Client.ConsoleUI
                 else if (Application.SetImagePath(input))
                 {
                     // Starts the service when the image path provided is valid
-                    Application.StartEmotion();
+                    await Application.StartEmotion();
                     break;
                 }
                 else
                     Console.Write("This image path is not valid! Try again: ");
             }
         }
+
+        #endregion
+
+        #region Helper Methods
 
         /// <summary>
         /// If the user chose to quit, Set <see cref="SessionIsNotOver"/> to false,
@@ -178,7 +180,8 @@ namespace BeEmote.Client.ConsoleUI
 
             // Verify that the userInput fit the program understanding
             // Until a proper input is provided
-            do {
+            do
+            {
                 DebugWarning("Enter action choice loop");
                 switch (countTries)
                 {
@@ -220,5 +223,7 @@ namespace BeEmote.Client.ConsoleUI
             Console.WriteLine(message);
             Console.ResetColor();
         }
+
+        #endregion
     }
 }

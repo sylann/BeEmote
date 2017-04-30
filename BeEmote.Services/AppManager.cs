@@ -1,12 +1,7 @@
 ﻿using BeEmote.Core;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Text;
 
 namespace BeEmote.Services
 {
@@ -78,7 +73,7 @@ namespace BeEmote.Services
         /// Send a request with the provided <see cref="ImagePath"/> to the Emotion API.
         /// Finally, print a description of the result in the console.
         /// </summary>
-        public async void StartEmotion()
+        public async Task StartEmotion()
         {
             // Configure a new Request
             if (ImagePath.StartsWith("http"))
@@ -100,7 +95,7 @@ namespace BeEmote.Services
         /// Succesfully then send 3 requests in a defined order to the Text Analytics API.
         /// Finally, print a description of the result in the console.
         /// </summary>
-        public async void StartTextAnalytics()
+        public async Task StartTextAnalytics()
         {
             // Instanciates the Text Analytics API Response model
             _TextAnalytics = new TextAnalyticsApiResponse();
