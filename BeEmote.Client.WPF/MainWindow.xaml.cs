@@ -71,6 +71,30 @@ namespace BeEmote.Client.WPF
             MainFrame.Margin = new Thickness(0, 30, 0, 0);
         }
 
+        /// <summary>
+        /// TODO: Add rectangles in the dedicated canvas for each face found on the image.
+        /// This method assumes that there actually are faces.
+        /// </summary>
+        /// <param name="emotion">The emotion response object</param>
+        private void AddRectangleFace(EmotionApiResponse emotion)
+        {
+            // Add a rectangle in the canvas, for each faces found in the image (according to the API response)
+            foreach (Face face in emotion.Faces)
+            {
+                // Create a new rectangle
+                Rectangle re = new Rectangle();
+                // Configure it
+                re.SetValue(Canvas.LeftProperty, face.FaceRectangle.Left);
+                re.SetValue(Canvas.TopProperty, face.FaceRectangle.Top);
+                re.Width = face.FaceRectangle.Width;
+                re.Height = face.FaceRectangle.Height;
+                // Add visual border
+                //re.
+                // Add the rectangle to the canvas
+                // canvas.Children.Add(rectangle);
+            }
+        }
+
         #endregion
 
         #region Events

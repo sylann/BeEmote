@@ -42,7 +42,7 @@ namespace BeEmote.Core
             Console.WriteLine($"\n==========================\nText Analytics API Result:\n");
             Console.WriteLine($"Language detected: {Language.Name}[{Language.Iso6391Name}] ({HumanReadable(Language.Score)})");
             Console.WriteLine($"Sentiment: {HumanReadable(Score)}");
-            Console.WriteLine($"Key phrases:\n{KeyPhrases.Aggregate((result, phrase) => result == null ? $"'{phrase}'" : $"{result}, '{phrase}'")}");
+            Console.WriteLine($"Key phrases:\n{KeyPhrases?.Aggregate((result, phrase) => result == null ? $"'{phrase}'" : $"{result}, '{phrase}'")}");
         }
 
         #endregion

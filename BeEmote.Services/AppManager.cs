@@ -2,9 +2,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace BeEmote.Services
 {
@@ -16,19 +18,46 @@ namespace BeEmote.Services
         #region Private Fields
 
         private RequestManager _RequestManager;
+        private JsonManager _JsonManager;
         private TextAnalyticsApiResponse _TextAnalytics;
         private EmotionApiResponse _Emotion;
-        private JObject _Request;
 
         #endregion
 
         #region Public Properties
 
-        List<string> Errors { get; set; }
+        /// <summary>
+        /// Indicates if the app is currently waiting for the API response
+        /// </summary>
+        public bool AwaitingServiceResponse { get; private set; }
 
-        string TextToAnalyse { get; set; }
+        /// <summary>
+        /// This is the text to send to the Text Analytics API
+        /// </summary>
+        public string TextToAnalyse { get; set; }
 
-        string ImagePath { get; set; }
+        /// <summary>
+        /// This is the path of the image to send to the Emootion API
+        /// </summary>
+        public string ImagePath { get; private set; }
+
+        /// <summary>
+        /// Verify that the provided path is correct.
+        /// Update <see cref="ImagePath"/> if it is and return true.
+        /// Else return false.
+        /// </summary>
+        /// <param name="path">A provided path that should point to an image</param>
+        public bool SetImagePath(string path)
+        {
+            // If the path is a urL, the API will handle its validity, so we don't care.
+            // Thus we only check if it's nor a url neither a valid local path.
+            if (!path.StartsWith("http") && !File.Exists(path))
+                return false;
+            
+            // Everything is ok, Set ImagePath and return true
+            ImagePath = path;
+            return true;
+        }
 
         #endregion
 
@@ -40,29 +69,9 @@ namespace BeEmote.Services
         public void Init()
         {
             _RequestManager = new RequestManager();
+            _JsonManager = new JsonManager();
             // Put dummy data until the interface allows us to set it for real
-            TextToAnalyse = JsonExamples.GetEnglishText();
-            ImagePath = @"G:\MyPics\self\20161214_124159.jpg";
-        }
-
-        /// <summary>
-        /// Init a request body, then send 3 requests in a defined order to the Text Analytics API.
-        /// Finally, print a description of the result in the console.
-        /// </summary>
-        public async void StartTextAnalytics()
-        {
-            // Resets the data
-            _TextAnalytics = new TextAnalyticsApiResponse();
-            // Initialization
-            InitRequest();
-            // Phase 1
-            await GetTextAnalyticsLanguage();
-            // Phase 2
-            await GetTextAnalyticsKeyPhrases();
-            // Phase 3
-            await GetTextAnalyticsScore();
-
-            _TextAnalytics.Describe();
+            //TextToAnalyse = JsonExamples.GetEnglishText();
         }
 
         /// <summary>
@@ -71,17 +80,40 @@ namespace BeEmote.Services
         /// </summary>
         public async void StartEmotion()
         {
+            // Configure a new Request
+            if (ImagePath.StartsWith("http"))
+                _RequestManager.SetEmotionConfiguration(_JsonManager.GetEmotionJson(ImagePath));
+            else
+                _RequestManager.SetEmotionConfiguration(ImagePath);
+
             // Sends the request
-            string json = await _RequestManager.MakeEmotionRequest(ImagePath);
-
-            // Automatically instanciates the relevant classes by deserializing the response
-            List<Face> faces = JsonConvert.DeserializeObject<List<Face>>(json);
-
+            AwaitingServiceResponse = true;
+            string json = await _RequestManager.MakeRequest();
+            AwaitingServiceResponse = false;
             // Instanciates the Emotion API Response model
-            _Emotion = new EmotionApiResponse(faces);
-
+            _Emotion = new EmotionApiResponse(_JsonManager.GetFacesFromJsonResponse(json));
             // Prints results in the console
             _Emotion.Describe();
+        }
+
+        /// <summary>
+        /// Succesfully then send 3 requests in a defined order to the Text Analytics API.
+        /// Finally, print a description of the result in the console.
+        /// </summary>
+        public async void StartTextAnalytics()
+        {
+            // Instanciates the Text Analytics API Response model
+            _TextAnalytics = new TextAnalyticsApiResponse();
+            AwaitingServiceResponse = true;
+            // Phase 1
+            await GetTextAnalyticsLanguage();
+            // Phase 2
+            await GetTextAnalyticsKeyPhrases();
+            // Phase 3
+            await GetTextAnalyticsScore();
+            AwaitingServiceResponse = false;
+            // Prints results in the console
+            _TextAnalytics.Describe();
         }
 
         #endregion
@@ -89,111 +121,52 @@ namespace BeEmote.Services
         #region Private Methods
 
         /// <summary>
-        /// Builds a json object request with no language specified
-        /// </summary>
-        private void InitRequest()
-        {
-            _Request = new JObject
-            {
-                ["documents"] = new JArray {
-                    new JObject {
-                        ["id"] = 0,
-                        ["text"] = JsonExamples.GetEnglishText()
-                    }
-                }
-            };
-        }
-
-        /// <summary>
-        /// Builds a json object request containing a language
-        /// </summary>
-        private void InitRequestWithLanguage()
-        {
-            _Request = new JObject
-            {
-                ["documents"] = new JArray {
-                    new JObject {
-                        ["id"] = 0,
-                        ["text"] = TextToAnalyse,
-                        ["language"] = _TextAnalytics.Language.Iso6391Name
-                    }
-                }
-            };
-
-        }
-
-        /// <summary>
-        /// Checks if The language is indeed available in the json structure of the request
-        /// </summary>
-        /// <returns></returns>
-        private bool RequestHasLanguage()
-        {
-            return _Request["documents"][0]["language"] != null;
-        }
-
-        /// <summary>
-        /// Calls the <see cref="GetResponseObject(string)"/> method with the specified query,
+        /// Calls the <see cref="ParseJsonResponse(string)"/> method with the specified query,
         /// which sends the request to the Text Analytics API.
         /// Sets the <see cref="TextAnalyticsApiResponse.Language"/> of the text once the response is caught.
         /// </summary>
         private async Task GetTextAnalyticsLanguage()
         {
-            JObject raw = await GetResponseObject("languages");
-            if (raw != null)
-            {
-                _TextAnalytics.Language = raw["documents"][0]["detectedLanguages"][0].ToObject<Language>();
-                InitRequestWithLanguage();
-            }
+            // Configure request
+            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse);
+            _RequestManager.SetTextAnalyticsConfiguration("languages", body);
+            // Send Request
+            string jsonString = await _RequestManager.MakeRequest();
+            // Put the result into the model
+            _TextAnalytics.Language = _JsonManager.GetLanguageFromJsonResponse(jsonString);
         }
 
         /// <summary>
-        /// Calls the <see cref="GetResponseObject(string)"/> method with the specified query,
+        /// Calls the <see cref="ParseJsonResponse(string)"/> method with the specified query,
         /// which sends the request to the Text Analytics API.
         /// Sets the <see cref="TextAnalyticsApiResponse.KeyPhrases"/> of the text once the response is caught.
         /// </summary>
         private async Task GetTextAnalyticsKeyPhrases()
         {
-            JObject raw = await GetResponseObject("keyPhrases");
-            if (raw != null)
-            {
-                _TextAnalytics.KeyPhrases = raw["documents"][0]["keyPhrases"].ToObject<List<string>>();
-            }
+            // Configure request
+            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, _TextAnalytics.Language.Iso6391Name);
+            _RequestManager.SetTextAnalyticsConfiguration("keyPhrases", body);
+            // Send Request
+            string jsonString = await _RequestManager.MakeRequest();
+            // Put the result into the model
+            _TextAnalytics.KeyPhrases = _JsonManager.GetKeyPhrasesFromJsonResponse(jsonString);
+
         }
 
         /// <summary>
-        /// Calls the <see cref="GetResponseObject(string)"/> method with the specified query,
+        /// Calls the <see cref="ParseJsonResponse(string)"/> method with the specified query,
         /// which sends the request to the Text Analytics API.
         /// Sets the <see cref="TextAnalyticsApiResponse.Score"/> of the text once the response is caught.
         /// </summary>
         private async Task GetTextAnalyticsScore()
         {
-            JObject raw = await GetResponseObject("sentiment");
-            if (raw != null)
-            {
-                _TextAnalytics.Score = (double)raw["documents"][0]["score"];
-            }
-        }
-
-        /// <summary>
-        /// Send a request to the Text analytics API. Check for errors.
-        /// Then transform the response json string into a <see cref="JObject"/>.
-        /// </summary>
-        /// <param name="Query">Last part of the route to the Text Analytics API</param>
-        /// <returns>The raw Json Object</returns>
-        private async Task<JObject> GetResponseObject(string Query)
-        {
-            string jsonString = await _RequestManager.MakeTextAnalyticsRequest(Query, _Request.ToString());
-            JObject jsonObject = JObject.Parse(jsonString);
-
-            // The API could send errors instead of the expected response
-            // In that case we would return null
-            if (jsonObject["errors"].Count() > 0)
-            {
-                Console.WriteLine(jsonObject["errors"][0]["message"]);
-                Errors.Insert(0, jsonObject["errors"][0]["message"].ToString());
-                return null;
-            }
-            return jsonObject;
+            // Configure request
+            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, _TextAnalytics.Language.Iso6391Name);
+            _RequestManager.SetTextAnalyticsConfiguration("sentiment", body);
+            // Send Request
+            string jsonString = await _RequestManager.MakeRequest();
+            // Put the result into the model
+            _TextAnalytics.Score = _JsonManager.GetScoreFromJsonResponse(jsonString);
         }
 
         #endregion

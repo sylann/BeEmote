@@ -47,19 +47,22 @@ namespace BeEmote.Core
         /// </summary>
         public void Describe()
         {
-            Console.WriteLine($"  Dominant Emotion: {GetDominantEmotion()}");
-            Console.WriteLine($"  Height: { FaceRectangle.Height }");
-            Console.WriteLine($"  Left:   { FaceRectangle.Left   }");
-            Console.WriteLine($"  Top:    { FaceRectangle.Top    }");
-            Console.WriteLine($"  Width:  { FaceRectangle.Width  }");
-            Console.WriteLine($"  Anger:     { Scores.AngerHR     }");
-            Console.WriteLine($"  Contempt:  { Scores.ContemptHR  }");
-            Console.WriteLine($"  Disgust:   { Scores.DisgustHR   }");
-            Console.WriteLine($"  Fear:      { Scores.FearHR      }");
-            Console.WriteLine($"  Happiness: { Scores.HappinessHR }");
-            Console.WriteLine($"  Neutral:   { Scores.NeutralHR   }");
-            Console.WriteLine($"  Sadness:   { Scores.SadnessHR   }");
-            Console.WriteLine($"  Surprise:  { Scores.SurpriseHR  }\n");
+            Console.WriteLine("Dominant Emotion:  {0},    Face Position:  {1}(Left), {2}(Top), {3}(Width), {4}(Height)"
+                , GetDominantEmotion()
+                , FaceRectangle.Left
+                , FaceRectangle.Top
+                , FaceRectangle.Width
+                , FaceRectangle.Height);
+            Console.WriteLine("| Surprise:   {0,6} | Contempt:  {1,6} | Disgust:  {2,6} | Fear:   {3,6} |"
+                , Scores.SurpriseHR
+                , Scores.ContemptHR
+                , Scores.DisgustHR
+                , Scores.FearHR);
+            Console.WriteLine("| Happiness:  {0,6} | Neutral:   {1,6} | Sadness:  {2,6} | Anger:  {3,6} |\n"
+                , Scores.HappinessHR
+                , Scores.NeutralHR
+                , Scores.SadnessHR
+                , Scores.AngerHR);
         }
 
         #endregion

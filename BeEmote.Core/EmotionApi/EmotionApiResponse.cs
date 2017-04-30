@@ -33,7 +33,7 @@ namespace BeEmote.Core
         public void Describe()
         {
             Console.WriteLine($"\n===================\nEmotion API Result:\n");
-            if (Faces.Count == 0)
+            if (Faces == null || Faces.Count == 0)
                 Console.WriteLine($"Oow. No face were found in your image.\n");
             else
             {
