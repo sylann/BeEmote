@@ -8,17 +8,56 @@
              d:DesignHeight="500" d:DesignWidth="750">
 
     <Grid Background="Transparent">
-        <TextBox x:Name="TextAnalyticsTitle"
-                 Text="Text Analytics"
-                 FontFamily="Lucida Handwriting"
-                 FontStyle="Italic"
-                 FontSize="24"
-                 Background="Transparent"
-                 Foreground="White"
-                 BorderThickness="0"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 HorizontalContentAlignment="Center"
-                 VerticalContentAlignment="Center" />
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header title -->
+        <TextBlock x:Name="EmotionTitle" Grid.Row="0" Text="Analyse d'un text" Style="{StaticResource MainControlHeader}"/>
+
+        <!-- View Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="200"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" x:Name="TextInputArea" Style="{StaticResource WhiteSubControl}">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Text="Sasir votre texte ici"></TextBox>
+                    <Button Grid.Row="1" Content="Analyser"  Width="120" HorizontalAlignment="Right" Margin="0 5 20 5" Style="{StaticResource FlatWhiteButton}"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="1" x:Name="TextAnalyticsData" Style="{StaticResource WhiteSubControl}">
+                <StackPanel>
+                    <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
+                        <Label Content="English" Style="{StaticResource DefaultLabel}"/>
+                        <Label Content="(50%)" Style="{StaticResource DefaultLabel}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
+                        <Label Content="(50%)" Style="{StaticResource DefaultLabel}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Key Phrases:" Style="{StaticResource DefaultLabel}"/>
+                        <Label Content="(12)" Style="{StaticResource DefaultLabel}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Bla bla bla" Style="{StaticResource DefaultLabel}"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+        </Grid>
     </Grid>
 </UserControl>

@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:BeEmote.Client.WPF">
+
+    <Color x:Key="BackGroundWhite">#fdfaff</Color>
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource BackGroundWhite}" />
+
+    <Color x:Key="BackGroundLightBlue">#efeeff</Color>
+    <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource BackGroundLightBlue}" />
+
+    <Color x:Key="BackgroundBlue">#70ccfb</Color>
+    <SolidColorBrush x:Key="BackgroundBlueBrush" Color="{StaticResource BackgroundBlue}" />
+
+    <Color x:Key="TextBlue">#ff83c5fa</Color>
+    <SolidColorBrush x:Key="TextBlueBrush" Color="{StaticResource TextBlue}" />
+
+    <Color x:Key="BorderBlue">#ffc1ecff</Color>
+    <SolidColorBrush x:Key="BorderBlueBrush" Color="{StaticResource BorderBlue}" />
+    
+</ResourceDictionary>

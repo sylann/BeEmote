@@ -15,19 +15,7 @@
         </Grid.RowDefinitions>
         
         <!-- Header title -->
-        <TextBox x:Name="EmotionTitle" Grid.Row="0"
-                 Text="Analyse des visages d'une photo"
-                 FontFamily="Lucida Handwriting"
-                 FontStyle="Italic"
-                 FontSize="24"
-                 Background="Transparent"
-                 Foreground="White"
-                 BorderThickness="0"
-                 HorizontalAlignment="Left"
-                 VerticalAlignment="Center"
-                 HorizontalContentAlignment="Center"
-                 VerticalContentAlignment="Center"
-                 Margin="15,0,0,0"/>
+        <TextBlock x:Name="EmotionTitle" Grid.Row="0" Text="Analyse des visages d'une photo" Style="{StaticResource MainControlHeader}"/>
 
         <!-- View Main Content -->
         <Grid Grid.Row="1">
@@ -54,38 +42,14 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        
-                        <Button x:Name="BrowseImageButton" Grid.Column="0"
-                                Content="Browse..."
-                                FontFamily="Calibri"
-                                FontSize="14"
-                                Foreground="#70CCFB"
-                                Background="White"
-                                BorderThickness="0"
-                                Margin="2" />
-                        <Button x:Name="PreviousFaceButton" Grid.Column="1"
-                                Content="Previous Face"
-                                FontFamily="Calibri"
-                                FontSize="14"
-                                Foreground="#70CCFB"
-                                Background="White"
-                                BorderThickness="0"
-                                Margin="2" />
-                        <Button x:Name="NextFaceButton" Grid.Column="2"
-                                Content="Next Face"
-                                FontFamily="Calibri"
-                                FontSize="14"
-                                Foreground="#70CCFB"
-                                Background="White"
-                                BorderThickness="0"
-                                Margin="2" />
+
+                        <Button x:Name="BrowseImageButton" Grid.Column="0" Content="Browse..." Style="{StaticResource FlatWhiteButton}"/>
+                        <Button x:Name="PreviousFaceButton" Grid.Column="1" Content="Previous Face" Style="{StaticResource FlatWhiteButton}"/>
+                        <Button x:Name="NextFaceButton" Grid.Column="2" Content="Next Face" Style="{StaticResource FlatWhiteButton}"/>
                     </Grid>
 
                     <!-- Image -->
-                    <Border  Grid.Row="1"
-                             Margin="2"
-                             BorderThickness="2"
-                             BorderBrush="White">
+                    <Border  Grid.Row="1" Style="{StaticResource WhiteSubControl}">
                         <Canvas x:Name="ImageContainer">
                             <Image x:Name="EmotionImage" />
                             <Rectangle Canvas.Left="{Binding}"
@@ -100,8 +64,7 @@
             </Border>
 
             <!-- Right part of the screen -->
-            <Border Grid.Column="1"
-                    Padding="5,10,10,10">
+            <Border Grid.Column="1" Padding="5,10,10,10">
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -110,78 +73,36 @@
                     </Grid.RowDefinitions>
                     
                     <!-- Statistiques -->
-                    <Border Grid.Row="0"
-                            Margin="2"
-                            BorderThickness="2"
-                            BorderBrush="White">
+                    <Border Grid.Row="0" Style="{StaticResource WhiteSubControl}">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Text="Statistiques"
-                                       FontFamily="Lucida Handwriting"
-                                       FontStyle="Italic"
-                                       FontSize="18"
-                                       Foreground="White"
-                                       Margin="10"
-                                       VerticalAlignment="Top"/>
+                            <TextBlock Text="Statistiques" Style="{StaticResource SubControlHeader}" />
                                 
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="Calls per day:"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
-                                    <Label Content="20"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
+                                    <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
+                                    <Label Content="20" Style="{StaticResource DefaultLabel}" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="Faces per call:"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
-                                    <Label Content="2"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
+                                    <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
+                                    <Label Content="2" Style="{StaticResource DefaultLabel}" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="Dominant Emotion:"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
-                                    <Label Content="Anger"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
+                                    <Label Content="Dominant Emotion:" Style="{StaticResource DefaultLabel}" />
+                                    <Label Content="Anger" Style="{StaticResource DefaultLabel}" />
                                 </StackPanel>
                             </StackPanel>
                     </Border>
                     
                     <!-- Image Specific Data -->
-                    <Border Grid.Row="1"
-                            Margin="2"
-                            BorderThickness="2"
-                            BorderBrush="White">
+                    <Border Grid.Row="1" Style="{StaticResource WhiteSubControl}">
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Image Analyse result"
-                                       FontFamily="Lucida Handwriting"
-                                       FontStyle="Italic"
-                                       FontSize="18"
-                                       Foreground="White"
-                                       Margin="10"
-                                       VerticalAlignment="Top"/>
+                            <TextBlock Text="Image Analyse result" Style="{StaticResource SubControlHeader}" />
 
                             <!-- Number of faces -->
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label Content="3"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
-                                <Label Content="faces found!"
-                                       FontFamily="Calibri"
-                                       FontSize="14"
-                                       Foreground="White"/>
+                                <Label Content="3" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="faces found!" Style="{StaticResource DefaultLabel}" />
                             </StackPanel>
 
                             <!-- Emotion table -->
@@ -197,108 +118,44 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Anger:"
-                                           FontFamily="Calibri"
-                                           FontSize="14"
-                                           Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                           FontFamily="Calibri"
-                                           FontSize="14"
-                                           Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Anger:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Contempt:"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Contempt:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Disgust:"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Disgust:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Fear:"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Fear:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Happiness:"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Happiness:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Neutral:"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Neutral:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Sadness:"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Sadness:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1"
-                                            Background="White"
-                                            Margin="1">
-                                    <Label Content="Surprise:"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
-                                    <Label Content="3"
-                                            FontFamily="Calibri"
-                                            FontSize="14"
-                                            Foreground="#70CCFB"/>
+                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                    <Label Content="Surprise:" Style="{StaticResource EmotionLabel}" />
+                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
                                 </StackPanel>
 
                             </Grid>

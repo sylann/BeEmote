@@ -8,30 +8,17 @@
              d:DesignHeight="500" d:DesignWidth="750">
     <Grid Background="Transparent">
 
-        <TextBox x:Name="PresentationTitle" Text="Be-Em☻te"
-                 FontFamily="Lucida Handwriting"
-                 FontStyle="Italic"
-                 FontSize="36"
-                 Background="Transparent"
-                 Foreground="White"
-                 BorderThickness="0"
+        <TextBlock Text="Be-Em☻te"
+                 FontFamily="{StaticResource DancingScript}"
+                 FontSize="{StaticResource FontSizeTitle}"
+                 Foreground="{StaticResource WhiteBrush}"
                  HorizontalAlignment="Center"
                  VerticalAlignment="Center"
-                 HorizontalContentAlignment="Center"
-                 VerticalContentAlignment="Center"
                  Margin="0,0,0,125" />
-        <TextBox x:Name="Be_simple" Text="Be simple,&#xA;Thus our app can easily spy on you"
-                 FontFamily="Lucida Handwriting"
-                 FontStyle="Italic"
-                 FontSize="16"
-                 Background="Transparent"
-                 Foreground="White"
-                 BorderThickness="0"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 HorizontalContentAlignment="Center"
-                 VerticalContentAlignment="Center"
-                 Margin="0,75,0,0" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,75,0,0">
+            <TextBlock Text="Be simple," Style="{StaticResource PresentationText}" />
+            <TextBlock Text="Thus our app can easily spy on you" Style="{StaticResource PresentationText}" />
+        </StackPanel>
 
         <Canvas x:Name="PresentationPaint"
                 Height="240"
