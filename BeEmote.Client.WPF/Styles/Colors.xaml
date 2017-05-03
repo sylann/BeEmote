@@ -14,7 +14,10 @@
     <Color x:Key="TextBlue">#ff83c5fa</Color>
     <SolidColorBrush x:Key="TextBlueBrush" Color="{StaticResource TextBlue}" />
 
+    <Color x:Key="TextDarkBlue">#3168a4</Color>
+    <SolidColorBrush x:Key="TextDarkBlueBrush" Color="{StaticResource TextDarkBlue}" />
+
     <Color x:Key="BorderBlue">#ffc1ecff</Color>
-    <SolidColorBrush x:Key="BorderBlueBrush" Color="{StaticResource BorderBlue}" />
-    
+    <SolidColorBrush x:Key="BorderBlueBrush" Color="{StaticResource BorderBlue}" /> 
+
 </ResourceDictionary>

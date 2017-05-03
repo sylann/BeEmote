@@ -9,9 +9,11 @@
         <Setter Property="Margin" Value="2"/>
     </Style>
 
-    <Style TargetType="{x:Type StackPanel}" x:Key="EmotionLabelContainer">
+    <Style TargetType="{x:Type DockPanel}" x:Key="EmotionLabelContainer">
         <Setter Property="Background" Value="{StaticResource WhiteBrush}"/>
         <Setter Property="Margin" Value="1"/>
+        <Setter Property="Width" Value="auto" />
+        <Setter Property="LastChildFill" Value="True"/>
     </Style>
     
     <!-- Text Blocks -->
@@ -33,11 +35,36 @@
         <Setter Property="Margin" Value="10" />
     </Style>
 
+    <Style TargetType="{x:Type TextBlock}" x:Key="CenteredInfoText" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="FontFamily" Value="{StaticResource CourgetteRegular}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeXXLarge}" />
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+    </Style>
+
     <Style TargetType="{x:Type TextBlock}" x:Key="PresentationText" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource CourgetteRegular}" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
         <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
+    </Style>
+
+    <!-- Text Boxes -->
+    <Style TargetType="{x:Type TextBox}" x:Key="BigTextBox" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WhiteBrush}"/>
+    </Style>
+
+    <Style TargetType="{x:Type TextBox}" x:Key="UrlTextBox" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WhiteBrush}"/>
     </Style>
     
     <!-- Buttons -->
@@ -101,6 +128,21 @@
     <Style TargetType="{x:Type Label}" x:Key="EmotionLabel" BasedOn="{StaticResource BaseStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
         <Setter Property="Foreground" Value="{StaticResource TextBlueBrush}"/>
+        <Setter Property="Padding" Value="10,5,0,5"/>
+    </Style>
+
+    <Style TargetType="{x:Type Label}" x:Key="EmotionScore" BasedOn="{StaticResource EmotionLabel}">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Padding" Value="0,5,10,5"/>
+    </Style>
+    
+    <!-- Combo Boxes -->
+    <Style TargetType="{x:Type ComboBox}" x:Key="CoolComboBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="MinWidth" Value="50"/>
     </Style>
     
 </ResourceDictionary>

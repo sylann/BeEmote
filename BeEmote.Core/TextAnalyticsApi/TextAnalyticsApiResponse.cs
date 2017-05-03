@@ -32,17 +32,35 @@ namespace BeEmote.Core
         /// </summary>
         public double Score { get; set; }
 
+        /// <summary>
+        /// The list of key phrases formatted as a single string.
+        /// Key phrases are separated by comma.
+        /// </summary>
+        public string FormattedLanguage { get => $"{Language.Name}[{Language.Iso6391Name}] ({HumanReadable(Language.Score)})"; }
+
+        /// <summary>
+        /// The list of key phrases formatted as a single string.
+        /// Key phrases are separated by comma.
+        /// </summary>
+        public string FormattedKeyPhrases { get => KeyPhrases?.Aggregate((result, k) => result == null ? $"'{k}'" : $"{result}, '{k}'"); }
+
+        /// <summary>
+        /// Gets the number of key phrases (returns 0 if the list is null or empty)
+        /// </summary>
+        public int NbKeyPhrases { get => KeyPhrases?.Count ?? 0; }
+
         #endregion
 
         #region Public Methods
 
 
+
         public void Describe()
         {
             Console.WriteLine($"\n==========================\nText Analytics API Result:\n");
-            Console.WriteLine($"Language detected: {Language.Name}[{Language.Iso6391Name}] ({HumanReadable(Language.Score)})");
+            Console.WriteLine($"Language detected: {FormattedLanguage})");
             Console.WriteLine($"Sentiment: {HumanReadable(Score)}");
-            Console.WriteLine($"Key phrases:\n{KeyPhrases?.Aggregate((result, phrase) => result == null ? $"'{phrase}'" : $"{result}, '{phrase}'")}");
+            Console.WriteLine($"Key phrases:\n{FormattedKeyPhrases}");
         }
 
         #endregion
