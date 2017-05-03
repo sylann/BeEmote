@@ -43,11 +43,11 @@
     <Compile Include="Data\JsonExamples.cs" />
     <Compile Include="EmotionApi\Base\Emotion.cs" />
     <Compile Include="EmotionApi\Base\Emotions.cs" />
-    <Compile Include="EmotionApi\Base\Scores.cs" />
-    <Compile Include="EmotionApi\Face.cs" />
+    <Compile Include="EmotionApi\Faces\Scores.cs" />
+    <Compile Include="EmotionApi\Faces\Face.cs" />
     <Compile Include="EmotionApi\EmotionApiResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EmotionApi\Base\FaceRectangle.cs" />
+    <Compile Include="EmotionApi\Faces\FaceRectangle.cs" />
     <Compile Include="RequestConfiguration.cs" />
     <Compile Include="TextAnalyticsApi\Language.cs" />
     <Compile Include="TextAnalyticsApi\TextAnalyticsApiResponse.cs" />
