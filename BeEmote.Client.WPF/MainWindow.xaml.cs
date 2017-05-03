@@ -12,12 +12,6 @@ namespace BeEmote.Client.WPF
         #region Private Fields
 
         /// <summary>
-        /// Indicates that the presentation page has been closed.
-        /// The app is ready to go.
-        /// </summary>
-        private bool AppInitialized = false;
-
-        /// <summary>
         /// Contains the application context
         /// </summary>
         private AppManager _AppManager;
@@ -76,10 +70,6 @@ namespace BeEmote.Client.WPF
         {
             HideNavBar();
             MainFrame.Content = new PresentationView();
-            // Reset
-            AppInitialized = false;
-            DataContext = null;
-            _AppManager = null;
         }
 
         /// <summary>
@@ -89,10 +79,6 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void EmotionButton_Click(object sender, RoutedEventArgs e)
         {
-            // Reset the application
-            //_AppManager = new AppManager();
-            // Link it to the view
-            //DataContext = _AppManager;
             // Use the emotion control
             MainFrame.Content = new EmotionView(_AppManager);
         }
@@ -104,10 +90,6 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void TextAnalyticsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Reset the application
-            //_AppManager = new AppManager();
-            // Link it to the view
-            //DataContext = _AppManager;
             // Use the text analytics control
             MainFrame.Content = new TextAnalyticsView(_AppManager);
         }
@@ -120,13 +102,8 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void MainFrame_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            // Only for the first time on the présentation page
-            if (!AppInitialized)
-            {
-                ShowNavBar();
-                MainFrame.Content = null;
-                AppInitialized = true;
-            }
+            ShowNavBar();
+            MainFrame.Content = null;
         }
 
         #endregion
