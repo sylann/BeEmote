@@ -16,6 +16,11 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private AppManager _AppManager;
 
+        /// <summary>
+        /// Indicates if the application is in the home screen.
+        /// </summary>
+        private bool IsAppInPresentationMode;
+
         #endregion
 
         #region Constructor
@@ -28,9 +33,7 @@ namespace BeEmote.Client.WPF
         {
             _AppManager = new AppManager();
             InitializeComponent();
-            // Hide the Navigation bar
-            HideNavBar();
-            MainFrame.Content = new PresentationView();
+            GoToPresentationMode();
         }
 
         #endregion
@@ -56,6 +59,28 @@ namespace BeEmote.Client.WPF
             NavBar.Height = 30;
             MainFrame.Margin = new Thickness(0, 30, 0, 0);
         }
+        
+        /// <summary>
+        /// Put the application in presentation mode (home).
+        /// Hides the navigation bar, instantiate Presentation usercontrol.
+        /// </summary>
+        private void GoToPresentationMode()
+        {
+            HideNavBar();
+            MainFrame.Content = new PresentationView();
+            IsAppInPresentationMode = true;
+        }
+
+        /// <summary>
+        /// Put the application out of presentation mode (home).
+        /// Shows the navigation bar and reset MainFrame.Content.
+        /// </summary>
+        private void GetOffPresentationMode()
+        {
+            ShowNavBar();
+            MainFrame.Content = null;
+            IsAppInPresentationMode = false;
+        }
 
         #endregion
 
@@ -68,8 +93,7 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
-            HideNavBar();
-            MainFrame.Content = new PresentationView();
+            GoToPresentationMode();
         }
 
         /// <summary>
@@ -102,8 +126,8 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void MainFrame_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ShowNavBar();
-            MainFrame.Content = null;
+            if (IsAppInPresentationMode)
+                GetOffPresentationMode();
         }
 
         #endregion

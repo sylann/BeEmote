@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         
         <!-- Header title -->
-        <TextBlock x:Name="EmotionTitle" Grid.Row="0" Text="Analyse des visages d'une photo" Style="{StaticResource MainControlHeader}"/>
+        <TextBlock x:Name="EmotionTitle" Grid.Row="0" Text="Analyze of the faces of an image" Style="{StaticResource MainControlHeader}"/>
 
         <!-- View Main Content -->
         <Grid Grid.Row="1">
@@ -40,23 +40,20 @@
                         
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="90"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="BrowseImageButton" Grid.Column="0" Content="Browse..." Style="{StaticResource FlatWhiteButton}"/>
-                        <Button x:Name="PreviousFaceButton" Grid.Column="1" Content="Previous Face" Style="{StaticResource FlatWhiteButton}"/>
-                        <Button x:Name="NextFaceButton" Grid.Column="2" Content="Next Face" Style="{StaticResource FlatWhiteButton}"/>
+                        <TextBox Grid.Column="0" x:Name="ImagePathTextBox" Text="http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg" Style="{StaticResource UrlTextBox}"/>
+                        <Button Grid.Column="1" x:Name="BrowseImageButton" Content="Browse..." Style="{StaticResource FlatWhiteButton}"/>
                     </Grid>
                     
                     <!-- Url/path -->
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="90"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox Grid.Column="0" x:Name="ImagePathTextBox" Text="http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg" Style="{StaticResource UrlTextBox}"/>
-                        <Button Grid.Column="1" x:Name="SendImageButton" Content="Analyser" Style="{StaticResource FlatWhiteButton}" Click="SendImageButton_Click"/>
+                        <Button Grid.Column="0" Grid.ColumnSpan="2" x:Name="SendImageButton" Content="Analyze" Style="{StaticResource FlatWhiteButton}" Click="SendImageButton_Click"/>
                     </Grid>
 
                     <!-- Image -->
@@ -75,37 +72,36 @@
 
             <!-- Right part of the screen -->
             <Border Grid.Column="1" Padding="5,10,10,10">
-
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    
-                    <!-- Statistiques -->
-                    <Border Grid.Row="0" Style="{StaticResource WhiteSubControl}">
-                            <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Statistiques" Style="{StaticResource SubControlHeader}" />
-                                
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                    <Label Content="20" Style="{StaticResource DefaultLabel}" />
-                                </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
-                                    <Label Content="2" Style="{StaticResource DefaultLabel}" />
-                                </StackPanel>
+                    <!-- Statistics -->
+                    <Border Grid.Row="0" Style="{StaticResource PaddedWhiteSubControl}">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
 
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Dominant Emotion:" Style="{StaticResource DefaultLabel}" />
-                                    <Label Content="Anger" Style="{StaticResource DefaultLabel}" />
-                                </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="20" Style="{StaticResource DefaultLabel}" />
                             </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="2" Style="{StaticResource DefaultLabel}" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Dominant Emotion:" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="Anger" Style="{StaticResource DefaultLabel}" />
+                            </StackPanel>
+                        </StackPanel>
                     </Border>
-                    
-                    <!-- Image Specific Data -->
-                    <Border Grid.Row="1" Style="{StaticResource WhiteSubControl}">
+
+                    <!-- Analyse result -->
+                    <Border Grid.Row="1" Style="{StaticResource PaddedWhiteSubControl}">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock Text="Image Analyse result" Style="{StaticResource SubControlHeader}" />
 
@@ -120,17 +116,17 @@
                             </StackPanel>
 
                             <!-- Emotion table -->
-                                <Grid Margin="10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
+                            <Grid Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
                                 <DockPanel Grid.Row="0" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Anger:" Style="{StaticResource EmotionLabel}" />
@@ -161,23 +157,22 @@
                                     <Label Content="Neutral:" Style="{StaticResource EmotionLabel}" />
                                     <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.NeutralHR}" Style="{StaticResource EmotionScore}" />
                                 </DockPanel>
-
+                                
                                 <DockPanel Grid.Row="2" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Sadness:" Style="{StaticResource EmotionLabel}" />
                                     <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.SadnessHR}" Style="{StaticResource EmotionScore}" />
                                 </DockPanel>
-
+                                
                                 <DockPanel Grid.Row="3" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Surprise:" Style="{StaticResource EmotionLabel}" />
                                     <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.SurpriseHR}" Style="{StaticResource EmotionScore}"/>
                                 </DockPanel>
-
                             </Grid>
+
                         </StackPanel>
                     </Border>
 
                 </Grid>
-                
             </Border>
 
         </Grid>

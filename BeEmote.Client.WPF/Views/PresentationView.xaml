@@ -26,17 +26,17 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
 
-            <!--Top Right Corner-->
+            <!--Top Left Corner-->
             <Line X1="0"   Y1="0" X2="0"   Y2="65" Stroke="White" StrokeThickness="2" />
             <Line X1="0"   Y1="0" X2="65"  Y2="0"  Stroke="White" StrokeThickness="2" />
 
-            <!--Top Left Corner-->
-            <Line X1="380" Y1="0" X2="315" Y2="0"  Stroke="White" StrokeThickness="2" />
-            <Line X1="380" Y1="0" X2="380" Y2="65" Stroke="White" StrokeThickness="2" />
+            <!--Top Right Corner-->
+            <!--<Line X1="380" Y1="0" X2="315" Y2="0"  Stroke="White" StrokeThickness="2" />
+            <Line X1="380" Y1="0" X2="380" Y2="65" Stroke="White" StrokeThickness="2" />-->
 
             <!--Bottom Left Corner-->
-            <Line X1="0" Y1="240" X2="0" Y2="175" Stroke="White" StrokeThickness="2" />
-            <Line X1="0" Y1="240" X2="65" Y2="240" Stroke="White" StrokeThickness="2" />
+            <!--<Line X1="0" Y1="240" X2="0" Y2="175" Stroke="White" StrokeThickness="2" />
+            <Line X1="0" Y1="240" X2="65" Y2="240" Stroke="White" StrokeThickness="2" />-->
 
             <!--Bottom Right Corner-->
             <Line X1="380" Y1="240" X2="380" Y2="175" Stroke="White" StrokeThickness="2" />
