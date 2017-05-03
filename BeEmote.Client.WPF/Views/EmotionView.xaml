@@ -31,6 +31,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -47,17 +48,26 @@
                         <Button x:Name="PreviousFaceButton" Grid.Column="1" Content="Previous Face" Style="{StaticResource FlatWhiteButton}"/>
                         <Button x:Name="NextFaceButton" Grid.Column="2" Content="Next Face" Style="{StaticResource FlatWhiteButton}"/>
                     </Grid>
+                    
+                    <!-- Url/path -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="ImagePathTextBox" Text="http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg" Style="{StaticResource UrlTextBox}"/>
+                        <Button Grid.Column="1" x:Name="SendImageButton" Content="Analyser" Style="{StaticResource FlatWhiteButton}" Click="SendImageButton_Click"/>
+                    </Grid>
 
                     <!-- Image -->
-                    <Border  Grid.Row="1" Style="{StaticResource WhiteSubControl}">
+                    <Border  Grid.Row="2" Style="{StaticResource WhiteSubControl}">
                         <Canvas x:Name="ImageContainer">
-                            <Image x:Name="EmotionImage" />
-                            <Rectangle Canvas.Left="{Binding}"
-                                   Canvas.Top="{Binding}"
-                                   Width="{Binding}"
-                                   Height="{Binding}"
-                                   Stroke="#FFD13D3D"/>
+                            <Image x:Name="EmotionImage"
+                                   Stretch="UniformToFill"
+                                   Width="{Binding Path=ActualWidth, ElementName=ImageContainer}"
+                                   Height="{Binding Path=ActualHeight, ElementName=ImageContainer}"/>
                             <!-- XXX Insert face rectangles here -->
+                            <Canvas x:Name="RectangleContainer"/>
                         </Canvas>
                     </Border>
                 </Grid>
@@ -68,8 +78,8 @@
 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     
                     <!-- Statistiques -->
@@ -96,17 +106,21 @@
                     
                     <!-- Image Specific Data -->
                     <Border Grid.Row="1" Style="{StaticResource WhiteSubControl}">
-                        <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <TextBlock Text="Image Analyse result" Style="{StaticResource SubControlHeader}" />
 
                             <!-- Number of faces -->
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Label Content="3" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="faces found!" Style="{StaticResource DefaultLabel}" />
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <Label Content="Face N° " Style="{StaticResource DefaultLabel}" />
+                                <ComboBox x:Name="listBox" ItemsSource="{Binding EmotionResponse.Faces}" Style="{StaticResource CoolComboBox}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <Label Content=" The dominant emotion is " Style="{StaticResource DefaultLabel}" />
+                                <Label Content="{Binding EmotionResponse.Faces.ElementAt(local:EmotionView.SelectedFaceIndex).GetDominantEmotion()}" Style="{StaticResource DefaultLabel}" />
                             </StackPanel>
 
                             <!-- Emotion table -->
-                                <Grid Margin="15,5,15,15">
+                                <Grid Margin="10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
@@ -118,45 +132,45 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="0" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Anger:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.AngerHR}" Style="{StaticResource EmotionScore}" />
+                                </DockPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Contempt:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.ContemptHR}" Style="{StaticResource EmotionScore}" />
+                                </DockPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="2" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Disgust:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.DisgustHR}" Style="{StaticResource EmotionScore}" />
+                                </DockPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="3" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Fear:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.FearHR}" Style="{StaticResource EmotionScore}" />
+                                </DockPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="0" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Happiness:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.HappinessHR}" Style="{StaticResource EmotionScore}" />
+                                </DockPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="1" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Neutral:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.NeutralHR}" Style="{StaticResource EmotionScore}" />
+                                </DockPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="2" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Sadness:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.SadnessHR}" Style="{StaticResource EmotionScore}" />
+                                </DockPanel>
 
-                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
+                                <DockPanel Grid.Row="3" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Surprise:" Style="{StaticResource EmotionLabel}" />
-                                    <Label Content="3" Style="{StaticResource EmotionLabel}" />
-                                </StackPanel>
+                                    <Label Content="{Binding EmotionResponse.Faces.ElementAt(SelectedFaceIndex).Scores.SurpriseHR}" Style="{StaticResource EmotionScore}"/>
+                                </DockPanel>
 
                             </Grid>
                         </StackPanel>

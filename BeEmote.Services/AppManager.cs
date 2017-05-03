@@ -1,30 +1,57 @@
 ﻿using BeEmote.Core;
 using Newtonsoft.Json.Linq;
+using PropertyChanged;
+using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace BeEmote.Services
 {
     /// <summary>
+    /// Possible status of the Application regarding API request/response
+    /// </summary>
+    public enum AwaitStatus
+    {
+        NoData,
+        AwaitingResponse,
+        ResponseReceived,
+        EmptyResult
+    }
+
+    /// <summary>
     /// Handles the global functionning of the application
     /// </summary>
-    public class AppManager
+    [ImplementPropertyChanged]
+    public class AppManager : INotifyPropertyChanged
     {
         #region Private Fields
 
         private RequestManager _RequestManager;
         private JsonManager _JsonManager;
-        private TextAnalyticsApiResponse _TextAnalytics;
-        private EmotionApiResponse _Emotion;
+        private string imagePath;
 
         #endregion
 
+        #region Events
+
+        /// <summary>
+        /// An event is fired whenever a public property changes
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
+
+        #endregion
+        
         #region Public Properties
 
         /// <summary>
-        /// Indicates if the app is currently waiting for the API response
+        /// Todo: Add description
         /// </summary>
-        public bool AwaitingServiceResponse { get; private set; }
+        public TextAnalyticsApiResponse TextAnalyticsResponse { get; set; }
+
+        /// <summary>
+        /// Todo: Add description
+        /// </summary>
+        public EmotionApiResponse EmotionResponse { get; set; }
 
         /// <summary>
         /// This is the text to send to the Text Analytics API
@@ -32,42 +59,46 @@ namespace BeEmote.Services
         public string TextToAnalyse { get; set; }
 
         /// <summary>
-        /// This is the path of the image to send to the Emootion API
+        /// This is the path of the image to send to the Emotion API
         /// </summary>
-        public string ImagePath { get; private set; }
+        public string ImagePath {
+            get => imagePath;
+            set
+            {
+                // If the path is a urL, the API will handle its validity, so we don't care.
+                // Thus we only check if it's nor a url neither a valid local path.
+                if (!value.StartsWith("http") && !File.Exists(value))
+                    ImagePath = null;
+                // Everything is ok, Set ImagePath and return true
+                imagePath = value;
+            }
+        }
 
         /// <summary>
-        /// Verify that the provided path is correct.
-        /// Update <see cref="ImagePath"/> if it is and return true.
-        /// Else return false.
+        /// Indicates the state in which the app currently is
         /// </summary>
-        /// <param name="path">A provided path that should point to an image</param>
-        public bool SetImagePath(string path)
+        public AwaitStatus State { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initialize the app such that it can wait for user interaction
+        /// </summary>
+        public AppManager()
         {
-            // If the path is a urL, the API will handle its validity, so we don't care.
-            // Thus we only check if it's nor a url neither a valid local path.
-            if (!path.StartsWith("http") && !File.Exists(path))
-                return false;
-            
-            // Everything is ok, Set ImagePath and return true
-            ImagePath = path;
-            return true;
+            _RequestManager = new RequestManager();
+            _JsonManager = new JsonManager();
+            // Set start up state
+            State = AwaitStatus.NoData;
+            // Put dummy data until the interface allows us to set it for real
+            //TextToAnalyse = JsonExamples.GetEnglishText();
         }
 
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Initialize the app such that it can wait for user interaction
-        /// </summary>
-        public void Init()
-        {
-            _RequestManager = new RequestManager();
-            _JsonManager = new JsonManager();
-            // Put dummy data until the interface allows us to set it for real
-            //TextToAnalyse = JsonExamples.GetEnglishText();
-        }
 
         /// <summary>
         /// Send a request with the provided <see cref="ImagePath"/> to the Emotion API.
@@ -81,14 +112,15 @@ namespace BeEmote.Services
             else
                 _RequestManager.SetEmotionConfiguration(ImagePath);
 
+            State = AwaitStatus.AwaitingResponse;
             // Sends the request
-            AwaitingServiceResponse = true;
             string json = await _RequestManager.MakeRequest();
-            AwaitingServiceResponse = false;
+            // Request satisfied
+            State = AwaitStatus.ResponseReceived;
             // Instanciates the Emotion API Response model
-            _Emotion = new EmotionApiResponse(_JsonManager.GetFacesFromJsonResponse(json));
+            EmotionResponse = new EmotionApiResponse(_JsonManager.GetFacesFromJsonResponse(json));
             // Prints results in the console
-            _Emotion.Describe();
+            EmotionResponse.Describe();
         }
 
         /// <summary>
@@ -98,17 +130,20 @@ namespace BeEmote.Services
         public async Task StartTextAnalytics()
         {
             // Instanciates the Text Analytics API Response model
-            _TextAnalytics = new TextAnalyticsApiResponse();
-            AwaitingServiceResponse = true;
+            TextAnalyticsResponse = new TextAnalyticsApiResponse();
+
+            State = AwaitStatus.AwaitingResponse;
             // Phase 1
             await GetTextAnalyticsLanguage();
             // Phase 2
             await GetTextAnalyticsKeyPhrases();
             // Phase 3
             await GetTextAnalyticsScore();
-            AwaitingServiceResponse = false;
+            // Request satisfied
+            State = AwaitStatus.ResponseReceived;
+
             // Prints results in the console
-            _TextAnalytics.Describe();
+            TextAnalyticsResponse.Describe();
         }
 
         #endregion
@@ -128,7 +163,7 @@ namespace BeEmote.Services
             // Send Request
             string jsonString = await _RequestManager.MakeRequest();
             // Put the result into the model
-            _TextAnalytics.Language = _JsonManager.GetLanguageFromJsonResponse(jsonString);
+            TextAnalyticsResponse.Language = _JsonManager.GetLanguageFromJsonResponse(jsonString);
         }
 
         /// <summary>
@@ -139,12 +174,12 @@ namespace BeEmote.Services
         private async Task GetTextAnalyticsKeyPhrases()
         {
             // Configure request
-            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, _TextAnalytics.Language.Iso6391Name);
+            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, TextAnalyticsResponse.Language.Iso6391Name);
             _RequestManager.SetTextAnalyticsConfiguration("keyPhrases", body);
             // Send Request
             string jsonString = await _RequestManager.MakeRequest();
             // Put the result into the model
-            _TextAnalytics.KeyPhrases = _JsonManager.GetKeyPhrasesFromJsonResponse(jsonString);
+            TextAnalyticsResponse.KeyPhrases = _JsonManager.GetKeyPhrasesFromJsonResponse(jsonString);
 
         }
 
@@ -156,12 +191,12 @@ namespace BeEmote.Services
         private async Task GetTextAnalyticsScore()
         {
             // Configure request
-            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, _TextAnalytics.Language.Iso6391Name);
+            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, TextAnalyticsResponse.Language.Iso6391Name);
             _RequestManager.SetTextAnalyticsConfiguration("sentiment", body);
             // Send Request
             string jsonString = await _RequestManager.MakeRequest();
             // Put the result into the model
-            _TextAnalytics.Score = _JsonManager.GetScoreFromJsonResponse(jsonString);
+            TextAnalyticsResponse.Score = _JsonManager.GetScoreFromJsonResponse(jsonString);
         }
 
         #endregion

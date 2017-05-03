@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using BeEmote.Services;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BeEmote.Client.WPF
 {
@@ -20,9 +10,29 @@ namespace BeEmote.Client.WPF
     /// </summary>
     public partial class TextAnalyticsView : UserControl
     {
-        public TextAnalyticsView()
+        private AppManager _AppManager;
+
+        public TextAnalyticsView(AppManager _AppManager)
         {
             InitializeComponent();
+            this._AppManager = _AppManager;
+            DataContext = _AppManager;
+        }
+
+        private void SendTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            HandleTextAnalyticsApiCall();
+        }
+
+        private async void HandleTextAnalyticsApiCall()
+        {
+            // Pick the image path from the url field
+            // and set the corresponding property in the view model
+            _AppManager.TextToAnalyse = TextToAnalyseTextBox.Text;
+
+            // Send the request
+            await _AppManager.StartTextAnalytics();
+            // Data updates with Bindings
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using BeEmote.Core;
+﻿using BeEmote.Services;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Shapes;
 
 namespace BeEmote.Client.WPF
 {
@@ -19,6 +17,11 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private bool AppInitialized = false;
 
+        /// <summary>
+        /// Contains the application context
+        /// </summary>
+        private AppManager _AppManager;
+
         #endregion
 
         #region Constructor
@@ -29,6 +32,7 @@ namespace BeEmote.Client.WPF
         /// </summary>
         public MainWindow()
         {
+            _AppManager = new AppManager();
             InitializeComponent();
             // Hide the Navigation bar
             HideNavBar();
@@ -59,30 +63,6 @@ namespace BeEmote.Client.WPF
             MainFrame.Margin = new Thickness(0, 30, 0, 0);
         }
 
-        /// <summary>
-        /// TODO: Add rectangles in the dedicated canvas for each face found on the image.
-        /// This method assumes that there actually are faces.
-        /// </summary>
-        /// <param name="emotion">The emotion response object</param>
-        private void AddRectangleFace(EmotionApiResponse emotion)
-        {
-            // Add a rectangle in the canvas, for each faces found in the image (according to the API response)
-            foreach (Face face in emotion.Faces)
-            {
-                // Create a new rectangle
-                Rectangle re = new Rectangle();
-                // Configure it
-                re.SetValue(Canvas.LeftProperty, face.FaceRectangle.Left);
-                re.SetValue(Canvas.TopProperty, face.FaceRectangle.Top);
-                re.Width = face.FaceRectangle.Width;
-                re.Height = face.FaceRectangle.Height;
-                // Add visual border
-                //re.
-                // Add the rectangle to the canvas
-                // canvas.Children.Add(rectangle);
-            }
-        }
-
         #endregion
 
         #region Events
@@ -95,8 +75,11 @@ namespace BeEmote.Client.WPF
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
             HideNavBar();
-            AppInitialized = false;
             MainFrame.Content = new PresentationView();
+            // Reset
+            AppInitialized = false;
+            DataContext = null;
+            _AppManager = null;
         }
 
         /// <summary>
@@ -106,7 +89,12 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void EmotionButton_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Content = new EmotionView();
+            // Reset the application
+            //_AppManager = new AppManager();
+            // Link it to the view
+            //DataContext = _AppManager;
+            // Use the emotion control
+            MainFrame.Content = new EmotionView(_AppManager);
         }
 
         /// <summary>
@@ -116,7 +104,12 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void TextAnalyticsButton_Click(object sender, RoutedEventArgs e)
         {
-            MainFrame.Content = new TextAnalyticsView();
+            // Reset the application
+            //_AppManager = new AppManager();
+            // Link it to the view
+            //DataContext = _AppManager;
+            // Use the text analytics control
+            MainFrame.Content = new TextAnalyticsView(_AppManager);
         }
 
         /// <summary>

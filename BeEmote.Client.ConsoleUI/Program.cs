@@ -43,7 +43,6 @@ namespace BeEmote.Client.ConsoleUI
         static void Main(string[] args)
         {
             Application = new AppManager();
-            Application.Init();
 
             // Basic testing/using interface for the console
             // Wait for correct user input
@@ -142,8 +141,12 @@ namespace BeEmote.Client.ConsoleUI
                     UserChoice = UserChoices.None;
                     break;
                 }
-                // else make sure the image path is accepted by the application
-                else if (Application.SetImagePath(input))
+
+                // Try to set the ImagePath
+                Application.ImagePath = input;
+                
+                // Make sure the image path is accepted by the application
+                if (Application.ImagePath == null)
                 {
                     // Starts the service when the image path provided is valid
                     await Application.StartEmotion();

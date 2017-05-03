@@ -30,31 +30,70 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" Text="Sasir votre texte ici"></TextBox>
-                    <Button Grid.Row="1" Content="Analyser"  Width="120" HorizontalAlignment="Right" Margin="0 5 20 5" Style="{StaticResource FlatWhiteButton}"/>
+                    <TextBox Grid.Row="0" x:Name="TextToAnalyseTextBox" Text="Input some text here" Style="{StaticResource BigTextBox}"/>
+                    <Button Grid.Row="1" x:Name="SendTextButton" Content="Analyser"  Width="120" HorizontalAlignment="Right" Margin="0 5 20 5" Style="{StaticResource FlatWhiteButton}" Click="SendTextButton_Click"/>
                 </Grid>
             </Border>
 
             <Border Grid.Row="1" x:Name="TextAnalyticsData" Style="{StaticResource WhiteSubControl}">
-                <StackPanel>
-                    <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
-                        <Label Content="English" Style="{StaticResource DefaultLabel}"/>
-                        <Label Content="(50%)" Style="{StaticResource DefaultLabel}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
-                        <Label Content="(50%)" Style="{StaticResource DefaultLabel}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Key Phrases:" Style="{StaticResource DefaultLabel}"/>
-                        <Label Content="(12)" Style="{StaticResource DefaultLabel}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Bla bla bla" Style="{StaticResource DefaultLabel}"/>
-                    </StackPanel>
-
+                <StackPanel VerticalAlignment="Center">
+                    <ContentControl>
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=State}" Value="0">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock Text="No data to analyse yet" Style="{StaticResource CenteredInfoText}"/>
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=State}" Value="1">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock Text="Analyzing data ..." Style="{StaticResource CenteredInfoText}"/>
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=State}" Value="2">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <StackPanel>
+                                                        <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
+                                                            <Label x:Name="Languagelabel" Content="{Binding TextAnalyticsResponse.Language.Name}" Style="{StaticResource DefaultLabel}"/>
+                                                            <Label x:Name="LanguageScorelabel" Content="{Binding TextAnalyticsResponse.Language.Score}" Style="{StaticResource DefaultLabel}"/>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
+                                                            <Label x:Name="Sentimentlabel" Content="{Binding TextAnalyticsResponse.Score}" Style="{StaticResource DefaultLabel}"/>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label Content="Key Phrases:" Style="{StaticResource DefaultLabel}"/>
+                                                            <Label x:Name="NbKeyPhraseslabel" Content="{Binding TextAnalyticsResponse.NbKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Label x:Name="KeyPhraseslabel" Content="{Binding TextAnalyticsResponse.FormattedKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
                 </StackPanel>
             </Border>
 
