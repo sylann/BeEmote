@@ -4,6 +4,7 @@ using PropertyChanged;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
+using System;
 
 namespace BeEmote.Services
 {
@@ -47,12 +48,35 @@ namespace BeEmote.Services
             {
                 // If the path is a urL, the API will handle its validity, so we don't care.
                 // Thus we only check if it's nor a url neither a valid local path.
-                // Also eliminate the case where no value is provided.
-                if (value == null || !value.StartsWith("http") && !File.Exists(value))
+                // And eliminate the case where no value is provided at all.
+                if (value == null
+                || !Uri.IsWellFormedUriString(value, UriKind.Absolute)
+                && !File.Exists(value))
+                {
                     imagePath = null;
-                // Everything is ok, Set ImagePath and return true
+                    return;
+                }
+                // Everything is ok, Set ImagePath
                 imagePath = value;
             }
+        }
+
+        /// <summary>
+        /// Indicates if the ImagePath looks like a URI.
+        /// </summary>
+        public bool ImagePathIsUri
+        {
+            get => Uri.IsWellFormedUriString(imagePath, UriKind.Absolute);
+        }
+
+        /// <summary>
+        /// Folder containing the Image of the ImagePath.
+        /// </summary>
+        public string ImageFolder
+        {
+            get => imagePath != null && !ImagePathIsUri
+                ? Directory.GetParent(ImagePath).ToString()
+                : null;
         }
 
         /// <summary>
@@ -170,7 +194,7 @@ namespace BeEmote.Services
             // Configure a new Request
             if (string.IsNullOrWhiteSpace(ImagePath))
                 return;
-            else if (ImagePath.StartsWith("http"))
+            else if (ImagePathIsUri)
                 _RequestManager.SetEmotionConfiguration(_JsonManager.GetEmotionJson(ImagePath));
             else
                 _RequestManager.SetEmotionConfiguration(ImagePath);

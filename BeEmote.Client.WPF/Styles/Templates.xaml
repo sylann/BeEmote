@@ -63,17 +63,24 @@
 
     <Style TargetType="{x:Type TextBlock}" x:Key="RequestFeedback" BasedOn="{StaticResource CenteredInfoText}">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=State}" Value="0">
-                <Setter Property="Text" Value="No image loaded" />
-            </DataTrigger>
             <DataTrigger Binding="{Binding Path=State}" Value="1">
                 <Setter Property="Text" Value="Analyzing"/>
+                <Setter Property="Foreground" Value="{StaticResource TextBlueBrush}"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Path=State}" Value="2">
                 <Setter Property="Text" Value=""/>
             </DataTrigger>
             <DataTrigger Binding="{Binding Path=State}" Value="3">
                 <Setter Property="Text" Value="Analyze failed"/>
+                <Setter Property="Foreground" Value="Red"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
+                <Setter Property="Text" Value="No image loaded" />
+                <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=TextChanged}" Value="True">
+                <Setter Property="Text" Value="No image loaded" />
+                <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -149,6 +156,38 @@
         <Setter Property="Background" Value="{StaticResource WhiteBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="2"/>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="LoadImageButton" BasedOn="{StaticResource FlatWhiteButton}">
+        <!-- Init -->
+        <Setter Property="IsEnabled" Value="False" />
+        <!-- Each condition evaluated to True will trigger, in this order -->
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="True" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=SourceUpdated}" Value="True">
+                <Setter Property="IsEnabled" Value="True" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=TextChanged}" Value="True">
+                <Setter Property="IsEnabled" Value="True" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=Text}" Value="">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="AnalyzeImageButton" BasedOn="{StaticResource FlatWhiteButton}">
+        <Setter Property="IsEnabled" Value="True" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
+                <Setter Property="IsEnabled" Value="False" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=Text}" Value="">
+                <Setter Property="Content" Value="Reload" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <!-- Labels -->

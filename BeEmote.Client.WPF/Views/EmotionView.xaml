@@ -35,25 +35,19 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <!-- Image Buttons -->
-                    <Grid x:Name="ImageButtons" Grid.Row="0">
-                        
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="90"/>
-                        </Grid.ColumnDefinitions>
-
-                        <TextBox Grid.Column="0" x:Name="ImagePathTextBox" Text="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource UrlTextBox}"/>
-                        <Button Grid.Column="1" x:Name="BrowseImageButton" Content="Browse..." Style="{StaticResource FlatWhiteButton}" Click="BrowseImageButton_Click"/>
-                    </Grid>
-                    
                     <!-- Url/path -->
+                    <TextBox Grid.Row="0" x:Name="ImagePathTextBox" Text="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource UrlTextBox}" KeyUp="ImagePathTextBox_KeyUp" TextChanged="ImagePathTextBox_TextChanged"/>
+                                        
+                    <!-- Image Buttons -->
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Grid.ColumnSpan="2" x:Name="SendImageButton" Content="Analyze" Style="{StaticResource FlatWhiteButton}" Click="SendImageButton_Click"/>
+                        <Button Grid.Column="0" x:Name="BrowseImageButton" Content="Browse ..." Style="{StaticResource FlatWhiteButton}" Click="BrowseImageButton_Click"/>
+                        <Button Grid.Column="1" x:Name="LoadImageButton" Content="Load Image" Style="{StaticResource LoadImageButton}" Click="LoadImageButton_Click"/>
+                        <Button Grid.Column="2" x:Name="SendImageButton" Content="Analyze" Style="{StaticResource AnalyzeImageButton}" Click="SendImageButton_Click"/>
                     </Grid>
 
                     <!-- Image -->
@@ -67,7 +61,7 @@
                                 <!-- XXX Insert face rectangles here -->
                                 <Canvas x:Name="RectangleContainer"/>
                             </Canvas>
-                            <TextBlock Style="{StaticResource RequestFeedback}" />
+                            <TextBlock x:Name="FeedbackTextBlock" Style="{StaticResource RequestFeedback}" />
                         </Grid>
                     </Border>
                 </Grid>

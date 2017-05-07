@@ -3,7 +3,6 @@ using BeEmote.Services;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,9 +20,11 @@ namespace BeEmote.Client.WPF
     {
         #region Private Fields
 
+        /// <summary>
+        /// The application manager instance of the Emotion ViewModel
+        /// </summary>
         private AppManager _AppManager;
-        private string memorizedPath;
-
+        
         #endregion
 
         #region Public Properties
@@ -94,6 +95,10 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private void LoadEmotionImage()
         {
+            // Don't load the image if there is no actual path
+            if (_AppManager.ImagePath == null)
+                return;
+
             ClearCanvas();
             ImageRectangles = new List<Rectangle>();
 
@@ -118,6 +123,45 @@ namespace BeEmote.Client.WPF
             NeutralLabel.Content = currentFace.Scores.NeutralHR;
             SadnessLabel.Content = currentFace.Scores.SadnessHR;
             SurpriseLabel.Content = currentFace.Scores.SurpriseHR;
+        }
+
+        /// <summary>
+        /// Resets the Emotion elements of the Image Analyses part to null
+        /// </summary>
+        private void ResetFaceStats()
+        {
+            SelectedFaceLabel.Content = null;
+            DominantEmotionLabel.Content = null;
+            AngerLabel.Content = null;
+            ContemptLabel.Content = null;
+            DisgustLabel.Content = null;
+            FearLabel.Content = null;
+            HappinessLabel.Content = null;
+            NeutralLabel.Content = null;
+            SadnessLabel.Content = null;
+            SurpriseLabel.Content = null;
+        }
+
+        /// <summary>
+        /// Opens a File browsing dialog and expects that the user
+        /// chose a valid image path.
+        /// </summary>
+        /// <returns>Either valid ImagePath or Null</returns>
+        private string GetLocalFilePath()
+        {
+            // Open the file browsing dialog
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                InitialDirectory = _AppManager.ImageFolder ?? @"c:\",
+                Filter = String.Format("Image Files({0})|{0}", "*.jpg;*.png;*.jpeg;*.jpe;*.gif;*.bmp"),
+                FilterIndex = 2,
+                CheckPathExists = true
+            };
+            // If no valid file were selected
+            if (openFileDialog.ShowDialog() == false)
+                return null;
+            // The seleceted image full path
+            return openFileDialog.FileName;
         }
 
         #endregion
@@ -313,32 +357,51 @@ namespace BeEmote.Client.WPF
         }
 
         /// <summary>
-        /// Opens the file dialog window to select image type files.
+        /// Opens the file dialog window to select a file of type image.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void BrowseImageButton_Click(object sender, RoutedEventArgs e)
         {
-            // Open the dialog
-            var openFileDialog = new OpenFileDialog()
+            // Updates ImagePath and memorize its parent folder.
+            _AppManager.ImagePath = GetLocalFilePath();
+            // load the image
+            LoadEmotionImage();
+        }
+
+        /// <summary>
+        /// Load the image when Pressing enter inside of the Image Path TextBox.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ImagePathTextBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Tab)
             {
-                InitialDirectory = memorizedPath ?? @"c:\",
-                Filter = "Image Files(*.JPG;*.PNG)|*.JPG;*.PNG",
-                FilterIndex = 2,
-                RestoreDirectory = true
-            };
-            // If a valid file has been selected
-            if (openFileDialog.ShowDialog() == true)
-            {
-                _AppManager.ImagePath = openFileDialog.FileName;
-                // Keep the folder in memory
-                memorizedPath = Directory.GetParent(_AppManager.ImagePath).ToString();
-                // load the image
                 LoadEmotionImage();
             }
+        }
 
+        /// <summary>
+        /// Manually load the image by clicking on the dedicated LoadImage Button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void LoadImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadEmotionImage();
+        }
 
-
+        /// <summary>
+        /// Reset Image Source when text changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ImagePathTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            EmotionImage.Source = null;
+            ClearCanvas();
+            ResetFaceStats();
         }
 
         #endregion
