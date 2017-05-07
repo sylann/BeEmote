@@ -8,18 +8,6 @@ using System.Threading.Tasks;
 namespace BeEmote.Services
 {
     /// <summary>
-    /// Possible status of the Application regarding API request/response
-    /// </summary>
-    public enum AwaitStatus
-    {
-        NoData,
-        AwaitingResponse,
-        ResponseReceived,
-        EmptyResult,
-        PartialResult
-    }
-
-    /// <summary>
     /// Handles the global functionning of the application
     /// </summary>
     [ImplementPropertyChanged]
@@ -69,7 +57,7 @@ namespace BeEmote.Services
         /// <summary>
         /// Indicates the state in which the app currently is
         /// </summary>
-        public AwaitStatus State { get; set; }
+        public RequestStates State { get; set; }
 
         #endregion
 
@@ -83,7 +71,7 @@ namespace BeEmote.Services
             _RequestManager = new RequestManager();
             _JsonManager = new JsonManager();
             // Set start up state
-            State = AwaitStatus.NoData;
+            State = RequestStates.NoData;
             // Put dummy data until the interface allows us to set it for real
             //TextToAnalyse = JsonExamples.GetEnglishText();
         }
@@ -132,37 +120,37 @@ namespace BeEmote.Services
         #region Private Status Methods
 
         /// <summary>
-        /// Initializes the request status to <see cref="AwaitStatus.NoData"/>
+        /// Initializes the request status to <see cref="RequestStates.NoData"/>
         /// </summary>
         private void InitStatus()
         {
-            State = AwaitStatus.AwaitingResponse;
+            State = RequestStates.AwaitingResponse;
         }
 
         /// <summary>
         /// Sets the request status according to the result:
-        /// Either <see cref="AwaitStatus.ResponseReceived"/>
-        /// Or <see cref="AwaitStatus.EmptyResult"/> if no face was found.
+        /// Either <see cref="RequestStates.ResponseReceived"/>
+        /// Or <see cref="RequestStates.EmptyResult"/> if no face was found.
         /// </summary>
         private void SetEmotionResultStatus()
         {
             State = EmotionResponse?.Faces?.Count > 0
-               ? AwaitStatus.ResponseReceived
-               : AwaitStatus.EmptyResult;
+               ? RequestStates.ResponseReceived
+               : RequestStates.EmptyResult;
         }
 
         /// <summary>
         /// Sets the request status according to the Text analytics result:
-        /// The resulting State is one of <see cref="AwaitStatus"/>.
+        /// The resulting State is one of <see cref="RequestStates"/>.
         /// </summary>
         private void SetTextAnalyticsResultStatus()
         {
             if (string.IsNullOrEmpty(TextAnalyticsResponse?.Language?.Name))
-                State = AwaitStatus.EmptyResult;
+                State = RequestStates.EmptyResult;
             else if (TextAnalyticsResponse.KeyPhrases?.Count == 0)
-                State = AwaitStatus.PartialResult;
+                State = RequestStates.PartialResult;
             else
-                State = AwaitStatus.ResponseReceived;
+                State = RequestStates.ResponseReceived;
         }
 
         #endregion

@@ -1,7 +1,7 @@
 ﻿using BeEmote.Core;
 using BeEmote.Services;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -76,7 +76,7 @@ namespace BeEmote.Client.WPF
             await _AppManager.StartEmotion();
             // Data updates with Bindings,
             // Handle the result only if it is consistent
-            if (_AppManager.State != AwaitStatus.EmptyResult)
+            if (_AppManager.State != RequestStates.EmptyResult)
             {
                 AddRectanglesToList(_AppManager.EmotionResponse.Faces);
                 AddRectanglesToCanvas();
