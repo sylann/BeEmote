@@ -25,170 +25,118 @@
             </Grid.RowDefinitions>
 
             <!-- Top Part: Text input -->
-            <Border Grid.Row="0" x:Name="TextInputArea" Style="{StaticResource PaddedWhiteSubControl}">
+            <Border Grid.Row="0" x:Name="TextInputArea" Margin="10,10,10,5">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" x:Name="SendTextButton" Content="Analyze" Style="{StaticResource FlatWhiteButton}" Click="SendTextButton_Click"/>
-                    <TextBox Grid.Row="1" x:Name="TextToAnalyseTextBox" Text="Input some text here" Style="{StaticResource BigTextBox}"/>
+                    <TextBox Grid.Row="1" x:Name="TextToAnalyseBox" Text="{Binding TextToAnalyse}" Style="{StaticResource BigTextBox}"/>
                 </Grid>
             </Border>
 
             <!-- Bottom part: Result and Stats -->
-            <Border Grid.Row="1">
+            <Border Grid.Row="1" Margin="10,5,10,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="19*"/>
+                        <ColumnDefinition Width="20*"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- Analyse result -->
-                    <Border Grid.Column="0" x:Name="TextAnalyticsData" Style="{StaticResource PaddedWhiteSubControl}">
+                    <Border Grid.Column="0" Style="{StaticResource PaddedWhiteSubControl}">
                         <StackPanel VerticalAlignment="Center">
-                            <ContentControl>
-                                <ContentControl.Style>
-                                    <Style TargetType="{x:Type ContentControl}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=State}" Value="0">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <StackPanel>
-                                                                <TextBlock Text="No data to analyse yet" Style="{StaticResource CenteredInfoText}"/>
-                                                            </StackPanel>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Path=State}" Value="1">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <StackPanel>
-                                                                <TextBlock Text="Analyzing data ..." Style="{StaticResource CenteredInfoText}"/>
-                                                            </StackPanel>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Path=State}" Value="2">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <StackPanel>
-                                                                <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
-                                                                    <Label x:Name="Languagelabel" Content="{Binding TextAnalyticsResponse.Language.Name}" Style="{StaticResource DefaultLabel}"/>
-                                                                    <Label x:Name="LanguageScorelabel" Content="{Binding TextAnalyticsResponse.Language.Score}" Style="{StaticResource DefaultLabel}"/>
-                                                                </StackPanel>
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
-                                                                    <Label x:Name="Sentimentlabel" Content="{Binding TextAnalyticsResponse.Score}" Style="{StaticResource DefaultLabel}"/>
-                                                                </StackPanel>
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Label Content="Key Phrases:" Style="{StaticResource DefaultLabel}"/>
-                                                                    <Label x:Name="NbKeyPhraseslabel" Content="{Binding TextAnalyticsResponse.NbKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
-                                                                </StackPanel>
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Label x:Name="KeyPhraseslabel" Content="{Binding TextAnalyticsResponse.FormattedKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
-                                                                </StackPanel>
-                                                            </StackPanel>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ContentControl.Style>
-                            </ContentControl>
+                            <ContentControl Style="{StaticResource TextAnalyticsResultStack}"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Statistics -->
                     <Border Grid.Column="1" Style="{StaticResource PaddedWhiteSubControl}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                        <StackPanel>
+                            <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
 
-                            <!-- Calls / day and Score distribution -->
-                            <StackPanel Grid.Column="0"  Orientation="Vertical">
-                                <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="20" Style="{StaticResource DefaultLabel}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
 
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                    <Label Content="20" Style="{StaticResource DefaultLabel}" />
+                                <!-- Calls / day and Score distribution -->
+                                <StackPanel Grid.Column="0"  Orientation="Vertical" Margin="0,0,20,0">
+
+                                    <TextBlock Text="Score distribution" Style="{StaticResource SectionHeader}" />
+
+                                    <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                        <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
+                                        <Label Content="25" Style="{StaticResource CompactLabel}" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                        <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
+                                        <Label Content="25" Style="{StaticResource CompactLabel}" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                        <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
+                                        <Label Content="25" Style="{StaticResource CompactLabel}" />
+                                    </StackPanel>
                                 </StackPanel>
 
-                                <TextBlock Text="Score distribution" Style="{StaticResource SectionHeader}" />
+                                <!-- Emotion distribution -->
+                                <StackPanel Grid.Column="1"  Orientation="Vertical">
+                                    <TextBlock Text="Language distribution" Style="{StaticResource SectionHeader}" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <StackPanel Orientation="Vertical">
+                                            
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Anger:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="25%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="25" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Contempt:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="15%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="25" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Disgust:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="10%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
 
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="25" Style="{StaticResource CompactLabel}" />
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Fear:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="7%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
+                                            
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical">
+                                            
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Happiness:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="6%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Neutral:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="5%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Sadness:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="3%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
+
+                                            <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                                <Label Content="Surprise:" Style="{StaticResource CompactLabel}" />
+                                                <Label Content="1%" Style="{StaticResource CompactLabel}" />
+                                            </StackPanel>
+                                            
+                                        </StackPanel>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
-
-                            <!-- Emotion distribution -->
-                            <StackPanel Grid.Column="1"  Orientation="Vertical">
-
-                                <TextBlock Text="Language distribution" Style="{StaticResource SectionHeader}" />
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Anger:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="25%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Contempt:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="15%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Disgust:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="10%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Fear:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="7%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Happiness:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="6%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Neutral:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="5%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Sadness:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="3%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="Surprise:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="1%" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-                                
-                            </StackPanel>
-                        </Grid>
+                        </StackPanel>
                     </Border>
                 </Grid>
             </Border>

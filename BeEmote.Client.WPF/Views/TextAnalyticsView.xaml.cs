@@ -1,7 +1,9 @@
 ﻿using BeEmote.Services;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace BeEmote.Client.WPF
 {
@@ -17,6 +19,9 @@ namespace BeEmote.Client.WPF
             InitializeComponent();
             this._AppManager = _AppManager;
             DataContext = _AppManager;
+            TextToAnalyseBox.GotFocus += OnTextToAnalyseGotFocus;
+            TextToAnalyseBox.LostFocus += OnTextToAnalyseLostFocus;
+            _AppManager.TextToAnalyse = "Input some text here...";
         }
 
         private void SendTextButton_Click(object sender, RoutedEventArgs e)
@@ -26,13 +31,34 @@ namespace BeEmote.Client.WPF
 
         private async void HandleTextAnalyticsApiCall()
         {
-            // Pick the image path from the url field
-            // and set the corresponding property in the view model
-            _AppManager.TextToAnalyse = TextToAnalyseTextBox.Text;
-
             // Send the request
             await _AppManager.StartTextAnalytics();
-            // Data updates with Bindings
+        }
+
+        /// <summary>
+        /// Removes the PlaceHolder of the TextBlock.
+        /// Also updates foreground color.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void OnTextToAnalyseGotFocus(object sender, EventArgs e)
+        {
+            TextToAnalyseBox.Foreground = FindResource("TextDarkBlueBrush") as SolidColorBrush;
+            _AppManager.TextToAnalyse = "";
+        }
+
+        /// <summary>
+        /// Insert default PlaceHolder providing some intel to the user.
+        /// Also updates foreground color.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void OnTextToAnalyseLostFocus(object sender, EventArgs e)
+        {
+            TextToAnalyseBox.Foreground = FindResource("TextGrayBrush") as SolidColorBrush;
+
+            if (String.IsNullOrWhiteSpace(_AppManager.TextToAnalyse))
+                _AppManager.TextToAnalyse = "Input some text here...";
         }
     }
 }

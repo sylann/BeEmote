@@ -5,12 +5,14 @@
     <!-- Containers -->
     <Style TargetType="{x:Type Border}" x:Key="WhiteSubControl">
         <Setter Property="BorderBrush" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="Background" Value="{StaticResource HalfTransparentBrush}" />
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="Margin" Value="2"/>
     </Style>
 
     <Style TargetType="{x:Type Border}" x:Key="PaddedWhiteSubControl" BasedOn="{StaticResource WhiteSubControl}">
         <Setter Property="Padding" Value="10"/>
+        <Setter Property="Background" Value="{StaticResource HalfTransparentBrush}"/>
     </Style>
 
     <Style TargetType="{x:Type DockPanel}" x:Key="EmotionLabelContainer">
@@ -37,7 +39,10 @@
 
     <Style TargetType="{x:Type TextBlock}" x:Key="SubControlHeader" BasedOn="{StaticResource EmoteTextBlock}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
-        <Setter Property="Margin" Value="0,0,0,5" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}" />
+        <Setter Property="Margin" Value="-12,-12,-12,5" />
+        <Setter Property="Padding" Value="20,2" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
@@ -56,6 +61,23 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
+    <Style TargetType="{x:Type TextBlock}" x:Key="RequestFeedback" BasedOn="{StaticResource CenteredInfoText}">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=State}" Value="0">
+                <Setter Property="Text" Value="No image loaded" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=State}" Value="1">
+                <Setter Property="Text" Value="Analyzing"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=State}" Value="2">
+                <Setter Property="Text" Value=""/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=State}" Value="3">
+                <Setter Property="Text" Value="Analyze failed"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
     <Style TargetType="{x:Type TextBlock}" x:Key="PresentationText" BasedOn="{StaticResource EmoteTextBlock}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -63,9 +85,9 @@
 
     <!-- Text Boxes -->
     <Style TargetType="{x:Type TextBox}" x:Key="BigTextBox" BasedOn="{StaticResource BaseStyle}">
-        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
+        <Setter Property="Background" Value="{StaticResource HalfTransparentBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="BorderBrush" Value="{StaticResource WhiteBrush}"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="Margin" Value="2"/>
     </Style>
@@ -163,8 +185,63 @@
         <Setter Property="MinWidth" Value="50"/>
     </Style>
 
+    <!-- Stack Panels -->
     <Style TargetType="{x:Type StackPanel}" x:Key="CompactStack">
         <Setter Property="Height" Value="20"/>
+    </Style>
+
+    <Style TargetType="{x:Type ContentControl}" x:Key="TextAnalyticsResultStack">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=State}" Value="0">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="No data to analyse yet" Style="{StaticResource CenteredInfoText}"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=State}" Value="1">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Analyzing data ..." Style="{StaticResource CenteredInfoText}"/>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Path=State}" Value="2">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <StackPanel>
+                                <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="Languagelabel" Content="{Binding TextAnalyticsResponse.Language.Name}" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="LanguageScorelabel" Content="{Binding TextAnalyticsResponse.Language.Score}" Style="{StaticResource DefaultLabel}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="Sentimentlabel" Content="{Binding TextAnalyticsResponse.Score}" Style="{StaticResource DefaultLabel}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Key Phrases:" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="NbKeyPhraseslabel" Content="{Binding TextAnalyticsResponse.NbKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label x:Name="KeyPhraseslabel" Content="{Binding TextAnalyticsResponse.FormattedKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

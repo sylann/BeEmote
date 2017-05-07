@@ -1,5 +1,6 @@
 ﻿using BeEmote.Core;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -94,9 +95,17 @@ namespace BeEmote.Services
         /// <returns></returns>
         private byte[] GetImageAsByteArray(string imageFilePath)
         {
-            FileStream fileStream = new FileStream(imageFilePath, FileMode.Open, FileAccess.Read);
-            BinaryReader binaryReader = new BinaryReader(fileStream);
-            return binaryReader.ReadBytes((int)fileStream.Length);
+            try
+            {
+                FileStream fileStream = new FileStream(imageFilePath, FileMode.Open, FileAccess.Read);
+                BinaryReader binaryReader = new BinaryReader(fileStream);
+                return binaryReader.ReadBytes((int)fileStream.Length);
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine($"Failed to read the given file: {imageFilePath}");
+                return null;
+            }
         }
 
         /// <summary>

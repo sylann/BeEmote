@@ -2,13 +2,22 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:BeEmote.Client.WPF">
 
+    <Color x:Key="HalfTransparent">#80FFFFFF</Color>
+    <SolidColorBrush x:Key="HalfTransparentBrush" Color="{StaticResource HalfTransparent}" />
+
+    <Color x:Key="TextGray">#aaaaaa</Color>
+    <SolidColorBrush x:Key="TextGrayBrush" Color="{StaticResource TextGray}" />
+
     <Color x:Key="BackGroundWhite">#fdfaff</Color>
     <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource BackGroundWhite}" />
 
+    <Color x:Key="DarkerWhite">#dddae3</Color>
+    <SolidColorBrush x:Key="DarkerWhiteBrush" Color="{StaticResource DarkerWhite}" />
+    
     <Color x:Key="BackGroundLightBlue">#efeeff</Color>
     <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource BackGroundLightBlue}" />
 
-    <Color x:Key="BackgroundBlue">#70ccfb</Color>
+    <Color x:Key="BackgroundBlue">#4588cb</Color>
     <SolidColorBrush x:Key="BackgroundBlueBrush" Color="{StaticResource BackgroundBlue}" />
 
     <Color x:Key="TextBlue">#ff83c5fa</Color>

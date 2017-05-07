@@ -51,8 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppHelpers\RequestStates.cs" />
     <Compile Include="AppManager.cs" />
-    <Compile Include="AppHelpers\AwaitStatus.cs" />
     <Compile Include="Credentials.cs" />
     <Compile Include="AppHelpers\JsonManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

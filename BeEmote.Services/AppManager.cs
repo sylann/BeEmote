@@ -47,8 +47,9 @@ namespace BeEmote.Services
             {
                 // If the path is a urL, the API will handle its validity, so we don't care.
                 // Thus we only check if it's nor a url neither a valid local path.
-                if (!value.StartsWith("http") && !File.Exists(value))
-                    ImagePath = null;
+                // Also eliminate the case where no value is provided.
+                if (value == null || !value.StartsWith("http") && !File.Exists(value))
+                    imagePath = null;
                 // Everything is ok, Set ImagePath and return true
                 imagePath = value;
             }
@@ -92,7 +93,8 @@ namespace BeEmote.Services
             SetEmotionResultStatus();
 
             // Prints results in the console
-            EmotionResponse.Describe();
+            if (State == RequestStates.ResponseReceived)
+                EmotionResponse.Describe();
         }
 
         /// <summary>
@@ -166,7 +168,9 @@ namespace BeEmote.Services
         private async Task GetEmotionFaces()
         {
             // Configure a new Request
-            if (ImagePath.StartsWith("http"))
+            if (string.IsNullOrWhiteSpace(ImagePath))
+                return;
+            else if (ImagePath.StartsWith("http"))
                 _RequestManager.SetEmotionConfiguration(_JsonManager.GetEmotionJson(ImagePath));
             else
                 _RequestManager.SetEmotionConfiguration(ImagePath);

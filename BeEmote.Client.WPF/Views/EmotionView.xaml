@@ -44,7 +44,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox Grid.Column="0" x:Name="ImagePathTextBox" Text="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource UrlTextBox}"/>
-                        <Button Grid.Column="1" x:Name="BrowseImageButton" Content="Browse..." Style="{StaticResource FlatWhiteButton}"/>
+                        <Button Grid.Column="1" x:Name="BrowseImageButton" Content="Browse..." Style="{StaticResource FlatWhiteButton}" Click="BrowseImageButton_Click"/>
                     </Grid>
                     
                     <!-- Url/path -->
@@ -58,14 +58,17 @@
 
                     <!-- Image -->
                     <Border  Grid.Row="2" Style="{StaticResource WhiteSubControl}">
-                        <Canvas x:Name="ImageContainer">
-                            <Image x:Name="EmotionImage"
+                        <Grid>
+                            <Canvas x:Name="ImageContainer">
+                                <Image x:Name="EmotionImage"
                                    Stretch="Uniform"
                                    Width="{Binding Path=ActualWidth, ElementName=ImageContainer}"
                                    Height="{Binding Path=ActualHeight, ElementName=ImageContainer}"/>
-                            <!-- XXX Insert face rectangles here -->
-                            <Canvas x:Name="RectangleContainer"/>
-                        </Canvas>
+                                <!-- XXX Insert face rectangles here -->
+                                <Canvas x:Name="RectangleContainer"/>
+                            </Canvas>
+                            <TextBlock Style="{StaticResource RequestFeedback}" />
+                        </Grid>
                     </Border>
                 </Grid>
             </Border>

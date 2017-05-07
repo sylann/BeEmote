@@ -1,7 +1,9 @@
 ﻿using BeEmote.Core;
 using BeEmote.Services;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +22,7 @@ namespace BeEmote.Client.WPF
         #region Private Fields
 
         private AppManager _AppManager;
+        private string memorizedPath;
 
         #endregion
 
@@ -71,7 +74,6 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private async void HandleEmotionApiCall()
         {
-            LoadEmotionImage();
             // Send the request
             await _AppManager.StartEmotion();
             // Data updates with Bindings,
@@ -308,6 +310,35 @@ namespace BeEmote.Client.WPF
                     Face face = _AppManager.EmotionResponse.Faces[index];
                     SetPositionAndSize(re, face);
                 }
+        }
+
+        /// <summary>
+        /// Opens the file dialog window to select image type files.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BrowseImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Open the dialog
+            var openFileDialog = new OpenFileDialog()
+            {
+                InitialDirectory = memorizedPath ?? @"c:\",
+                Filter = "Image Files(*.JPG;*.PNG)|*.JPG;*.PNG",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
+            // If a valid file has been selected
+            if (openFileDialog.ShowDialog() == true)
+            {
+                _AppManager.ImagePath = openFileDialog.FileName;
+                // Keep the folder in memory
+                memorizedPath = Directory.GetParent(_AppManager.ImagePath).ToString();
+                // load the image
+                LoadEmotionImage();
+            }
+
+
+
         }
 
         #endregion
