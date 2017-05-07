@@ -15,7 +15,8 @@ namespace BeEmote.Services
         NoData,
         AwaitingResponse,
         ResponseReceived,
-        EmptyResult
+        EmptyResult,
+        PartialResult
     }
 
     /// <summary>
@@ -29,15 +30,6 @@ namespace BeEmote.Services
         private RequestManager _RequestManager;
         private JsonManager _JsonManager;
         private string imagePath;
-
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        /// An event is fired whenever a public property changes
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         #endregion
         
@@ -106,19 +98,11 @@ namespace BeEmote.Services
         /// </summary>
         public async Task StartEmotion()
         {
-            // Configure a new Request
-            if (ImagePath.StartsWith("http"))
-                _RequestManager.SetEmotionConfiguration(_JsonManager.GetEmotionJson(ImagePath));
-            else
-                _RequestManager.SetEmotionConfiguration(ImagePath);
+            // Sends the request and handle the result
+            InitStatus();
+            await GetEmotionFaces();
+            SetEmotionResultStatus();
 
-            State = AwaitStatus.AwaitingResponse;
-            // Sends the request
-            string json = await _RequestManager.MakeRequest();
-            // Request satisfied
-            State = AwaitStatus.ResponseReceived;
-            // Instanciates the Emotion API Response model
-            EmotionResponse = new EmotionApiResponse(_JsonManager.GetFacesFromJsonResponse(json));
             // Prints results in the console
             EmotionResponse.Describe();
         }
@@ -132,15 +116,12 @@ namespace BeEmote.Services
             // Instanciates the Text Analytics API Response model
             TextAnalyticsResponse = new TextAnalyticsApiResponse();
 
-            State = AwaitStatus.AwaitingResponse;
-            // Phase 1
+            // Send the request and handle the result
+            InitStatus();
             await GetTextAnalyticsLanguage();
-            // Phase 2
             await GetTextAnalyticsKeyPhrases();
-            // Phase 3
             await GetTextAnalyticsScore();
-            // Request satisfied
-            State = AwaitStatus.ResponseReceived;
+            SetTextAnalyticsResultStatus();
 
             // Prints results in the console
             TextAnalyticsResponse.Describe();
@@ -148,7 +129,65 @@ namespace BeEmote.Services
 
         #endregion
 
-        #region Private Methods
+        #region Private Status Methods
+
+        /// <summary>
+        /// Initializes the request status to <see cref="AwaitStatus.NoData"/>
+        /// </summary>
+        private void InitStatus()
+        {
+            State = AwaitStatus.AwaitingResponse;
+        }
+
+        /// <summary>
+        /// Sets the request status according to the result:
+        /// Either <see cref="AwaitStatus.ResponseReceived"/>
+        /// Or <see cref="AwaitStatus.EmptyResult"/> if no face was found.
+        /// </summary>
+        private void SetEmotionResultStatus()
+        {
+            State = EmotionResponse?.Faces?.Count > 0
+               ? AwaitStatus.ResponseReceived
+               : AwaitStatus.EmptyResult;
+        }
+
+        /// <summary>
+        /// Sets the request status according to the Text analytics result:
+        /// The resulting State is one of <see cref="AwaitStatus"/>.
+        /// </summary>
+        private void SetTextAnalyticsResultStatus()
+        {
+            if (string.IsNullOrEmpty(TextAnalyticsResponse?.Language?.Name))
+                State = AwaitStatus.EmptyResult;
+            else if (TextAnalyticsResponse.KeyPhrases?.Count == 0)
+                State = AwaitStatus.PartialResult;
+            else
+                State = AwaitStatus.ResponseReceived;
+        }
+
+        #endregion
+
+        #region Private Request Methods
+
+        /// <summary>
+        /// Configure an emotion request according to the set image url,
+        /// then sends the request,
+        /// finally put the result in the model.
+        /// </summary>
+        /// <returns></returns>
+        private async Task GetEmotionFaces()
+        {
+            // Configure a new Request
+            if (ImagePath.StartsWith("http"))
+                _RequestManager.SetEmotionConfiguration(_JsonManager.GetEmotionJson(ImagePath));
+            else
+                _RequestManager.SetEmotionConfiguration(ImagePath);
+
+            // Send the request
+            string json = await _RequestManager.MakeRequest();
+            // Put the result in the model
+            EmotionResponse = new EmotionApiResponse(_JsonManager.GetFacesFromJsonResponse(json));
+        }
 
         /// <summary>
         /// Calls the <see cref="ParseJsonResponse(string)"/> method with the specified query,
@@ -198,6 +237,15 @@ namespace BeEmote.Services
             // Put the result into the model
             TextAnalyticsResponse.Score = _JsonManager.GetScoreFromJsonResponse(jsonString);
         }
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// An event is fired whenever a public property changes
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         #endregion
     }
