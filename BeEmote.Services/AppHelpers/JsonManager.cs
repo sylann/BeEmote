@@ -7,9 +7,14 @@ using System.Linq;
 
 namespace BeEmote.Services
 {
+    /// <summary>
+    /// Provides methods to deserialize or serialize Json,
+    /// related to the Cognitive Services API.
+    /// Should be used by the <see cref="AppManager"/>.
+    /// </summary>
     public class JsonManager
     {
-        #region Public Methods
+        #region Internal Methods
 
         /// <summary>
         /// Builds a json object containing the provided url,
@@ -17,7 +22,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public JObject GetEmotionJson(string url)
+        internal JObject GetEmotionJson(string url)
         {
             return new JObject
             {
@@ -29,7 +34,7 @@ namespace BeEmote.Services
         /// Builds a json object containing a provided text,
         /// as needed by the Text Analytics API "GET /languages"
         /// </summary>
-        public JObject GetTextAnalyticsJson(string text)
+        internal JObject GetTextAnalyticsJson(string text)
         {
             return new JObject
             {
@@ -45,7 +50,7 @@ namespace BeEmote.Services
         /// <summary>
         /// Builds a json object request containing a language
         /// </summary>
-        public JObject GetTextAnalyticsJson(string text, string language)
+        internal JObject GetTextAnalyticsJson(string text, string language)
         {
             return new JObject
             {
@@ -66,7 +71,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="json">A response from the Text Analytics API</param>
         /// <returns>The list of faces of an image</returns>
-        public List<Face> GetFacesFromJsonResponse(string json)
+        internal List<Face> GetFacesFromJsonResponse(string json)
         {
             try
             {
@@ -84,15 +89,19 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The language of a text</returns>
-        public Language GetLanguageFromJsonResponse(string jsonString)
+        internal Language GetLanguageFromJsonResponse(string jsonString)
         {
-            JObject raw = ParseJsonResponse(jsonString);
-
-            if (raw != null)
+            JObject raw;
+            try
             {
+                raw = ParseJsonResponse(jsonString);
                 return raw["documents"][0]["detectedLanguages"][0].ToObject<Language>();
             }
-            return null;
+            catch (Exception)
+            {
+                Console.WriteLine("The response structure was unexpected");
+                return null;
+            }
         }
 
         /// <summary>
@@ -101,30 +110,38 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The key phrases of a text</returns>
-        public List<string> GetKeyPhrasesFromJsonResponse(string jsonString)
+        internal List<string> GetKeyPhrasesFromJsonResponse(string jsonString)
         {
-            JObject raw = ParseJsonResponse(jsonString);
-            if (raw != null)
+            JObject raw;
+            try
             {
+                raw = ParseJsonResponse(jsonString);
                 return raw["documents"][0]["keyPhrases"].ToObject<List<string>>();
             }
-            return null;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
         /// Get the score value from a json string if it contains it.
-        /// Else return -1.
+        /// Else return null.
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The score of a text</returns>
-        public double GetScoreFromJsonResponse(string jsonString)
+        internal double? GetScoreFromJsonResponse(string jsonString)
         {
-            JObject raw = ParseJsonResponse(jsonString);
-            if (raw != null)
+            JObject raw;
+            try
             {
-                return (double)raw["documents"][0]["score"];
+                raw = ParseJsonResponse(jsonString);
+                return (double?)raw["documents"][0]["score"];
             }
-            return -1;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         #endregion
@@ -134,7 +151,7 @@ namespace BeEmote.Services
         /// <summary>
         /// Transform a response json string into a <see cref="JObject"/>.
         /// </summary>
-        /// <param name="Query">Last part of the route to the Text Analytics API</param>
+        /// <param name="jsonString">A json structured string</param>
         /// <returns>The raw Json Object</returns>
         private JObject ParseJsonResponse(string jsonString)
         {

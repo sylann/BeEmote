@@ -30,7 +30,7 @@ namespace BeEmote.Core
         /// A higher value means the text feels more positive and reciprocally.
         /// Requires that the language be known. Not every languages are supported.
         /// </summary>
-        public double Score { get; set; }
+        public double? Score { get; set; }
 
         /// <summary>
         /// The list of key phrases formatted as a single string.
@@ -53,8 +53,9 @@ namespace BeEmote.Core
 
         #region Public Methods
 
-
-
+        /// <summary>
+        /// Prints an easily readable recap of the result in the Console.
+        /// </summary>
         public void Describe()
         {
             Console.WriteLine($"\n==========================\nText Analytics API Result:\n");
@@ -67,7 +68,15 @@ namespace BeEmote.Core
 
         #region Private Methods
 
-        private string HumanReadable(double score) => $"{Math.Round(score * 100, 2)}%";
+        /// <summary>
+        /// Formats the score into a readable percentage.
+        /// </summary>
+        /// <param name="score"></param>
+        /// <returns></returns>
+        private string HumanReadable(double? score)
+        {
+            return score == null ? "-" : $"{Math.Round((double)score * 100, 2)}%";
+        }
 
         #endregion
     }
