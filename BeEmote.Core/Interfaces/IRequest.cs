@@ -1,7 +1,6 @@
-﻿using BeEmote.Core;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace BeEmote.Services
+namespace BeEmote.Core
 {
     /// <summary>
     /// Is able to send an Http request.

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace BeEmote.Services
+namespace BeEmote.Core
 {
     /// <summary>
     /// Provides methods to interact with the 2 Microsoft's Cognitive APIs:

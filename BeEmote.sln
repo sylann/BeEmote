@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Services.Tests", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Client.WPF.Tests", "BeEmote.Client.WPF.Tests\BeEmote.Client.WPF.Tests.csproj", "{E51D6A85-DF4F-48D4-A528-10CC6C2D5F35}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B9696C4D-D4AE-41C5-9598-B8315B8A6DD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{81DA6F07-C2F7-47B8-AA8D-43CAA2BBB10A} = {B9696C4D-D4AE-41C5-9598-B8315B8A6DD1}
+		{E51D6A85-DF4F-48D4-A528-10CC6C2D5F35} = {B9696C4D-D4AE-41C5-9598-B8315B8A6DD1}
 	EndGlobalSection
 EndGlobal

@@ -52,9 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppHelpers\ByteArrayBuilder.cs" />
-    <Compile Include="AppHelpers\RequestStates.cs" />
     <Compile Include="AppManager.cs" />
-    <Compile Include="Credentials.cs" />
+    <Compile Include="Security\ConnectionStrings.cs" />
+    <Compile Include="Security\Credentials.cs" />
     <Compile Include="AppHelpers\JsonManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AppHelpers\RequestManager.cs" />

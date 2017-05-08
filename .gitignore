@@ -244,3 +244,4 @@ ModelManifest.xml
 # Custom Credential Data
 *.sql
 Credentials.cs
+ConnectionStrings.cs
