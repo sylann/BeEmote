@@ -1,10 +1,7 @@
 ﻿using BeEmote.Core;
 using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BeEmote.Services
@@ -12,25 +9,20 @@ namespace BeEmote.Services
     /// <summary>
     /// Dedicated to preparing and sending requests to the API
     /// </summary>
-    public class RequestManager
-    {
-        /// <summary>
-        /// Configuration containing the need information to make a request.
-        /// </summary>
-        private RequestConfiguration Configuration;
-
-        #region Public Methods
+    public class RequestManager : IConfigurable, IRequest
+    {        
+        #region Public Methods (Configuration)
 
         /// <summary>
         /// Configure an Emotion request for a local image,
         /// by providing its local path
         /// </summary>
         /// <param name="ImagePath">The local path of the image</param>
-        public void SetEmotionConfiguration(string ImagePath)
+        public RequestConfiguration GetEmotionConfiguration(string ImagePath)
         {
-            Configuration = new RequestConfiguration(
+            return new RequestConfiguration(
                 Uri: "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize",
-                Data: GetImageAsByteArray(ImagePath),
+                Data: ByteArrayBuilder.FromImagePath(ImagePath),
                 ContentType: "application/octet-stream",
                 CredentialKey: Credentials.EmotionKey);
         }
@@ -40,11 +32,11 @@ namespace BeEmote.Services
         /// by providing its url.
         /// </summary>
         /// <param name="ImageUrl">Image url encapsulated in a <see cref="JObject"/></param>
-        public void SetEmotionConfiguration(JObject ImageUrl)
+        public RequestConfiguration GetEmotionConfiguration(JObject ImageUrl)
         {
-            Configuration = new RequestConfiguration(
+            return new RequestConfiguration(
                 Uri: "https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize",
-                Data: GetJsonAsByteArray(ImageUrl),
+                Data: ByteArrayBuilder.FromJsonObject(ImageUrl),
                 ContentType: "application/json",
                 CredentialKey: Credentials.EmotionKey);
         }
@@ -54,14 +46,18 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="Query"></param>
         /// <param name="body"></param>
-        public void SetTextAnalyticsConfiguration(string Query, JObject body)
+        public RequestConfiguration GetTextAnalyticsConfiguration(string Query, JObject body)
         {
-            Configuration = new RequestConfiguration(
+            return new RequestConfiguration(
                 Uri: $"https://westus.api.cognitive.microsoft.com/text/analytics/v2.0/{Query}",
-                Data: GetJsonAsByteArray(body),
+                Data: ByteArrayBuilder.FromJsonObject(body),
                 ContentType: "application/json",
                 CredentialKey: Credentials.TextAnalyticsKey);
         }
+
+        #endregion
+
+        #region Public Methods (Request)
 
         /// <summary>
         /// Send a request to the server with a configuration object as parameter,
@@ -69,56 +65,21 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="imageFilePath"></param>
         /// <returns>Task(string) JSON data about the image</returns>
-        public async Task<string> MakeRequest()
+        public async Task<string> MakeRequest(RequestConfiguration conf)
         {
             using (var client = new HttpClient())
             {
                 // Configure
-                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", Configuration.CredentialKey);
-                var request = new ByteArrayContent(Configuration.Data);
-                request.Headers.ContentType = new MediaTypeHeaderValue(Configuration.ContentType);
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", conf.CredentialKey);
+                var request = new ByteArrayContent(conf.Data);
+                request.Headers.ContentType = new MediaTypeHeaderValue(conf.ContentType);
 
                 // Send
-                System.Console.WriteLine($"Sending request to {Configuration.Uri}...");
-                return await (await client.PostAsync(Configuration.Uri, request)).Content.ReadAsStringAsync();
+                System.Console.WriteLine($"Sending request to {conf.Uri}...");
+                return await (await client.PostAsync(conf.Uri, request)).Content.ReadAsStringAsync();
             }
         }
 
         #endregion
-
-        #region Private Methods
-        
-        /// <summary>
-        /// Transform an image from its local path into an array of byte
-        /// </summary>
-        /// <param name="imageFilePath">The full path to the image</param>
-        /// <returns></returns>
-        private byte[] GetImageAsByteArray(string imageFilePath)
-        {
-            try
-            {
-                FileStream fileStream = new FileStream(imageFilePath, FileMode.Open, FileAccess.Read);
-                BinaryReader binaryReader = new BinaryReader(fileStream);
-                return binaryReader.ReadBytes((int)fileStream.Length);
-            }
-            catch (System.Exception)
-            {
-                Console.WriteLine($"Failed to read the given file: {imageFilePath}");
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Transforms a string representing a json body into an array of byte
-        /// </summary>
-        /// <param name="json">The string representing the json body</param>
-        /// <returns></returns>
-        private byte[] GetJsonAsByteArray(JObject json)
-        {
-            return Encoding.UTF8.GetBytes(json.ToString());
-        }
-
-        #endregion
-
     }
 }

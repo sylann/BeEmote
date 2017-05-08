@@ -12,9 +12,9 @@ namespace BeEmote.Services
     /// related to the Cognitive Services API.
     /// Should be used by the <see cref="AppManager"/>.
     /// </summary>
-    public class JsonManager
+    public class JsonManager : IEmotionParser, ITextAnalyticsParser
     {
-        #region Internal Methods
+        #region public Methods
 
         /// <summary>
         /// Builds a json object containing the provided url,
@@ -22,7 +22,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        internal JObject GetEmotionJson(string url)
+        public JObject GetEmotionJson(string url)
         {
             return new JObject
             {
@@ -34,7 +34,7 @@ namespace BeEmote.Services
         /// Builds a json object containing a provided text,
         /// as needed by the Text Analytics API "GET /languages"
         /// </summary>
-        internal JObject GetTextAnalyticsJson(string text)
+        public JObject GetTextAnalyticsJson(string text)
         {
             return new JObject
             {
@@ -50,7 +50,7 @@ namespace BeEmote.Services
         /// <summary>
         /// Builds a json object request containing a language
         /// </summary>
-        internal JObject GetTextAnalyticsJson(string text, string language)
+        public JObject GetTextAnalyticsJson(string text, string language)
         {
             return new JObject
             {
@@ -71,7 +71,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="json">A response from the Text Analytics API</param>
         /// <returns>The list of faces of an image</returns>
-        internal List<Face> GetFacesFromJsonResponse(string json)
+        public List<Face> GetFacesFromJsonResponse(string json)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The language of a text</returns>
-        internal Language GetLanguageFromJsonResponse(string jsonString)
+        public Language GetLanguageFromJsonResponse(string jsonString)
         {
             JObject raw;
             try
@@ -110,7 +110,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The key phrases of a text</returns>
-        internal List<string> GetKeyPhrasesFromJsonResponse(string jsonString)
+        public List<string> GetKeyPhrasesFromJsonResponse(string jsonString)
         {
             JObject raw;
             try
@@ -130,7 +130,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The score of a text</returns>
-        internal double? GetScoreFromJsonResponse(string jsonString)
+        public double? GetScoreFromJsonResponse(string jsonString)
         {
             JObject raw;
             try

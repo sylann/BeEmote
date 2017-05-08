@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace BeEmote.Core
 {
-    public class Face
+    public class Face : IDescribable
     {
         #region Public Properties
 

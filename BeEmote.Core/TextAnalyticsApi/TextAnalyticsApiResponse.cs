@@ -9,7 +9,7 @@ namespace BeEmote.Core
     /// It concists of a detected <see cref="Core.Language"/>, a list of key phrases depending on the language
     /// and a score of sentiment for the overall text (depending on the language).
     /// </summary>
-    public class TextAnalyticsApiResponse
+    public class TextAnalyticsApiResponse : IDescribable
     {
         #region Public Properties
 

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BeEmote.Services.Tests\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,11 +50,19 @@
     <Compile Include="EmotionApi\Faces\Scores.cs" />
     <Compile Include="EmotionApi\Faces\Face.cs" />
     <Compile Include="EmotionApi\EmotionApiResponse.cs" />
+    <Compile Include="Interfaces\ICognitiveApp.cs" />
+    <Compile Include="Interfaces\IConfigurable.cs" />
+    <Compile Include="Interfaces\IEmotionAPI.cs" />
+    <Compile Include="Interfaces\IEmotionParser.cs" />
+    <Compile Include="Interfaces\IDescribable.cs" />
+    <Compile Include="Interfaces\IRequest.cs" />
+    <Compile Include="Interfaces\ITextAnalyticsAPI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmotionApi\Faces\FaceRectangle.cs" />
     <Compile Include="RequestConfiguration.cs" />
     <Compile Include="TextAnalyticsApi\Language.cs" />
     <Compile Include="TextAnalyticsApi\TextAnalyticsApiResponse.cs" />
+    <Compile Include="Interfaces\ITextAnalyticsParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\EmotionApiResponse1.json" />

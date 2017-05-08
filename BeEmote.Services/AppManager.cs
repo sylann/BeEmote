@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 namespace BeEmote.Services
 {
@@ -12,7 +13,7 @@ namespace BeEmote.Services
     /// Handles the global functionning of the application
     /// </summary>
     [ImplementPropertyChanged]
-    public class AppManager : INotifyPropertyChanged
+    public class AppManager : INotifyPropertyChanged, ICognitiveApp, IEmotionAPI, ITextAnalyticsAPI
     {
         #region Private Fields
 
@@ -103,26 +104,32 @@ namespace BeEmote.Services
 
         #endregion
 
-        #region Public Methods
+        #region ICognitiveApp implementation
 
         /// <summary>
-        /// Send a request with the provided <see cref="ImagePath"/> to the Emotion API.
+        /// Send a request to the Emotion API and fully handle the results.
         /// Finally, print a description of the result in the console.
         /// </summary>
         public async Task StartEmotion()
         {
             // Sends the request and handle the result
-            InitStatus();
-            await GetEmotionFaces();
-            SetEmotionResultStatus();
+            State = RequestStates.AwaitingResponse;
 
-            // Prints results in the console
-            if (State == RequestStates.ResponseReceived)
+            var conf = GetEmotionConfiguration(ImagePath);
+            EmotionResponse = await GetEmotionFaces(conf);
+
+            if (EmotionResponse?.Faces?.Count > 0)
+            {
+                State = RequestStates.ResponseReceived;
+                // Prints results in the console
                 EmotionResponse.Describe();
+            }
+            else
+                State = RequestStates.EmptyResult;
         }
 
         /// <summary>
-        /// Succesfully then send 3 requests in a defined order to the Text Analytics API.
+        /// Send 3 requests in a defined order to the Text Analytics API.
         /// Finally, print a description of the result in the console.
         /// </summary>
         public async Task StartTextAnalytics()
@@ -131,11 +138,23 @@ namespace BeEmote.Services
             TextAnalyticsResponse = new TextAnalyticsApiResponse();
 
             // Send the request and handle the result
-            InitStatus();
-            await GetTextAnalyticsLanguage();
-            await GetTextAnalyticsKeyPhrases();
-            await GetTextAnalyticsScore();
-            SetTextAnalyticsResultStatus();
+            State = RequestStates.AwaitingResponse;
+
+            var conf = GetTextAnalyticsConfiguration("languages", TextToAnalyse);
+            TextAnalyticsResponse.Language = await GetTextAnalyticsLanguage(conf);
+
+            State = RequestStates.PartialResult;
+
+            conf = GetTextAnalyticsConfiguration("keyPhrases", TextToAnalyse, TextAnalyticsResponse.Language.Iso6391Name);
+            TextAnalyticsResponse.KeyPhrases = await GetTextAnalyticsKeyPhrases(conf);
+
+            conf = GetTextAnalyticsConfiguration("sentiment", TextToAnalyse, TextAnalyticsResponse.Language.Iso6391Name);
+            TextAnalyticsResponse.Score = await GetTextAnalyticsScore(conf);
+
+            if (string.IsNullOrEmpty(TextAnalyticsResponse?.Language?.Name))
+                State = RequestStates.EmptyResult;
+            else
+                State = RequestStates.ResponseReceived;
 
             // Prints results in the console
             TextAnalyticsResponse.Describe();
@@ -143,115 +162,102 @@ namespace BeEmote.Services
 
         #endregion
 
-        #region Private Status Methods
+        #region IEmotionAPI implementation
 
         /// <summary>
-        /// Initializes the request status to <see cref="RequestStates.NoData"/>
+        /// Sends a request with the provided configuration
         /// </summary>
-        private void InitStatus()
+        /// <param name="conf">A configuration for the Emotion API</param>
+        /// <returns>The response from API</returns>
+        public async Task<EmotionApiResponse> GetEmotionFaces(RequestConfiguration conf)
         {
-            State = RequestStates.AwaitingResponse;
+            // Send the request
+            string json = await _RequestManager.MakeRequest(conf);
+            // Put the result in the model
+            return new EmotionApiResponse(_JsonManager.GetFacesFromJsonResponse(json));
         }
 
         /// <summary>
-        /// Sets the request status according to the result:
-        /// Either <see cref="RequestStates.ResponseReceived"/>
-        /// Or <see cref="RequestStates.EmptyResult"/> if no face was found.
+        /// Configures an emotion request according to the provided image url
         /// </summary>
-        private void SetEmotionResultStatus()
+        /// <returns></returns>
+        public RequestConfiguration GetEmotionConfiguration(string imagePath)
         {
-            State = EmotionResponse?.Faces?.Count > 0
-               ? RequestStates.ResponseReceived
-               : RequestStates.EmptyResult;
-        }
-
-        /// <summary>
-        /// Sets the request status according to the Text analytics result:
-        /// The resulting State is one of <see cref="RequestStates"/>.
-        /// </summary>
-        private void SetTextAnalyticsResultStatus()
-        {
-            if (string.IsNullOrEmpty(TextAnalyticsResponse?.Language?.Name))
-                State = RequestStates.EmptyResult;
-            else if (TextAnalyticsResponse.KeyPhrases?.Count == 0)
-                State = RequestStates.PartialResult;
+            // Configure a new Request
+            if (string.IsNullOrWhiteSpace(imagePath))
+                return null;
+            else if (Uri.IsWellFormedUriString(imagePath, UriKind.Absolute))
+                return _RequestManager.GetEmotionConfiguration(_JsonManager.GetEmotionJson(imagePath));
             else
-                State = RequestStates.ResponseReceived;
+                return _RequestManager.GetEmotionConfiguration(imagePath);
         }
 
         #endregion
 
-        #region Private Request Methods
-
+        #region ITextAnalytics implementation
+        
         /// <summary>
-        /// Configure an emotion request according to the set image url,
-        /// then sends the request,
-        /// finally put the result in the model.
+        /// Sends a request to the Text Analytics API.
+        /// Retrive the <see cref="TextAnalyticsApiResponse.Language"/> from the json response.
         /// </summary>
-        /// <returns></returns>
-        private async Task GetEmotionFaces()
+        public async Task<Language> GetTextAnalyticsLanguage(RequestConfiguration conf)
         {
-            // Configure a new Request
-            if (string.IsNullOrWhiteSpace(ImagePath))
-                return;
-            else if (ImagePathIsUri)
-                _RequestManager.SetEmotionConfiguration(_JsonManager.GetEmotionJson(ImagePath));
-            else
-                _RequestManager.SetEmotionConfiguration(ImagePath);
-
-            // Send the request
-            string json = await _RequestManager.MakeRequest();
-            // Put the result in the model
-            EmotionResponse = new EmotionApiResponse(_JsonManager.GetFacesFromJsonResponse(json));
+            // Send Request
+            string jsonString = await _RequestManager.MakeRequest(conf);
+            // Put the result into the model
+            return _JsonManager.GetLanguageFromJsonResponse(jsonString);
         }
 
         /// <summary>
-        /// Calls the <see cref="ParseJsonResponse(string)"/> method with the specified query,
-        /// which sends the request to the Text Analytics API.
-        /// Sets the <see cref="TextAnalyticsApiResponse.Language"/> of the text once the response is caught.
+        /// Sends a request to the Text Analytics API.
+        /// Retrive the <see cref="TextAnalyticsApiResponse.KeyPhrases"/> from the json response.
         /// </summary>
-        private async Task GetTextAnalyticsLanguage()
+        public async Task<List<string>> GetTextAnalyticsKeyPhrases(RequestConfiguration conf)
         {
-            // Configure request
-            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse);
-            _RequestManager.SetTextAnalyticsConfiguration("languages", body);
             // Send Request
-            string jsonString = await _RequestManager.MakeRequest();
+            string jsonString = await _RequestManager.MakeRequest(conf);
             // Put the result into the model
-            TextAnalyticsResponse.Language = _JsonManager.GetLanguageFromJsonResponse(jsonString);
-        }
-
-        /// <summary>
-        /// Calls the <see cref="ParseJsonResponse(string)"/> method with the specified query,
-        /// which sends the request to the Text Analytics API.
-        /// Sets the <see cref="TextAnalyticsApiResponse.KeyPhrases"/> of the text once the response is caught.
-        /// </summary>
-        private async Task GetTextAnalyticsKeyPhrases()
-        {
-            // Configure request
-            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, TextAnalyticsResponse.Language.Iso6391Name);
-            _RequestManager.SetTextAnalyticsConfiguration("keyPhrases", body);
-            // Send Request
-            string jsonString = await _RequestManager.MakeRequest();
-            // Put the result into the model
-            TextAnalyticsResponse.KeyPhrases = _JsonManager.GetKeyPhrasesFromJsonResponse(jsonString);
+            return _JsonManager.GetKeyPhrasesFromJsonResponse(jsonString);
 
         }
 
         /// <summary>
-        /// Calls the <see cref="ParseJsonResponse(string)"/> method with the specified query,
-        /// which sends the request to the Text Analytics API.
-        /// Sets the <see cref="TextAnalyticsApiResponse.Score"/> of the text once the response is caught.
+        /// Sends a request to the Text Analytics API.
+        /// Retrive the <see cref="TextAnalyticsApiResponse.Score"/> from the Json Response
         /// </summary>
-        private async Task GetTextAnalyticsScore()
+        public async Task<double?> GetTextAnalyticsScore(RequestConfiguration conf)
+        {
+            // Send Request
+            string jsonString = await _RequestManager.MakeRequest(conf);
+            // Put the result into the model
+            return _JsonManager.GetScoreFromJsonResponse(jsonString);
+        }
+
+        /// <summary>
+        /// Todo: Add description
+        /// </summary>
+        /// <param name="query">The end of the Text Analytics API url</param>
+        /// <param name="text">The text to analyse</param>
+        /// <returns>A configuration to request a Text's Language</returns>
+        public RequestConfiguration GetTextAnalyticsConfiguration(string query, string text)
         {
             // Configure request
-            JObject body = _JsonManager.GetTextAnalyticsJson(TextToAnalyse, TextAnalyticsResponse.Language.Iso6391Name);
-            _RequestManager.SetTextAnalyticsConfiguration("sentiment", body);
-            // Send Request
-            string jsonString = await _RequestManager.MakeRequest();
-            // Put the result into the model
-            TextAnalyticsResponse.Score = _JsonManager.GetScoreFromJsonResponse(jsonString);
+            JObject body = _JsonManager.GetTextAnalyticsJson(text);
+            return _RequestManager.GetTextAnalyticsConfiguration(query, body);
+        }
+
+        /// <summary>
+        /// Todo: Add description
+        /// </summary>
+        /// <param name="query">The end of the Text Analytics API url</param>
+        /// <param name="text">The text to analyse</param>
+        /// <param name="language">The language of the text as already identified by the API</param>
+        /// <returns>A configuration to request a Text's key phrases or Score</returns>
+        public RequestConfiguration GetTextAnalyticsConfiguration(string query, string text, string language)
+        {
+            // Configure request
+            JObject body = _JsonManager.GetTextAnalyticsJson(text, language);
+            return _RequestManager.GetTextAnalyticsConfiguration(query, body);
         }
 
         #endregion

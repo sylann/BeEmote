@@ -8,7 +8,7 @@ namespace BeEmote.Core
     /// It concists of a list of <see cref="Face"/>s describing the position
     /// and the <see cref="Emotion"/> of each face found on the image.
     /// </summary>
-    public class EmotionApiResponse
+    public class EmotionApiResponse : IDescribable
     {
         #region Public Properties
 

@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppHelpers\ByteArrayBuilder.cs" />
     <Compile Include="AppHelpers\RequestStates.cs" />
     <Compile Include="AppManager.cs" />
     <Compile Include="Credentials.cs" />
