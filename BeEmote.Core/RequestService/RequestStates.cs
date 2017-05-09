@@ -1,4 +1,4 @@
-﻿namespace BeEmote.Services
+﻿namespace BeEmote.Core
 {
     /// <summary>
     /// Possible status of the Application regarding API request/response

@@ -16,7 +16,7 @@ namespace BeEmote.Client.WPF
         /// <summary>
         /// The application manager instance of the TextAnalytics ViewModel
         /// </summary>
-        private AppManager _AppManager;
+        private TextAnalyticsManager TextAnalyticsApp;
 
         #endregion
 
@@ -26,15 +26,15 @@ namespace BeEmote.Client.WPF
         /// Default constructor: Init components, set context, init global events.
         /// Optionnaly set dummy data.
         /// </summary>
-        /// <param name="_AppManager"></param>
-        public TextAnalyticsView(AppManager _AppManager)
+        public TextAnalyticsView()
         {
             InitializeComponent();
-            this._AppManager = _AppManager;
-            DataContext = _AppManager;
+            TextAnalyticsApp = new TextAnalyticsManager();
+            DataContext = TextAnalyticsApp;
             TextToAnalyseBox.GotFocus += OnTextToAnalyseGotFocus;
             TextToAnalyseBox.LostFocus += OnTextToAnalyseLostFocus;
-            _AppManager.TextToAnalyse = "Input some text here...";
+            TextAnalyticsApp.TextToAnalyse = "Input some text here...";
+            
         }
 
         #endregion
@@ -48,7 +48,7 @@ namespace BeEmote.Client.WPF
         private async void HandleTextAnalyticsApiCall()
         {
             // Send the request
-            await _AppManager.StartTextAnalytics();
+            await TextAnalyticsApp.Start();
         }
 
         #endregion
@@ -75,7 +75,7 @@ namespace BeEmote.Client.WPF
         public void OnTextToAnalyseGotFocus(object sender, EventArgs e)
         {
             TextToAnalyseBox.Foreground = FindResource("TextDarkBlueBrush") as SolidColorBrush;
-            _AppManager.TextToAnalyse = "";
+            TextAnalyticsApp.TextToAnalyse = "";
         }
 
         /// <summary>
@@ -88,8 +88,8 @@ namespace BeEmote.Client.WPF
         {
             TextToAnalyseBox.Foreground = FindResource("TextGrayBrush") as SolidColorBrush;
 
-            if (String.IsNullOrWhiteSpace(_AppManager.TextToAnalyse))
-                _AppManager.TextToAnalyse = "Input some text here...";
+            if (String.IsNullOrWhiteSpace(TextAnalyticsApp.TextToAnalyse))
+                TextAnalyticsApp.TextToAnalyse = "Input some text here...";
         }
 
         #endregion

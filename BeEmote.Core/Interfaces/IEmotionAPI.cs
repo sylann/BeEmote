@@ -2,20 +2,18 @@
 
 namespace BeEmote.Core
 {
+    /// <summary>
+    /// Defines the methods that are mandatory to interact 
+    /// with the Emotion API in particular.
+    /// </summary>
     public interface IEmotionAPI
     {
         /// <summary>
-        /// Todo: Add description
+        /// Calls the <see cref="RequestManager.GetEmotionConfiguration(string)"/> method.
+        /// imagePath can be either a local path or a remote url.
         /// </summary>
-        /// <param name="conf"></param>
-        /// <returns></returns>
-        Task<EmotionApiResponse> GetEmotionFaces(RequestConfiguration conf);
-
-        /// <summary>
-        /// Todo: Add description
-        /// </summary>
-        /// <param name="imagePath"></param>
-        /// <returns></returns>
-        RequestConfiguration GetEmotionConfiguration(string imagePath);
+        /// <param name="imagePath">The path of the image to analyse</param>
+        /// <returns>A configuration for an Emotion API Request</returns>
+        RequestConfiguration Configure(string imagePath);
     }
 }

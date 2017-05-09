@@ -25,9 +25,9 @@ namespace BeEmote.Services
                 BinaryReader binaryReader = new BinaryReader(fileStream);
                 return binaryReader.ReadBytes((int)fileStream.Length);
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
-                Console.WriteLine($"Failed to read the given file: {imageFilePath}");
+                Console.WriteLine($"Failed to read the given file: {imageFilePath}\nError: {e}");
                 return null;
             }
         }

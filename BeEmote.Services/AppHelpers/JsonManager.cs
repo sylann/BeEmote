@@ -71,7 +71,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="json">A response from the Text Analytics API</param>
         /// <returns>The list of faces of an image</returns>
-        public List<Face> GetFacesFromJsonResponse(string json)
+        public List<Face> GetFacesFromJson(string json)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The language of a text</returns>
-        public Language GetLanguageFromJsonResponse(string jsonString)
+        public Language GetLanguageFromJson(string jsonString)
         {
             JObject raw;
             try
@@ -110,7 +110,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The key phrases of a text</returns>
-        public List<string> GetKeyPhrasesFromJsonResponse(string jsonString)
+        public List<string> GetKeyPhrasesFromJson(string jsonString)
         {
             JObject raw;
             try
@@ -130,7 +130,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="jsonString">A response from the Text Analytics API</param>
         /// <returns>The score of a text</returns>
-        public double? GetScoreFromJsonResponse(string jsonString)
+        public double? GetScoreFromJson(string jsonString)
         {
             JObject raw;
             try

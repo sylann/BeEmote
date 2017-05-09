@@ -10,12 +10,7 @@ namespace BeEmote.Client.WPF
     public partial class MainWindow : Window
     {
         #region Private Fields
-
-        /// <summary>
-        /// Contains the application context
-        /// </summary>
-        private AppManager _AppManager;
-
+        
         /// <summary>
         /// Indicates if the application is in the home screen.
         /// </summary>
@@ -31,7 +26,6 @@ namespace BeEmote.Client.WPF
         /// </summary>
         public MainWindow()
         {
-            _AppManager = new AppManager();
             InitializeComponent();
             GoToPresentationMode();
         }
@@ -104,7 +98,7 @@ namespace BeEmote.Client.WPF
         private void EmotionButton_Click(object sender, RoutedEventArgs e)
         {
             // Use the emotion control
-            MainFrame.Content = new EmotionView(_AppManager);
+            MainFrame.Content = new EmotionView();
         }
 
         /// <summary>
@@ -115,7 +109,7 @@ namespace BeEmote.Client.WPF
         private void TextAnalyticsButton_Click(object sender, RoutedEventArgs e)
         {
             // Use the text analytics control
-            MainFrame.Content = new TextAnalyticsView(_AppManager);
+            MainFrame.Content = new TextAnalyticsView();
         }
 
         /// <summary>

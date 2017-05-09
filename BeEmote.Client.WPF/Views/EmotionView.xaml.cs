@@ -23,7 +23,7 @@ namespace BeEmote.Client.WPF
         /// <summary>
         /// The application manager instance of the Emotion ViewModel
         /// </summary>
-        private AppManager _AppManager;
+        private EmotionManager emotionApp;
         
         #endregion
 
@@ -53,16 +53,15 @@ namespace BeEmote.Client.WPF
         /// Init the view, bring the Application context
         /// down from the main window, and set it as DataContext
         /// </summary>
-        /// <param name="_AppManager"></param>
-        public EmotionView(AppManager _AppManager)
+        public EmotionView()
         {
             InitializeComponent();
-            this._AppManager = _AppManager;
-            DataContext = _AppManager;
+            emotionApp = new EmotionManager();
+            DataContext = emotionApp;
             // Listen to window resizing to update rectangles size
             ImageContainer.SizeChanged += OnCanvasSizeChanged;
             // Dummy data for testing purposes
-            _AppManager.ImagePath = "http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg";
+            emotionApp.ImagePath = "http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg";
         }
 
         #endregion
@@ -76,13 +75,14 @@ namespace BeEmote.Client.WPF
         private async void HandleEmotionApiCall()
         {
             // Send the request
-            await _AppManager.StartEmotion();
+            await emotionApp.Start();
             // Data updates with Bindings,
             // Handle the result only if it is consistent
-            if (_AppManager.State != RequestStates.EmptyResult)
+            if (emotionApp.State != RequestStates.EmptyResult)
             {
-                AddRectanglesToList(_AppManager.EmotionResponse.Faces);
-                AddRectanglesToCanvas();
+                ClearCanvas(RectangleContainer);
+                AddRectanglesToList(emotionApp.Response.Faces);
+                AddRectanglesToCanvas(ImageRectangles, RectangleContainer);
                 SelectFaceRectangle(ImageRectangles[0]); // Select 1st face per default
                 LoadCurrentFaceStats();
             }
@@ -95,15 +95,17 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private void LoadEmotionImage()
         {
+            // Resets the state, which removes fail messages
+            emotionApp.Reset();
             // Don't load the image if there is no actual path
-            if (_AppManager.ImagePath == null)
+            if (emotionApp.ImagePath == null)
                 return;
 
-            ClearCanvas();
+            ClearCanvas(RectangleContainer);
             ImageRectangles = new List<Rectangle>();
 
             // Instantiate the image and put it in the view
-            var uri = new Uri(_AppManager.ImagePath, UriKind.Absolute);
+            var uri = new Uri(emotionApp.ImagePath, UriKind.Absolute);
             EmotionImage.Source = InitialEmotionImage = new BitmapImage(uri);
         }
 
@@ -113,7 +115,7 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private void LoadCurrentFaceStats()
         {
-            var currentFace = _AppManager.EmotionResponse.Faces.ElementAt(SelectedFaceIndex);
+            var currentFace = emotionApp.Response.Faces.ElementAt(SelectedFaceIndex);
             DominantEmotionLabel.Content = currentFace.GetDominantEmotion();
             AngerLabel.Content = currentFace.Scores.AngerHR;
             ContemptLabel.Content = currentFace.Scores.ContemptHR;
@@ -152,7 +154,7 @@ namespace BeEmote.Client.WPF
             // Open the file browsing dialog
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
-                InitialDirectory = _AppManager.ImageFolder ?? @"c:\",
+                InitialDirectory = emotionApp.ImageFolder ?? @"c:\",
                 Filter = String.Format("Image Files({0})|{0}", "*.jpg;*.png;*.jpeg;*.jpe;*.gif;*.bmp"),
                 FilterIndex = 2,
                 CheckPathExists = true
@@ -238,18 +240,18 @@ namespace BeEmote.Client.WPF
         /// Add rectangles in the dedicated canvas for each face found on the image.
         /// </summary>
         /// <param name="emotion">The emotion response object</param>
-        private void AddRectanglesToCanvas()
+        private void AddRectanglesToCanvas(List<Rectangle> rectangles, Canvas canvas)
         {
-            foreach (var rectangle in ImageRectangles)
-                RectangleContainer.Children.Add(rectangle);
+            foreach (var rectangle in rectangles)
+                canvas.Children.Add(rectangle);
         }
 
         /// <summary>
         /// Clear the rectangles from the canvas
         /// </summary>
-        private void ClearCanvas()
+        private void ClearCanvas(Canvas canvas)
         {
-            RectangleContainer.Children.Clear();
+            canvas.Children.Clear();
         }
 
         /// <summary>
@@ -260,56 +262,29 @@ namespace BeEmote.Client.WPF
         /// <param name="face"></param>
         private void SetPositionAndSize(Rectangle rectangle, Face face)
         {
-            rectangle.SetValue(Canvas.LeftProperty, LeftResize(face.FaceRectangle.Left));
-            rectangle.SetValue(Canvas.TopProperty, TopResize(face.FaceRectangle.Top));
-            rectangle.Width = WidthResize(face.FaceRectangle.Width);
-            rectangle.Height = HeightResize(face.FaceRectangle.Height);
-        }
-
-        /// <summary>
-        /// Updates the distance between the left of the faceBox
-        /// and the left of the<see cref="ImageContainer"/>
-        /// </summary>
-        /// <param name="top">Current distance</param>
-        /// <returns>Updated distance</returns>
-        private object LeftResize(int left)
-        {
-            double offset = (ImageContainer.ActualWidth - EmotionImage.ActualWidth) / 2;
-            return offset + WidthResize(left);
-        }
-
-        /// <summary>
-        /// Updates the distance between the top of the faceBox
-        /// and the top of the<see cref="ImageContainer"/>
-        /// </summary>
-        /// <param name="top">Current distance</param>
-        /// <returns>Updated distance</returns>
-        private object TopResize(int top)
-        {
-            double offset = (ImageContainer.ActualHeight - EmotionImage.ActualHeight) / 2;
-            return offset + HeightResize(top);
-        }
-
-        /// <summary>
-        /// Re Evaluates a horizontal dimension after a resize of the canvas
-        /// </summary>
-        /// <param name="val">A horizontal dimension (left position or width)</param>
-        /// <returns>The new dimension</returns>
-        private double WidthResize(double val)
-        {
-            double HorizontalRatio = InitialEmotionImage.Width / EmotionImage.ActualWidth;
-            return val / HorizontalRatio;
-        }
-
-        /// <summary>
-        /// Re Evaluates a vertical dimension after a resize of the canvas
-        /// </summary>
-        /// <param name="val">A vertical dimension (top position or height)</param>
-        /// <returns>The new dimension</returns>
-        private double HeightResize(double val)
-        {
-            double VerticalRatio = InitialEmotionImage.Height / EmotionImage.ActualHeight;
-            return val / VerticalRatio;
+            var drawer = new RectangleDrawer();
+            // Reposition Left
+            rectangle.SetValue(Canvas.LeftProperty, drawer.LeftResize(
+                face.FaceRectangle.Left,
+                ImageContainer.ActualWidth,
+                EmotionImage.ActualWidth,
+                InitialEmotionImage.Width));
+            // Reposition Top
+            rectangle.SetValue(Canvas.TopProperty, drawer.TopResize(
+                face.FaceRectangle.Top,
+                ImageContainer.ActualHeight,
+                EmotionImage.ActualHeight,
+                InitialEmotionImage.Height));
+            // Reposition Width
+            rectangle.Width = drawer.WidthResize(
+                face.FaceRectangle.Width,
+                InitialEmotionImage.Width,
+                EmotionImage.ActualWidth);
+            // Reposition Height
+            rectangle.Height = drawer.HeightResize(
+                face.FaceRectangle.Height,
+                InitialEmotionImage.Height,
+                EmotionImage.ActualHeight);
         }
 
         #endregion
@@ -317,7 +292,7 @@ namespace BeEmote.Client.WPF
         #region Events
 
         /// <summary>
-        /// The action executed when The user clicks on the "Send Image" Button
+        /// The action executed when The user clicks on the "Analyse" Button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -351,7 +326,7 @@ namespace BeEmote.Client.WPF
                 foreach (Rectangle re in ImageRectangles)
                 {
                     int index = int.Parse(re.Uid);
-                    Face face = _AppManager.EmotionResponse.Faces[index];
+                    Face face = emotionApp.Response.Faces[index];
                     SetPositionAndSize(re, face);
                 }
         }
@@ -364,7 +339,7 @@ namespace BeEmote.Client.WPF
         private void BrowseImageButton_Click(object sender, RoutedEventArgs e)
         {
             // Updates ImagePath and memorize its parent folder.
-            _AppManager.ImagePath = GetLocalFilePath();
+            emotionApp.ImagePath = GetLocalFilePath();
             // load the image
             LoadEmotionImage();
         }
@@ -400,7 +375,7 @@ namespace BeEmote.Client.WPF
         private void ImagePathTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             EmotionImage.Source = null;
-            ClearCanvas();
+            ClearCanvas(RectangleContainer);
             ResetFaceStats();
         }
 

@@ -1,46 +1,38 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace BeEmote.Core
+﻿namespace BeEmote.Core
 {
+    /// <summary>
+    /// Defines the methods that are mandatory to interact 
+    /// with the Text Analytics API in particular.
+    /// </summary>
     public interface ITextAnalyticsAPI
     {
         /// <summary>
-        /// Todo: Add description
+        /// Check the <paramref name="confType"/> and calls the proper method
+        /// from the <see cref="RequestManager"/>.
         /// </summary>
-        /// <param name="conf"></param>
-        /// <returns></returns>
-        Task<Language> GetTextAnalyticsLanguage(RequestConfiguration conf);
-
+        /// <param name="confType">The configuration type: 'languages', 'keyPhrases', 'sentiment'</param>
+        /// <returns>A configuration for an TextAnalytics API Request</returns>
+        RequestConfiguration Configure(string confType);
         /// <summary>
-        /// Todo: Add description
+        /// Updates the value of the Language in the TextAnalytics Model.
+        /// Then resolve the state of the App at this stage.
         /// </summary>
-        /// <param name="conf"></param>
-        /// <returns></returns>
-        Task<List<string>> GetTextAnalyticsKeyPhrases(RequestConfiguration conf);
-
+        /// <param name="jsonResponse">The response of the Language request</param>
+        /// <returns>State of the app</returns>
+        RequestStates UpdateLanguage(string jsonResponse);
         /// <summary>
-        /// Todo: Add description
+        /// Updates the value of the Key phrases in the TextAnalytics Model.
+        /// Then resolve the state of the App at this stage.
         /// </summary>
-        /// <param name="conf"></param>
-        /// <returns></returns>
-        Task<double?> GetTextAnalyticsScore(RequestConfiguration conf);
-
+        /// <param name="jsonResponse">The response of the Key phrases request</param>
+        /// <returns>State of the app</returns>
+        RequestStates UpdateKeyPhrases(string jsonResponse);
         /// <summary>
-        /// Todo: Add description
+        /// Updates the value of the Sentiment in the TextAnalytics Model.
+        /// Then resolve the state of the App at this stage.
         /// </summary>
-        /// <param name="query"></param>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        RequestConfiguration GetTextAnalyticsConfiguration(string query, string text);
-
-        /// <summary>
-        /// Todo: Add description
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="text"></param>
-        /// <param name="language"></param>
-        /// <returns></returns>
-        RequestConfiguration GetTextAnalyticsConfiguration(string query, string text, string language);
+        /// <param name="jsonResponse">The response of the Sentiment request</param>
+        /// <returns>State of the app</returns>
+        RequestStates UpdateSentiment(string jsonResponse);
     }
 }

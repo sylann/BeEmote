@@ -36,7 +36,13 @@ namespace BeEmote.Core
         /// The list of key phrases formatted as a single string.
         /// Key phrases are separated by comma.
         /// </summary>
-        public string FormattedLanguage { get => $"{Language.Name}[{Language.Iso6391Name}] ({HumanReadable(Language.Score)})"; }
+        public string Sentiment { get => (Score == null) ? "-" : $"{Math.Round((double)Score * 100, 2)}%"; }
+
+        /// <summary>
+        /// The list of key phrases formatted as a single string.
+        /// Key phrases are separated by comma.
+        /// </summary>
+        public string FormattedLanguage { get => $"{Language.Name}[{Language.Iso6391Name}] ({Language.Confidence})"; }
 
         /// <summary>
         /// The list of key phrases formatted as a single string.
@@ -60,7 +66,7 @@ namespace BeEmote.Core
         {
             Console.WriteLine($"\n==========================\nText Analytics API Result:\n");
             Console.WriteLine($"Language detected: {FormattedLanguage})");
-            Console.WriteLine($"Sentiment: {HumanReadable(Score)}");
+            Console.WriteLine($"Sentiment: {Sentiment}");
             Console.WriteLine($"Key phrases:\n{FormattedKeyPhrases}");
         }
 
@@ -71,12 +77,6 @@ namespace BeEmote.Core
         /// <summary>
         /// Formats the score into a readable percentage.
         /// </summary>
-        /// <param name="score"></param>
-        /// <returns></returns>
-        private string HumanReadable(double? score)
-        {
-            return score == null ? "-" : $"{Math.Round((double)score * 100, 2)}%";
-        }
 
         #endregion
     }

@@ -7,26 +7,23 @@ namespace BeEmote.Core
     /// </summary>
     public interface IConfigurable
     {
+
         /// <summary>
-        /// Todo: Add description
+        /// Produce a new <see cref="RequestConfiguration"/> from the provided imagePath.
+        /// Handles both local image path and remote url.
         /// </summary>
-        /// <param name="ImagePath"></param>
-        /// <returns></returns>
+        /// <param name="imagePath">The path of the image (local or url)</param>
+        /// <returns>A valid emotion request configuration or null</returns>
         RequestConfiguration GetEmotionConfiguration(string ImagePath);
 
         /// <summary>
-        /// Todo: Add description
+        /// Produce a new <see cref="RequestConfiguration"/>
+        /// from the provided <paramref name="query"/>, <paramref name="text"/> and <paramref name="language"/>.
+        /// The resulting configuration depends on the value of <paramref name="query"/>
         /// </summary>
-        /// <param name="ImageUrl"></param>
-        /// <returns></returns>
-        RequestConfiguration GetEmotionConfiguration(JObject ImageUrl);
-
-        /// <summary>
-        /// Todo: Add description
-        /// </summary>
-        /// <param name="Query"></param>
-        /// <param name="body"></param>
-        /// <returns></returns>
-        RequestConfiguration GetTextAnalyticsConfiguration(string Query, JObject body);
+        /// <param name="query">The end of the Text Analytics API GET route</param>
+        /// <param name="text">The text to analyse</param>
+        /// <param name="language">The language of the text (may be null)</param>
+        RequestConfiguration GetTextAnalyticsConfiguration(string query, string text, string language);
     }
 }

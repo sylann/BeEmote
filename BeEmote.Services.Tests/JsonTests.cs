@@ -61,7 +61,7 @@ namespace BeEmote.Services.Tests
             int expectedLeft = 488;
             //var expected = new List<Face>{new Face{FaceRectangle=new FaceRectangle{Left=488,Top=263,Width=148,Height=148},Scores=new Scores{Anger=9.075572e-13,Contempt=7.048959e-9,Disgust=1.02152783e-11,Fear=1.778957e-14,Happiness=0.9999999,Neutral=1.31694478e-7,Sadness=6.04054263e-12,Surprise=3.92249462e-11}}};
             // Act
-            var instance = jsonManager.GetFacesFromJsonResponse(jsonResponse);
+            var instance = jsonManager.GetFacesFromJson(jsonResponse);
             // Assert
             Assert.IsInstanceOfType(instance,typeof(List<Face>));
             Assert.AreEqual(expectedNumberOfFaces, instance.Count);
@@ -74,7 +74,7 @@ namespace BeEmote.Services.Tests
             // Arrange
             string jsonResponse = @"[{"":263,""width"":148,""height"":148},""scores"":{""anger"":9.075572e-13,""contempt"":7.048959e-9,""disgust"":1.02152783e-11,""fear"":1.778957e-14,""happiness"":0.9999999,""neutral"":1.31694478e-7,""sadness"":6.04054263e-12,""surprise"":3.92249462e-11}}]";
             // Act
-            var actual = jsonManager.GetFacesFromJsonResponse(jsonResponse);
+            var actual = jsonManager.GetFacesFromJson(jsonResponse);
             // Assert
             Assert.IsNull(actual);
         }
@@ -86,7 +86,7 @@ namespace BeEmote.Services.Tests
             var validResponse = @"{""documents"":[{""id"":""0"",""detectedLanguages"":[{""name"":""English"",""iso6391Name"":""en"",""score"":1}]}],""errors"":[]}";
             var expected = new Language { Name = "English", Iso6391Name = "en", Score = 1 };
             // Act
-            var actual = jsonManager.GetLanguageFromJsonResponse(validResponse);
+            var actual = jsonManager.GetLanguageFromJson(validResponse);
             // Assert
             Assert.AreEqual(expected.Name, actual.Name);
             Assert.AreEqual(expected.Iso6391Name, actual.Iso6391Name);
@@ -100,8 +100,8 @@ namespace BeEmote.Services.Tests
             var invalidResponse = @"{""doc0"",""detectedLanguages"":[{""name"":""English"",""iso6391Name"":""en"",""score"":1}]}],""errors"":[]}";
             var errorResponse = @"{""documents"":[],""errors"":[{""id"":""0"",""message"":""invalid""}]}";
             // Act
-            var invalidActual = jsonManager.GetLanguageFromJsonResponse(invalidResponse);
-            var errorActual = jsonManager.GetLanguageFromJsonResponse(errorResponse);
+            var invalidActual = jsonManager.GetLanguageFromJson(invalidResponse);
+            var errorActual = jsonManager.GetLanguageFromJson(errorResponse);
             // Assert
             Assert.IsNull(invalidActual);
             Assert.IsNull(errorActual);
@@ -114,7 +114,7 @@ namespace BeEmote.Services.Tests
             var validResponse = @"{""documents"":[{""keyPhrases"":[""Excellent"",""unbelievable""],""id"":""0""}],""errors"":[]}";
             var expected = new List<string> { "Excellent", "unbelievable" };
             // Act
-            var actual = jsonManager.GetKeyPhrasesFromJsonResponse(validResponse);
+            var actual = jsonManager.GetKeyPhrasesFromJson(validResponse);
             // Assert
             Assert.AreEqual(expected.Count, actual.Count);
             for (int i = 0; i < expected.Count; i++)
@@ -128,8 +128,8 @@ namespace BeEmote.Services.Tests
             var invalidResponse = @"""documents"":[{""keyPhrases"":[""Excellent"",""unbelievable""],""id"":""0""}],""errors"":[]}";
             var errorResponse = @"{""documents"":[],""errors"":[{""id"":""0"",""message"":""invalid""}]}";
             // Act
-            var invalidActual = jsonManager.GetKeyPhrasesFromJsonResponse(invalidResponse);
-            var errorActual = jsonManager.GetKeyPhrasesFromJsonResponse(errorResponse);
+            var invalidActual = jsonManager.GetKeyPhrasesFromJson(invalidResponse);
+            var errorActual = jsonManager.GetKeyPhrasesFromJson(errorResponse);
             // Assert
             Assert.IsNull(invalidActual);
             Assert.IsNull(errorActual);
@@ -142,7 +142,7 @@ namespace BeEmote.Services.Tests
             var validResponse = @"{""documents"":[{""score"":0.995092326472033,""id"":""0""}],""errors"":[]}";
             var expected = 0.995092326472033;
             // Act
-            var actual = jsonManager.GetScoreFromJsonResponse(validResponse);
+            var actual = jsonManager.GetScoreFromJson(validResponse);
             // Assert
             Assert.AreEqual(expected, actual);
         }
@@ -154,8 +154,8 @@ namespace BeEmote.Services.Tests
             var invalidResponse = @"{""documents"":""score"":0.995092326472033,""id"":""0""}],""errors"":[]}";
             var errorResponse = @"{""documents"":[],""errors"":[{""id"":""0"",""message"":""invalid""}]}";
             // Act
-            var invalidActual = jsonManager.GetScoreFromJsonResponse(invalidResponse);
-            var errorActual = jsonManager.GetScoreFromJsonResponse(errorResponse);
+            var invalidActual = jsonManager.GetScoreFromJson(invalidResponse);
+            var errorActual = jsonManager.GetScoreFromJson(errorResponse);
             // Assert
             Assert.IsNull(invalidActual);
             Assert.IsNull(errorActual);

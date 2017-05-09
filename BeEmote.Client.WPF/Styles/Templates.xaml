@@ -74,11 +74,11 @@
                 <Setter Property="Text" Value="Analyze failed"/>
                 <Setter Property="Foreground" Value="Red"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
-                <Setter Property="Text" Value="No image loaded" />
+            <DataTrigger Binding="{Binding Path=State}" Value="0">
+                <Setter Property="Text" Value="No image loaded"/>
                 <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=TextChanged}" Value="True">
+            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
                 <Setter Property="Text" Value="No image loaded" />
                 <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
             </DataTrigger>
@@ -261,19 +261,18 @@
                                 <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label x:Name="Languagelabel" Content="{Binding TextAnalyticsResponse.Language.Name}" Style="{StaticResource DefaultLabel}"/>
-                                    <Label x:Name="LanguageScorelabel" Content="{Binding TextAnalyticsResponse.Language.Score}" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="Languagelabel" Content="{Binding Response.FormattedLanguage}" Style="{StaticResource DefaultLabel}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label x:Name="Sentimentlabel" Content="{Binding TextAnalyticsResponse.Score}" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="Sentimentlabel" Content="{Binding Response.Sentiment}" Style="{StaticResource DefaultLabel}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="Key Phrases:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label x:Name="NbKeyPhraseslabel" Content="{Binding TextAnalyticsResponse.NbKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="NbKeyPhraseslabel" Content="{Binding Response.NbKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                    <Label x:Name="KeyPhraseslabel" Content="{Binding TextAnalyticsResponse.FormattedKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
+                                    <Label x:Name="KeyPhraseslabel" Content="{Binding Response.FormattedKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
                                 </StackPanel>
                             </StackPanel>
                         </ControlTemplate>

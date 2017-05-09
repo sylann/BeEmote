@@ -245,3 +245,4 @@ ModelManifest.xml
 *.sql
 Credentials.cs
 ConnectionStrings.cs
+App.config

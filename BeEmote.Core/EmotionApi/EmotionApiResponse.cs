@@ -41,7 +41,6 @@ namespace BeEmote.Core
                 foreach (Face face in Faces)
                     face.Describe();
             }
-
         }
 
         #endregion

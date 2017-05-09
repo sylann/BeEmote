@@ -19,6 +19,6 @@ namespace BeEmote.Core
         /// </summary>
         /// <param name="json">Json string response from the Emotion API</param>
         /// <returns>A List of <see cref="Faces"/> or Null</returns>
-        List<Face> GetFacesFromJsonResponse(string json);
+        List<Face> GetFacesFromJson(string json);
     }
 }

@@ -25,20 +25,20 @@ namespace BeEmote.Core
         /// </summary>
         /// <param name="jsonString"></param>
         /// <returns></returns>
-        Language GetLanguageFromJsonResponse(string jsonString);
+        Language GetLanguageFromJson(string jsonString);
 
         /// <summary>
         /// Todo: Add description
         /// </summary>
         /// <param name="jsonString"></param>
         /// <returns></returns>
-        List<string> GetKeyPhrasesFromJsonResponse(string jsonString);
+        List<string> GetKeyPhrasesFromJson(string jsonString);
 
         /// <summary>
         /// Todo: Add description
         /// </summary>
         /// <param name="jsonString"></param>
         /// <returns></returns>
-        double? GetScoreFromJsonResponse(string jsonString);
+        double? GetScoreFromJson(string jsonString);
     }
 }

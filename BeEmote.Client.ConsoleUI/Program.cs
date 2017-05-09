@@ -3,7 +3,6 @@ using System;
 
 namespace BeEmote.Client.ConsoleUI
 {
-
     class Program
     {
         #region Private Members
@@ -22,7 +21,12 @@ namespace BeEmote.Client.ConsoleUI
         /// <summary>
         /// Contains the Application manager.
         /// </summary>
-        private static AppManager Application;
+        private static EmotionManager EmotionApp;
+
+        /// <summary>
+        /// Contains the Application manager.
+        /// </summary>
+        private static TextAnalyticsManager TextAnalyticsApp;
 
         /// <summary>
         /// When the user ask to quit this will set to false.
@@ -42,7 +46,13 @@ namespace BeEmote.Client.ConsoleUI
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Application = new AppManager();
+            EmotionApp = new EmotionManager();
+            TextAnalyticsApp = new TextAnalyticsManager();
+            var DB = new DataAccess();
+
+            DB.InsertImgAnalysis();
+
+            Console.ReadLine();
 
             // Basic testing/using interface for the console
             // Wait for correct user input
@@ -61,7 +71,7 @@ namespace BeEmote.Client.ConsoleUI
             // - after that, the prompt stays in the same service
             // - user can enter another content
             // - if nothing entered, back to choice of service
-            while (SessionIsNotOver)
+            /*while (SessionIsNotOver)
             {
                 DebugWarning("Enter session loop");
                 // Set the user choice if none is actually set.
@@ -86,7 +96,7 @@ namespace BeEmote.Client.ConsoleUI
                         break;
                 }
                 // loop
-            }
+            }*/
             // The program ends.
         }
 
@@ -111,8 +121,8 @@ namespace BeEmote.Client.ConsoleUI
             else
             {
                 // Start the application with the input text
-                Application.TextToAnalyse = input;
-                await Application.StartTextAnalytics();
+                TextAnalyticsApp.TextToAnalyse = input;
+                await TextAnalyticsApp.Start();
             }
         }
 
@@ -143,13 +153,13 @@ namespace BeEmote.Client.ConsoleUI
                 }
 
                 // Try to set the ImagePath
-                Application.ImagePath = input;
+                EmotionApp.ImagePath = input;
                 
                 // Make sure the image path is accepted by the application
-                if (Application.ImagePath == null)
+                if (EmotionApp.ImagePath == null)
                 {
                     // Starts the service when the image path provided is valid
-                    await Application.StartEmotion();
+                    await EmotionApp.Start();
                     break;
                 }
                 else
