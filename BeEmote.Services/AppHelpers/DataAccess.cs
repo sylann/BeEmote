@@ -60,6 +60,21 @@ namespace BeEmote.Services
                         Sadness = f.Scores.Sadness,
                         Surprise = f.Scores.Surprise
                     });
+                    System.Console.WriteLine("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}\n{11}\n{12}\n{13}",
+                        IdImg,
+                        Dominant,
+                        f.FaceRectangle.Left,
+                        f.FaceRectangle.Top,
+                        f.FaceRectangle.Width,
+                        f.FaceRectangle.Height,
+                        f.Scores.Anger,
+                        f.Scores.Contempt,
+                        f.Scores.Disgust,
+                        f.Scores.Fear,
+                        f.Scores.Happiness,
+                        f.Scores.Neutral,
+                        f.Scores.Sadness,
+                        f.Scores.Surprise);
                 }
             }
         }

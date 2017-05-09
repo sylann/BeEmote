@@ -15,7 +15,8 @@ namespace BeEmote.Client.ConsoleUI
             None = 0,
             StartEmotionAPI = 1,
             StartTextAnalyticsAPI = 2,
-            EndSession = 3
+            EndSession = 3,
+            Testing = 9
         }
 
         /// <summary>
@@ -87,12 +88,38 @@ namespace BeEmote.Client.ConsoleUI
                     case UserChoices.StartTextAnalyticsAPI:
                         AskTextFromUser();
                         break;
+                    case UserChoices.Testing:
+                        TestProgram();
+                        break;
                     default:
                         break;
                 }
                 // loop
             }
             // The program ends.
+        }
+
+        private static void TestProgram()
+        {
+            while (true)
+            {
+                Console.WriteLine("Attention! Starting tests!");
+                Console.WriteLine("Currently testing database.\nExecute DB Test? Y/N");
+                ConsoleKeyInfo input = Console.ReadKey();
+
+                if (input.Key != ConsoleKey.Y)
+                    break;
+
+                Console.WriteLine("Inserting...");
+                var DB = new DataAccess();
+                DB.InsertImgAnalysis();
+
+                Console.WriteLine("Do you want to (Q)uit? Any key to continue");
+                input = Console.ReadKey();
+                if (input.Key == ConsoleKey.Q)
+                    break;
+            }
+            Console.WriteLine("End of tests.");
         }
 
         #region Main Methods
