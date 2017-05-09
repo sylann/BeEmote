@@ -48,11 +48,6 @@ namespace BeEmote.Client.ConsoleUI
         {
             EmotionApp = new EmotionManager();
             TextAnalyticsApp = new TextAnalyticsManager();
-            var DB = new DataAccess();
-
-            DB.InsertImgAnalysis();
-
-            Console.ReadLine();
 
             // Basic testing/using interface for the console
             // Wait for correct user input
@@ -71,7 +66,7 @@ namespace BeEmote.Client.ConsoleUI
             // - after that, the prompt stays in the same service
             // - user can enter another content
             // - if nothing entered, back to choice of service
-            /*while (SessionIsNotOver)
+            while (SessionIsNotOver)
             {
                 DebugWarning("Enter session loop");
                 // Set the user choice if none is actually set.
@@ -96,7 +91,7 @@ namespace BeEmote.Client.ConsoleUI
                         break;
                 }
                 // loop
-            }*/
+            }
             // The program ends.
         }
 
