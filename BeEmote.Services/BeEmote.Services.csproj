@@ -60,6 +60,8 @@
     <Compile Include="AppHelpers\DatabaseManager.cs" />
     <Compile Include="AppHelpers\RectangleDrawer.cs" />
     <Compile Include="App\EmotionManager.cs" />
+    <Compile Include="Security\Example.Credentials.cs" />
+    <Compile Include="Security\Example.ConnectionStrings.cs" />
     <Compile Include="Security\ConnectionStrings.cs" />
     <Compile Include="Security\Credentials.cs" />
     <Compile Include="AppHelpers\JsonManager.cs" />
