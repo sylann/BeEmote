@@ -40,6 +40,7 @@ namespace BeEmote.Services
             using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
             {
                 int IdImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new { NbFaces = Faces.Count }).Single();
+                System.Console.WriteLine($"Number of faces: {Faces.Count}");
                 foreach (Face f in Faces)
                 {
                     var Dominant = f.GetDominantEmotion();
@@ -61,20 +62,20 @@ namespace BeEmote.Services
                         Surprise = f.Scores.Surprise
                     });
                     System.Console.WriteLine("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}\n{11}\n{12}\n{13}",
-                        IdImg,
-                        Dominant,
-                        f.FaceRectangle.Left,
-                        f.FaceRectangle.Top,
-                        f.FaceRectangle.Width,
-                        f.FaceRectangle.Height,
-                        f.Scores.Anger,
-                        f.Scores.Contempt,
-                        f.Scores.Disgust,
-                        f.Scores.Fear,
-                        f.Scores.Happiness,
-                        f.Scores.Neutral,
-                        f.Scores.Sadness,
-                        f.Scores.Surprise);
+                        $"IdImg     : {IdImg}",
+                        $"Dominant  : {Dominant}",
+                        $"Left      : {f.FaceRectangle.Left}",
+                        $"Top       : {f.FaceRectangle.Top}",
+                        $"Width     : {f.FaceRectangle.Width}",
+                        $"Height    : {f.FaceRectangle.Height}",
+                        $"Anger     : {f.Scores.Anger}",
+                        $"Contempt  : {f.Scores.Contempt}",
+                        $"Disgust   : {f.Scores.Disgust}",
+                        $"Fear      : {f.Scores.Fear}",
+                        $"Happiness : {f.Scores.Happiness}",
+                        $"Neutral   : {f.Scores.Neutral}",
+                        $"Sadness   : {f.Scores.Sadness}",
+                        $"Surprise  : {f.Scores.Surprise}");
                 }
             }
         }
