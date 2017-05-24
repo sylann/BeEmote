@@ -133,25 +133,7 @@ under certain conditions.");
 
         private static void TestProgram()
         {
-            while (true)
-            {
-                Console.WriteLine("Attention! Starting tests!");
-                Console.WriteLine("Currently testing database.\nExecute DB Test? Y/N");
-                ConsoleKeyInfo input = Console.ReadKey();
-
-                if (input.Key != ConsoleKey.Y)
-                    break;
-
-                Console.WriteLine("Inserting...");
-                var DB = new DataAccess();
-                DB.InsertImgAnalysis();
-
-                Console.WriteLine("Do you want to (Q)uit? Any key to continue");
-                input = Console.ReadKey();
-                if (input.Key == ConsoleKey.Q)
-                    break;
-            }
-            Console.WriteLine("End of tests.");
+            Console.WriteLine("Nothing to test at the moment. ");
         }
 
         #region Main Methods
@@ -188,7 +170,7 @@ under certain conditions.");
         /// </summary>
         private static async void AskImagePathFromUser()
         {
-            Console.WriteLine("You chosed, Emotion...");
+            Console.WriteLine("You chose, Emotion...");
 
             // Valid examples
             // "http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg";

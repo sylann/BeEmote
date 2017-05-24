@@ -21,8 +21,8 @@ namespace BeEmote.Client.WPF
         #region Constructor
 
         /// <summary>
-        /// Default Constructor. Initialize pages's instance
-        /// and open on presentation page
+        /// Default Constructor. Initialize pages' instance
+        /// and start on the presentation screen
         /// </summary>
         public MainWindow()
         {
@@ -56,7 +56,7 @@ namespace BeEmote.Client.WPF
         
         /// <summary>
         /// Put the application in presentation mode (home).
-        /// Hides the navigation bar, instantiate Presentation usercontrol.
+        /// Hides the navigation bar, instantiate Presentation user control.
         /// </summary>
         private void GoToPresentationMode()
         {
@@ -81,7 +81,8 @@ namespace BeEmote.Client.WPF
         #region Events
 
         /// <summary>
-        /// TODO: Add description
+        /// When clicking on the BeEmote button in the navigation bar,
+        /// Display the presentation screen and hide the navigation bar.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -91,7 +92,8 @@ namespace BeEmote.Client.WPF
         }
 
         /// <summary>
-        /// TODO: Add description
+        /// When clicking on the Emotion button in the navigation bar,
+        /// switch content to <see cref="EmotionView"/>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -102,7 +104,8 @@ namespace BeEmote.Client.WPF
         }
 
         /// <summary>
-        /// TODO: Add description
+        /// When clicking on the Text Analytics button in the navigation bar,
+        /// switch content to <see cref="TextAnalyticsView"/>
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -113,8 +116,8 @@ namespace BeEmote.Client.WPF
         }
 
         /// <summary>
-        /// When clicking on the presentation page,
-        /// hides it and show the navigation bar.
+        /// When clicking on the presentation screen,
+        /// hides it and show the navigation bar instead.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

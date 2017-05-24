@@ -8,9 +8,6 @@ namespace BeEmote.Services.Tests
     {
         #region StartEmotion Tests
 
-        // TODO: We will probably need to decompose the current methods such that
-        // we can mock the response and test the application properly
-
         [TestMethod]
         public void Emotion_AfterStart_RequestShouldBeSet()
         {

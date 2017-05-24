@@ -14,11 +14,6 @@
         /// </summary>
         AwaitingResponse,
         /// <summary>
-        /// The response has been received, the result is not empty
-        /// and there are no errors.
-        /// </summary>
-        ResponseReceived,
-        /// <summary>
         /// The response has been received
         /// but there are errors or the result is empty.
         /// </summary>
@@ -27,6 +22,16 @@
         /// The response has been received
         /// but is not complete.
         /// </summary>
-        PartialResult
+        PartialResult,
+        /// <summary>
+        /// The response has been received, the result is not empty
+        /// and there are no errors.
+        /// </summary>
+        ResponseReceived,
+        /// <summary>
+        /// The response has been received,
+        /// and the database has been updated with the non empty result.
+        /// </summary>
+        DatabaseUpdated
     }
 }

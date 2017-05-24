@@ -19,7 +19,7 @@ namespace BeEmote.Core
         RequestStates State { get; set; }
         /// <summary>
         /// Executes the complete logic from image encapsulation
-        /// into a valid Emotion request, to its result handeling.
+        /// into a valid Emotion request, to its result handling.
         /// </summary>
         Task Start();
         /// <summary>

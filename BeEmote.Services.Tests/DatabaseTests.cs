@@ -9,8 +9,7 @@ namespace BeEmote.Services.Tests
         [TestMethod]
         public void DatabaseExists()
         {
-            // TODO: Produce tests in order to TDD the database part of the application
-            // TDD* Test driven development
+            // TODO: Tests for the database layer. How?
             Assert.Fail();
         }
 
@@ -24,7 +23,7 @@ namespace BeEmote.Services.Tests
 
         // after Failed request
         // - number of fail request should increase by 1
-        // - stats for emotions or textanalytics should not change
+        // - stats for emotions or text analytics should not change
 
     }
 }

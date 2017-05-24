@@ -20,6 +20,7 @@
 using BeEmote.Core;
 using Dapper;
 using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -33,70 +34,138 @@ namespace BeEmote.Services
     /// </summary>
     public class DataAccess
     {
+#region Main public methods
+
         /// <summary>
-        /// Executes the stored procedure insertinto_imganalysis
+        /// Generates an entry in imganalysis table.
+        /// Then insert each face's data into the emotion table,
+        /// with the corresponding imganalysis id.
         /// </summary>
-        public List<int> GetImgAnalysis()
+        /// <param name="faces">List of faces from the image</param>
+        /// <returns>imgAnalysis AND emotion both succeeded?</returns>
+        public bool UpdateEmotion(List<Face> faces)
         {
-            // Keeps the connection open only to execute the logique and close it immediately after
-            using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
-            {
-                return conn.Query<int>(DatabaseManager.SelectFromImgAnalysis, new int()).ToList(); // Dapper syntax
-            }
+            var idImg = InsertEmotion(faces.Count);
+            var newEmotionEntries = InsertImgAnalysis(faces, idImg);
+
+            return idImg != 0 && newEmotionEntries == faces.Count;
         }
 
         /// <summary>
-        /// Executes the stored procedure insertinto_imganalysis.
-        /// Instanciates a new list (the insert method needs a list),
-        /// and immediately fills it with a new int
+        /// Generates an entry in textanalysis table.
         /// </summary>
-        public void InsertImgAnalysis()
+        /// <returns>all procedures succeeded</returns>
+        public bool UpdateTextAnalytics(Language language, double? sentiment)
         {
-            JsonManager Json = new JsonManager();
-            string jsonResponse = JsonExamples.GetEmotionAPIResult2();
-            List<Face> Faces = Json.GetFacesFromJson(jsonResponse);
+            var idText = InsertTextAnalysis(language, sentiment);
 
-            using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+            return idText != 0;
+        }
+
+#endregion
+
+#region Emotion Methods
+
+        /// <summary>
+        /// Executes the insertinto_emotion stored procedure.
+        /// </summary>
+        /// <param name="facesCount"></param>
+        /// <returns></returns>
+        public int InsertEmotion(int facesCount)
+        {
+            try
             {
-                int IdImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new { NbFaces = Faces.Count }).Single();
-                System.Console.WriteLine($"Number of faces: {Faces.Count}");
-                foreach (Face f in Faces)
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
                 {
-                    var Dominant = f.GetDominantEmotion();
-                    conn.Execute(DatabaseManager.InsertIntoEmotion, new
-                    {
-                        IdImg,
-                        Dominant,
-                        RLeft = f.FaceRectangle.Left,
-                        RTop = f.FaceRectangle.Top,
-                        RWidth = f.FaceRectangle.Width,
-                        RHeight = f.FaceRectangle.Height,
-                        Anger = f.Scores.Anger,
-                        Contempt = f.Scores.Contempt,
-                        Disgust = f.Scores.Disgust,
-                        Fear = f.Scores.Fear,
-                        Happiness = f.Scores.Happiness,
-                        Neutral = f.Scores.Neutral,
-                        Sadness = f.Scores.Sadness,
-                        Surprise = f.Scores.Surprise
-                    });
-                    System.Console.WriteLine("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}\n{11}\n{12}\n{13}",
-                        $"IdImg     : {IdImg}",
-                        $"Dominant  : {Dominant}",
-                        $"Left      : {f.FaceRectangle.Left}",
-                        $"Top       : {f.FaceRectangle.Top}",
-                        $"Width     : {f.FaceRectangle.Width}",
-                        $"Height    : {f.FaceRectangle.Height}",
-                        $"Anger     : {f.Scores.Anger}",
-                        $"Contempt  : {f.Scores.Contempt}",
-                        $"Disgust   : {f.Scores.Disgust}",
-                        $"Fear      : {f.Scores.Fear}",
-                        $"Happiness : {f.Scores.Happiness}",
-                        $"Neutral   : {f.Scores.Neutral}",
-                        $"Sadness   : {f.Scores.Sadness}",
-                        $"Surprise  : {f.Scores.Surprise}");
+                    int idImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new { NbFaces = facesCount }).Single();
+                    Console.WriteLine($"DB post-check: New entry in localhost.beemote.imganalysis: id={idImg}");
+                    return idImg;
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return 0;
+            }
         }
+
+        /// <summary>
+        /// Executes the insertinto_imganalysis stored procedure.
+        /// </summary>
+        public int InsertImgAnalysis(List<Face> faces, int idImg)
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    Console.WriteLine($"DB pre-check: Number of faces in the image: {faces.Count}");
+                    int newEmotionEntries = 0;
+                    foreach (Face f in faces)
+                    {
+                        var Dominant = f.GetDominantEmotion();
+                        newEmotionEntries += conn.Execute(DatabaseManager.InsertIntoEmotion, new
+                        {
+                            idImg,
+                            Dominant,
+                            RLeft = f.FaceRectangle.Left,
+                            RTop = f.FaceRectangle.Top,
+                            RWidth = f.FaceRectangle.Width,
+                            RHeight = f.FaceRectangle.Height,
+                            Anger = f.Scores.Anger,
+                            Contempt = f.Scores.Contempt,
+                            Disgust = f.Scores.Disgust,
+                            Fear = f.Scores.Fear,
+                            Happiness = f.Scores.Happiness,
+                            Neutral = f.Scores.Neutral,
+                            Sadness = f.Scores.Sadness,
+                            Surprise = f.Scores.Surprise
+                        });
+
+                    }
+                    Console.WriteLine($"DB post-check: {newEmotionEntries} new entry-ies in localhost.beemote.emotion");
+                    return newEmotionEntries;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return 0;
+            }
+        }
+
+        #endregion
+
+        #region TextAnalytics Methods
+
+        /// <summary>
+        /// Executes the insertinto_textanalysis stored procedure.
+        /// </summary>
+        /// <param name="language"></param>
+        /// <param name="sentiment"></param>
+        /// <returns></returns>
+        public int InsertTextAnalysis(Language language, double? sentiment)
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    int idText = conn.Query<int>(DatabaseManager.InsertIntoTextAnalysis, new {
+                        LangName = language.Name,
+                        LangISO = language.Iso6391Name,
+                        LangScore = language.Score,
+                        TextScore = sentiment
+                    }).Single();
+                    Console.WriteLine($"DB post-check: New entry in localhost.beemote.textanalysis: id={idText}");
+                    return idText;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return 0;
+            }
+        }
+
+        #endregion
     }
 }

@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 namespace BeEmote.Services
 {
     /// <summary>
-    /// Handles the global functionning of the application with the Emotion API Context
+    /// Handles the global functioning of the application with the Emotion API Context
     /// </summary>
     [ImplementPropertyChanged]
     public class EmotionManager : ICognitiveApp<EmotionApiResponse>, IEmotionAPI, INotifyPropertyChanged
@@ -76,13 +76,19 @@ namespace BeEmote.Services
             State = RequestStates.AwaitingResponse;
             // Configure, send the request and wait for the result
             var config = Configure(ImagePath);
-            var json = await SendRequest(config);
+            var jsonString = await SendRequest(config);
             // Resolve result
-            State = HandleResult(json);
+            State = HandleResult(jsonString);
             // Console print the results.
             Response?.Describe();
-
-            // TODO: UpdateDataBase
+            
+            // TODO: extract method + interface?
+            // Insert into database
+            var DB = new DataAccess();
+            var dbSuccess = DB.UpdateEmotion(Response.Faces);
+            // Resolve final state
+            if (dbSuccess)
+                State = RequestStates.DatabaseUpdated;
             // TODO: GetStatistics
         }
 
@@ -110,19 +116,19 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// Updates the model acccording to the result of the
+        /// Updates the model according to the result of the
         /// Emotion <paramref name="jsonResponse"/>.
-        /// Returns and Set the State of the App.
+        /// Returns the State of the App.
         /// </summary>
         /// <param name="jsonResponse">A response of the Emotion API</param>
         /// <returns>The state of the app</returns>
         public RequestStates HandleResult(string jsonResponse)
         {
             // Put the result in the model
-            JsonManager Json = new JsonManager();
+            var Json = new JsonManager();
             List<Face> Faces = Json.GetFacesFromJson(jsonResponse);
             Response = new EmotionApiResponse(Faces);
-            // Resolve final state
+            // Check response
             return Response?.Faces?.Count == 0
                 ? RequestStates.EmptyResult
                 : RequestStates.ResponseReceived;
@@ -139,8 +145,8 @@ namespace BeEmote.Services
         /// <returns>A configuration for an Emotion API Request</returns>
         public RequestConfiguration Configure(string imagePath)
         {
-            RequestManager Req = new RequestManager();
-            return Req.GetEmotionConfiguration(imagePath);
+            var req = new RequestManager();
+            return req.GetEmotionConfiguration(imagePath);
         }
 
         #endregion
@@ -148,7 +154,7 @@ namespace BeEmote.Services
         #region INotifyPropertyChanged Implementation
 
         /// <summary>
-        /// An event is fired whenever a public property changes
+        /// An event that is fired whenever a public property changes
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 

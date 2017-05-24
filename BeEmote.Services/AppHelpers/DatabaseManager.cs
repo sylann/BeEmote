@@ -24,10 +24,12 @@ namespace BeEmote.Services
     /// <summary>
     /// Kind of interface for the database.
     /// Contains everything that directly concerns the connection to the database
-    /// Aswell as everything that identifies names from the database.
+    /// As well as everything that identifies names from the database.
     /// </summary>
     public class DatabaseManager
     {
+        #region Connection String
+
         /// <summary>
         /// Helper method that provides a complete connection string
         /// from the provided partial connection string
@@ -40,14 +42,13 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// Partial conection string for TimCorey with MySql on dbtimcoreysample
+        /// Partial connection string
         /// </summary>
         public static string MySql_BeEmote { get => Connect("Mysql_BeEmote"); }
 
-        /// <summary>
-        /// Stored procedure signature SELECT FROM imganalysis
-        /// </summary>
-        public static string SelectFromImgAnalysis { get => "selectfrom_imganalysis(@nbFaces)"; }
+        #endregion
+
+        #region Stored Procedures INSERT INTO
 
         /// <summary>
         /// Stored procedure signature INSERT INTO imganalysis
@@ -55,8 +56,15 @@ namespace BeEmote.Services
         public static string InsertIntoImgAnalysis { get => "insertinto_imganalysis(@NbFaces)"; }
 
         /// <summary>
-        /// Stored procedure signature INSERT INTO imganalysis
+        /// Stored procedure signature INSERT INTO emotion
         /// </summary>
         public static string InsertIntoEmotion { get => "insertinto_emotion(@IdImg,@Dominant,@RLeft,@RTop,@RWidth,@RHeight,@Anger,@Contempt,@Disgust,@Fear,@Happiness,@Neutral,@Sadness,@Surprise)"; }
+
+        /// <summary>
+        /// Stored procedure signature INSERT INTO textanalysis
+        /// </summary>
+        public static string InsertIntoTextAnalysis { get => "insertinto_textanalysis(@LangName,@LangISO,@LangScore,@TextScore)"; }
+
+        #endregion
     }
 }
