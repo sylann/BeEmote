@@ -9,12 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Core", "BeEmote.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Services", "BeEmote.Services\BeEmote.Services.csproj", "{A6ED0062-53FD-4030-A090-68E23D6F6BBD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{15ED6E0D-CF98-4658-B004-F721FA0C122B}"
-	ProjectSection(SolutionItems) = preProject
-		CreateProcedures.sql = CreateProcedures.sql
-		CreateTables.sql = CreateTables.sql
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Client.ConsoleUI", "BeEmote.Client.ConsoleUI\BeEmote.Client.ConsoleUI.csproj", "{F2EB9F51-CEED-49D4-A5D0-4271BB059E81}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeEmote.Services.Tests", "BeEmote.Services.Tests\BeEmote.Services.Tests.csproj", "{81DA6F07-C2F7-47B8-AA8D-43CAA2BBB10A}"
