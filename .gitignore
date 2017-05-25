@@ -241,8 +241,13 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
-# Custom Credential Data
+# SQL Files custom rules
 *.sql
+!beemote_user.sql
+!beemote_db.sql
+
+# Custom Credential Data
+
 Credentials.cs
 ConnectionStrings.cs
 App.config

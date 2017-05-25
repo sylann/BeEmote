@@ -86,7 +86,7 @@ namespace BeEmote.Services
             // TODO: extract method + interface?
             // Insert into database
             var DB = new DataAccess();
-            var dbSuccess = DB.UpdateTextAnalytics(Response.Language, Response.Score);
+            var dbSuccess = DB.UpdateTextAnalytics(Response.Language, Response.Score, TextToAnalyse);
             // Resolve final state
             if (dbSuccess)
                 State = RequestStates.DatabaseUpdated;

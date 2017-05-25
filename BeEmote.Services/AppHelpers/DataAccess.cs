@@ -43,9 +43,9 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="faces">List of faces from the image</param>
         /// <returns>imgAnalysis AND emotion both succeeded?</returns>
-        public bool UpdateEmotion(List<Face> faces)
+        public bool UpdateEmotion(List<Face> faces, string imagePath)
         {
-            var idImg = InsertEmotion(faces.Count);
+            var idImg = InsertEmotion(faces.Count, imagePath);
             var newEmotionEntries = InsertImgAnalysis(faces, idImg);
 
             return idImg != 0 && newEmotionEntries == faces.Count;
@@ -55,9 +55,9 @@ namespace BeEmote.Services
         /// Generates an entry in textanalysis table.
         /// </summary>
         /// <returns>all procedures succeeded</returns>
-        public bool UpdateTextAnalytics(Language language, double? sentiment)
+        public bool UpdateTextAnalytics(Language language, double? sentiment, string textContent)
         {
-            var idText = InsertTextAnalysis(language, sentiment);
+            var idText = InsertTextAnalysis(language, sentiment, textContent);
 
             return idText != 0;
         }
@@ -71,13 +71,17 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="facesCount"></param>
         /// <returns></returns>
-        public int InsertEmotion(int facesCount)
+        public int InsertEmotion(int facesCount, string imagePath)
         {
             try
             {
                 using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
                 {
-                    int idImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new { NbFaces = facesCount }).Single();
+                    int idImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new
+                    {
+                        NbFaces = facesCount,
+                        imagePath = imagePath
+                    }).SingleOrDefault();
                     Console.WriteLine($"DB post-check: New entry in localhost.beemote.imganalysis: id={idImg}");
                     return idImg;
                 }
@@ -103,7 +107,7 @@ namespace BeEmote.Services
                     foreach (Face f in faces)
                     {
                         var Dominant = f.GetDominantEmotion();
-                        newEmotionEntries += conn.Execute(DatabaseManager.InsertIntoEmotion, new
+                        int idEmo = conn.Query<int>(DatabaseManager.InsertIntoEmotion, new
                         {
                             idImg,
                             Dominant,
@@ -119,8 +123,11 @@ namespace BeEmote.Services
                             Neutral = f.Scores.Neutral,
                             Sadness = f.Scores.Sadness,
                             Surprise = f.Scores.Surprise
-                        });
-
+                        }).SingleOrDefault();
+                        // increment only if a new id is returned from the database
+                        Console.WriteLine(idEmo);
+                        if (idEmo != 0)
+                            newEmotionEntries++;
                     }
                     Console.WriteLine($"DB post-check: {newEmotionEntries} new entry-ies in localhost.beemote.emotion");
                     return newEmotionEntries;
@@ -143,18 +150,20 @@ namespace BeEmote.Services
         /// <param name="language"></param>
         /// <param name="sentiment"></param>
         /// <returns></returns>
-        public int InsertTextAnalysis(Language language, double? sentiment)
+        public int InsertTextAnalysis(Language language, double? sentiment, string textContent)
         {
             try
             {
                 using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
                 {
-                    int idText = conn.Query<int>(DatabaseManager.InsertIntoTextAnalysis, new {
+                    int idText = conn.Query<int>(DatabaseManager.InsertIntoTextAnalysis, new
+                    {
                         LangName = language.Name,
                         LangISO = language.Iso6391Name,
                         LangScore = language.Score,
-                        TextScore = sentiment
-                    }).Single();
+                        TextScore = sentiment,
+                        TextContent = textContent
+                    }).SingleOrDefault();
                     Console.WriteLine($"DB post-check: New entry in localhost.beemote.textanalysis: id={idText}");
                     return idText;
                 }

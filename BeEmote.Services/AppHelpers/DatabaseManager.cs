@@ -53,7 +53,7 @@ namespace BeEmote.Services
         /// <summary>
         /// Stored procedure signature INSERT INTO imganalysis
         /// </summary>
-        public static string InsertIntoImgAnalysis { get => "insertinto_imganalysis(@NbFaces)"; }
+        public static string InsertIntoImgAnalysis { get => "insertinto_imganalysis(@NbFaces,@ImagePath)"; }
 
         /// <summary>
         /// Stored procedure signature INSERT INTO emotion
@@ -63,7 +63,7 @@ namespace BeEmote.Services
         /// <summary>
         /// Stored procedure signature INSERT INTO textanalysis
         /// </summary>
-        public static string InsertIntoTextAnalysis { get => "insertinto_textanalysis(@LangName,@LangISO,@LangScore,@TextScore)"; }
+        public static string InsertIntoTextAnalysis { get => "insertinto_textanalysis(@LangName,@LangISO,@LangScore,@TextScore,@TextContent)"; }
 
         #endregion
     }

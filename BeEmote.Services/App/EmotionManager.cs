@@ -85,7 +85,7 @@ namespace BeEmote.Services
             // TODO: extract method + interface?
             // Insert into database
             var DB = new DataAccess();
-            var dbSuccess = DB.UpdateEmotion(Response.Faces);
+            var dbSuccess = DB.UpdateEmotion(Response.Faces, ImagePath);
             // Resolve final state
             if (dbSuccess)
                 State = RequestStates.DatabaseUpdated;
