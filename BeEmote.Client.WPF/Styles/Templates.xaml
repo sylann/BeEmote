@@ -37,13 +37,22 @@
         <Setter Property="Margin" Value="15,0,0,0" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="SubControlHeader" BasedOn="{StaticResource EmoteTextBlock}">
+    <Style TargetType="{x:Type TextBlock}" x:Key="SubControlHeader" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
         <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
         <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}" />
         <Setter Property="Margin" Value="-12,-12,-12,5" />
         <Setter Property="Padding" Value="20,2" />
         <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="ControlHeader" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}" />
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Margin" Value="-1,-1,-1,0" />
+        <Setter Property="Padding" Value="20,2" />
     </Style>
 
     <Style TargetType="{x:Type TextBlock}" x:Key="SectionHeader" BasedOn="{StaticResource EmoteTextBlock}">
@@ -61,26 +70,28 @@
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}" x:Key="RequestFeedback" BasedOn="{StaticResource CenteredInfoText}">
+    <Style TargetType="{x:Type TextBlock}" x:Key="ImageRequestFeedback" BasedOn="{StaticResource CenteredInfoText}">
+        <!-- Default appearance -->
+        <Setter Property="FontSize" Value="{StaticResource FontSizeXXLarge}" />
+        <Setter Property="Padding" Value="15,5"/>
+        <Setter Property="Text" Value=""/>
         <Style.Triggers>
+            <!-- RequestStates.AwaitingResponse -->
             <DataTrigger Binding="{Binding Path=State}" Value="1">
-                <Setter Property="Text" Value="Analyzing"/>
+                <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextBlueBrush}"/>
+                <Setter Property="Text" Value="Analyzing"/>
             </DataTrigger>
+            <!-- RequestStates.EmptyResult -->
             <DataTrigger Binding="{Binding Path=State}" Value="2">
-                <Setter Property="Text" Value=""/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=State}" Value="3">
-                <Setter Property="Text" Value="Analyze failed"/>
+                <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
                 <Setter Property="Foreground" Value="Red"/>
+                <Setter Property="Text" Value="Analysis failed"/>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Path=State}" Value="0">
-                <Setter Property="Text" Value="No image loaded"/>
-                <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
-            </DataTrigger>
+            <!-- No image in the image container -->
             <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
-                <Setter Property="Text" Value="No image loaded" />
-                <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+                <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
+                <Setter Property="Text" Value="No image loaded!" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -93,17 +104,19 @@
     <!-- Text Boxes -->
     <Style TargetType="{x:Type TextBox}" x:Key="BigTextBox" BasedOn="{StaticResource BaseStyle}">
         <Setter Property="Background" Value="{StaticResource HalfTransparentBrush}" />
-        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DarkerWhiteBrush}"/>
         <Setter Property="TextWrapping" Value="Wrap"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="Margin" Value="2"/>
     </Style>
 
     <Style TargetType="{x:Type TextBox}" x:Key="UrlTextBox" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="Background" Value="{StaticResource WhiteBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
         <Setter Property="Padding" Value="2"/>
-        <Setter Property="Margin" Value="2"/>
-        <Setter Property="BorderBrush" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="Margin" Value="0,2"/>
+        <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
     <!-- Buttons -->
@@ -158,34 +171,34 @@
         <Setter Property="Margin" Value="2"/>
     </Style>
 
-    <Style TargetType="{x:Type Button}" x:Key="LoadImageButton" BasedOn="{StaticResource FlatWhiteButton}">
-        <!-- Init -->
-        <Setter Property="IsEnabled" Value="False" />
-        <!-- Each condition evaluated to True will trigger, in this order -->
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
-                <Setter Property="IsEnabled" Value="True" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=SourceUpdated}" Value="True">
-                <Setter Property="IsEnabled" Value="True" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=TextChanged}" Value="True">
-                <Setter Property="IsEnabled" Value="True" />
-            </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=Text}" Value="">
-                <Setter Property="IsEnabled" Value="False" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
-
     <Style TargetType="{x:Type Button}" x:Key="AnalyzeImageButton" BasedOn="{StaticResource FlatWhiteButton}">
+        <Setter Property="Content" Value="Analyze" />
+        <Setter Property="Padding" Value="10,2" />
         <Setter Property="IsEnabled" Value="True" />
         <Style.Triggers>
+            <!-- No image in the image container -->
             <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
                 <Setter Property="IsEnabled" Value="False" />
+                <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
+                <Setter Property="Content" Value="No image loaded!" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding ElementName=ImagePathTextBox, Path=Text}" Value="">
-                <Setter Property="Content" Value="Reload" />
+        </Style.Triggers>
+        
+    </Style>
+
+    <Style TargetType="{x:Type Button}" x:Key="AnalyzeTextButton" BasedOn="{StaticResource FlatWhiteButton}">
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Padding" Value="10,2" />
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
+        <Setter Property="Content" Value="Analyze" />
+        <Setter Property="IsEnabled" Value="True" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding ElementName=TextToAnalyseBox, Path=Text}" Value="">
+                <Setter Property="IsEnabled" Value="False" />
+                <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
+                <Setter Property="Content" Value="No text to analyze!" />
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -194,6 +207,12 @@
     <Style TargetType="{x:Type Label}" x:Key="DefaultLabel" BasedOn="{StaticResource BaseStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
         <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+    </Style>
+
+    <Style TargetType="{x:Type Label}" x:Key="EmphaseLabel" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
     </Style>
 
     <Style TargetType="{x:Type Label}" x:Key="CompactLabel" BasedOn="{StaticResource BaseStyle}">
@@ -213,6 +232,7 @@
     <Style TargetType="{x:Type Label}" x:Key="EmotionScore" BasedOn="{StaticResource EmotionLabel}">
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="Padding" Value="0,5,10,5"/>
+        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}" />
     </Style>
 
     <!-- Combo Boxes -->
@@ -231,54 +251,20 @@
 
     <Style TargetType="{x:Type ContentControl}" x:Key="TextAnalyticsResultStack">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=State}" Value="0">
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding Path=State}" Value="3"/>
+                    <Condition Binding="{Binding Path=State}" Value="4"/>
+                    <Condition Binding="{Binding Path=State}" Value="5"/>
+                </MultiDataTrigger.Conditions>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="No data to analyse yet" Style="{StaticResource CenteredInfoText}"/>
-                            </StackPanel>
+
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=State}" Value="1">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="Analyzing data ..." Style="{StaticResource CenteredInfoText}"/>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding Path=State}" Value="2">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <StackPanel>
-                                <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label x:Name="Languagelabel" Content="{Binding Response.FormattedLanguage}" Style="{StaticResource DefaultLabel}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label x:Name="Sentimentlabel" Content="{Binding Response.Sentiment}" Style="{StaticResource DefaultLabel}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Key Phrases:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label x:Name="NbKeyPhraseslabel" Content="{Binding Response.NbKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label x:Name="KeyPhraseslabel" Content="{Binding Response.FormattedKeyPhrases}" Style="{StaticResource DefaultLabel}"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </DataTrigger>
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
 

@@ -48,7 +48,8 @@ namespace BeEmote.Services
         /// </summary>
         public string ImageFolder
         {
-            get => ImagePath != null && !Uri.IsWellFormedUriString(ImagePath, UriKind.Absolute)
+            get => !String.IsNullOrWhiteSpace(ImagePath)
+                && !Uri.IsWellFormedUriString(ImagePath, UriKind.Absolute)
                 ? Directory.GetParent(ImagePath).ToString()
                 : null;
         }

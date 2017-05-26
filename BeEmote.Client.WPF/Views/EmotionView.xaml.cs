@@ -3,6 +3,7 @@ using BeEmote.Services;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,6 +25,11 @@ namespace BeEmote.Client.WPF
         /// The application manager instance of the Emotion ViewModel
         /// </summary>
         private EmotionManager emotionApp;
+
+        /// <summary>
+        /// The last directory that contained a valid ImagePath
+        /// </summary>
+        private String memorizedDirectory;
         
         #endregion
 
@@ -95,22 +101,28 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private void LoadEmotionImage()
         {
-            // Resets the state, which removes fail messages
-            emotionApp.Reset();
-            // Don't load the image if there is no actual path
-            if (emotionApp.ImagePath == null)
-                return;
-
+            ResetFaceStats();
+            emotionApp.Reset(); // removes fail messages
             ClearCanvas(RectangleContainer);
-            ImageRectangles = new List<Rectangle>();
 
-            // Instantiate the image and put it in the view
-            var uri = new Uri(emotionApp.ImagePath, UriKind.Absolute);
-            EmotionImage.Source = InitialEmotionImage = new BitmapImage(uri);
+            // new image
+            try
+            {
+                var uri = new Uri(emotionApp.ImagePath, UriKind.Absolute);
+                InitialEmotionImage = new BitmapImage(uri);
+            }
+            catch (Exception)
+            {
+                InitialEmotionImage = null;// reset any existing source
+            }
+            finally
+            {
+                EmotionImage.Source = InitialEmotionImage;
+            }
         }
 
         /// <summary>
-        /// Sets the Emotion elements of the Image Analyses part,
+        /// Sets the Emotion elements of the Image Analysis part,
         /// with the data corresponding to the currently selected face.
         /// </summary>
         private void LoadCurrentFaceStats()
@@ -128,7 +140,7 @@ namespace BeEmote.Client.WPF
         }
 
         /// <summary>
-        /// Resets the Emotion elements of the Image Analyses part to null
+        /// Resets the Emotion elements of the Image Analysis part to null
         /// </summary>
         private void ResetFaceStats()
         {
@@ -145,25 +157,23 @@ namespace BeEmote.Client.WPF
         }
 
         /// <summary>
-        /// Opens a File browsing dialog and expects that the user
-        /// chose a valid image path.
+        /// Opens a File selection dialog and returns the path to a
+        /// selected element or null if none were selected.
         /// </summary>
-        /// <returns>Either valid ImagePath or Null</returns>
+        /// <returns>Nullable string</returns>
         private string GetLocalFilePath()
         {
             // Open the file browsing dialog
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
-                InitialDirectory = emotionApp.ImageFolder ?? @"c:\",
+                InitialDirectory = memorizedDirectory ?? @"c:\",
                 Filter = String.Format("Image Files({0})|{0}", "*.jpg;*.png;*.jpeg;*.jpe;*.gif;*.bmp"),
                 FilterIndex = 2,
                 CheckPathExists = true
             };
-            // If no valid file were selected
-            if (openFileDialog.ShowDialog() == false)
-                return null;
-            // The seleceted image full path
-            return openFileDialog.FileName;
+            return openFileDialog.ShowDialog() == false
+                ? null                      // No file selected (cancel or closed)
+                : openFileDialog.FileName;  // File selected
         }
 
         #endregion
@@ -177,8 +187,10 @@ namespace BeEmote.Client.WPF
         /// <param name="emotion">The response from the API</param>
         private void AddRectanglesToList(List<Face> faces)
         {
-            int i = 0;
+            // Init or reset
+            ImageRectangles = new List<Rectangle>();
             // Add a rectangle in the canvas, for each faces found in the image (according to the API response)
+            int i = 0;
             foreach (Face face in faces)
             {
                 Rectangle newFaceRectangle = MakeFaceRectangle(i++, face);
@@ -247,7 +259,7 @@ namespace BeEmote.Client.WPF
         }
 
         /// <summary>
-        /// Clear the rectangles from the canvas
+        /// Clear the rectangles from the provided <paramref name="canvas"/> parameter
         /// </summary>
         private void ClearCanvas(Canvas canvas)
         {
@@ -292,18 +304,18 @@ namespace BeEmote.Client.WPF
         #region Events
 
         /// <summary>
-        /// The action executed when The user clicks on the "Analyse" Button
+        /// The action executed when The user clicks on the "Analyze" Button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void SendImageButton_Click(object sender, RoutedEventArgs e)
+        private void AnalyzeImageButton_Click(object sender, RoutedEventArgs e)
         {
             HandleEmotionApiCall();
         }
 
         /// <summary>
         /// Visually identifies the face rectangle on which the user clicked,
-        /// and reloads the corresponding analyse data.
+        /// and reloads the corresponding data.
         /// </summary>
         /// <param name="sender">The clicked <see cref="Rectangle"/></param>
         /// <param name="e">Not used</param>
@@ -338,45 +350,22 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void BrowseImageButton_Click(object sender, RoutedEventArgs e)
         {
-            // Updates ImagePath and memorize its parent folder.
+            // Open file selection dialog. Gets resolved on box closed.
+            // This will trigger ImagePathTextBox_TextChanged
             emotionApp.ImagePath = GetLocalFilePath();
-            // load the image
-            LoadEmotionImage();
+
+            // Useful directory to memorize
+            memorizedDirectory = emotionApp.ImageFolder;
         }
 
         /// <summary>
-        /// Load the image when Pressing enter inside of the Image Path TextBox.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ImagePathTextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter || e.Key == Key.Tab)
-            {
-                LoadEmotionImage();
-            }
-        }
-
-        /// <summary>
-        /// Manually load the image by clicking on the dedicated LoadImage Button.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void LoadImageButton_Click(object sender, RoutedEventArgs e)
-        {
-            LoadEmotionImage();
-        }
-
-        /// <summary>
-        /// Reset Image Source when text changes
+        /// Reload Image Source when text changes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void ImagePathTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            EmotionImage.Source = null;
-            ClearCanvas(RectangleContainer);
-            ResetFaceStats();
+            LoadEmotionImage();
         }
 
         #endregion

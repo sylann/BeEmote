@@ -5,6 +5,9 @@
     <Color x:Key="HalfTransparent">#80FFFFFF</Color>
     <SolidColorBrush x:Key="HalfTransparentBrush" Color="{StaticResource HalfTransparent}" />
 
+    <Color x:Key="DarkGrayMask">#E5404040</Color>
+    <SolidColorBrush x:Key="DarkGrayMaskBrush" Color="{StaticResource DarkGrayMask}"/>
+
     <Color x:Key="TextGray">#aaaaaa</Color>
     <SolidColorBrush x:Key="TextGrayBrush" Color="{StaticResource TextGray}" />
 

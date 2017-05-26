@@ -13,58 +13,62 @@
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <!-- Header title -->
         <TextBlock x:Name="EmotionTitle" Grid.Row="0" Text="Analyze of the faces of an image" Style="{StaticResource MainControlHeader}"/>
 
         <!-- View Main Content -->
         <Grid Grid.Row="1">
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="350"/>
             </Grid.ColumnDefinitions>
 
             <!-- Left part of the screen -->
-            <Border Grid.Column="0"
-                    Padding="10,10,5,10">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+            <Border Grid.Column="0" Padding="10,10,5,10">
+                <Border Style="{StaticResource WhiteSubControl}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <!-- Url/path -->
-                    <TextBox Grid.Row="0" x:Name="ImagePathTextBox" Text="{Binding ImagePath, Mode=TwoWay}" Style="{StaticResource UrlTextBox}" KeyUp="ImagePathTextBox_KeyUp" TextChanged="ImagePathTextBox_TextChanged"/>
-                                        
-                    <!-- Image Buttons -->
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" x:Name="BrowseImageButton" Content="Browse ..." Style="{StaticResource FlatWhiteButton}" Click="BrowseImageButton_Click"/>
-                        <Button Grid.Column="1" x:Name="LoadImageButton" Content="Load Image" Style="{StaticResource LoadImageButton}" Click="LoadImageButton_Click"/>
-                        <Button Grid.Column="2" x:Name="SendImageButton" Content="Analyze" Style="{StaticResource AnalyzeImageButton}" Click="SendImageButton_Click"/>
-                    </Grid>
+                        <TextBlock Grid.Row="0" Text="Image selection" Style="{StaticResource ControlHeader}" />
 
-                    <!-- Image -->
-                    <Border  Grid.Row="2" Style="{StaticResource WhiteSubControl}">
-                        <Grid>
-                            <Canvas x:Name="ImageContainer">
-                                <Image x:Name="EmotionImage"
+                        <!-- Image Buttons -->
+                        <Grid Grid.Row="2" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" x:Name="BrowseImageButton" Content="..." Style="{StaticResource FlatWhiteButton}" Click="BrowseImageButton_Click"/>
+                            <!-- Url/path -->
+                            <TextBox Grid.Column="1" x:Name="ImagePathTextBox"
+                                 Text="{Binding ImagePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource UrlTextBox}"
+                                 TextChanged="ImagePathTextBox_TextChanged"/>
+                            <Button Grid.Column="2" Style="{StaticResource AnalyzeImageButton}" Click="AnalyzeImageButton_Click"/>
+                        </Grid>
+
+                        <!-- Image -->
+                        <Border  Grid.Row="1">
+                            <Grid>
+                                <Canvas x:Name="ImageContainer">
+                                    <Image x:Name="EmotionImage"
                                    Stretch="Uniform"
                                    Width="{Binding Path=ActualWidth, ElementName=ImageContainer}"
                                    Height="{Binding Path=ActualHeight, ElementName=ImageContainer}"/>
-                                <!-- XXX Insert face rectangles here -->
-                                <Canvas x:Name="RectangleContainer"/>
-                            </Canvas>
-                            <TextBlock x:Name="FeedbackTextBlock" Style="{StaticResource RequestFeedback}" />
-                        </Grid>
-                    </Border>
-                </Grid>
+                                    <!-- XXX Insert face rectangles here -->
+                                    <Canvas x:Name="RectangleContainer"/>
+                                </Canvas>
+                                <TextBlock x:Name="FeedbackTextBlock" Style="{StaticResource ImageRequestFeedback}"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
             </Border>
 
             <!-- Right part of the screen -->
@@ -82,17 +86,17 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="20" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="20" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="2" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="2" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Dominant Emotion:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="Anger" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="Anger" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
                         </StackPanel>
                     </Border>
@@ -100,16 +104,16 @@
                     <!-- Analyse result -->
                     <Border Grid.Row="1" Style="{StaticResource PaddedWhiteSubControl}">
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock Text="Image Analyse result" Style="{StaticResource SubControlHeader}" />
+                            <TextBlock Text="Image analyze result" Style="{StaticResource SubControlHeader}" />
 
                             <!-- Number of faces -->
                             <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
                                 <Label Content="Face N° " Style="{StaticResource DefaultLabel}" />
-                                <Label x:Name="SelectedFaceLabel" Style="{StaticResource DefaultLabel}" />
+                                <Label x:Name="SelectedFaceLabel" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
                                 <Label Content=" The dominant emotion is " Style="{StaticResource DefaultLabel}" />
-                                <Label x:Name="DominantEmotionLabel" Style="{StaticResource DefaultLabel}" />
+                                <Label x:Name="DominantEmotionLabel" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
                             <!-- Emotion table -->
@@ -154,12 +158,12 @@
                                     <Label Content="Neutral:" Style="{StaticResource EmotionLabel}" />
                                     <Label x:Name="NeutralLabel" Style="{StaticResource EmotionScore}" />
                                 </DockPanel>
-                                
+
                                 <DockPanel Grid.Row="2" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Sadness:" Style="{StaticResource EmotionLabel}" />
                                     <Label x:Name="SadnessLabel" Style="{StaticResource EmotionScore}" />
                                 </DockPanel>
-                                
+
                                 <DockPanel Grid.Row="3" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
                                     <Label Content="Surprise:" Style="{StaticResource EmotionLabel}" />
                                     <Label x:Name="SurpriseLabel" Style="{StaticResource EmotionScore}"/>

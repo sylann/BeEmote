@@ -23,16 +23,14 @@ namespace BeEmote.Client.WPF
         #region Constructor
 
         /// <summary>
-        /// Default constructor: Init components, set context, init global events.
-        /// Optionnaly set dummy data.
+        /// Default constructor: Init components, set context.
+        /// Optionally set dummy data.
         /// </summary>
         public TextAnalyticsView()
         {
             InitializeComponent();
             TextAnalyticsApp = new TextAnalyticsManager();
             DataContext = TextAnalyticsApp;
-            TextToAnalyseBox.GotFocus += OnTextToAnalyseGotFocus;
-            TextToAnalyseBox.LostFocus += OnTextToAnalyseLostFocus;
             TextAnalyticsApp.TextToAnalyse = "Input some text here...";
             
         }
@@ -61,37 +59,11 @@ namespace BeEmote.Client.WPF
         /// </summary>
         /// <param name="sender">Analyze button</param>
         /// <param name="e">Not used</param>
-        private void SendTextButton_Click(object sender, RoutedEventArgs e)
+        private void AnalyzeTextButton_Click(object sender, RoutedEventArgs e)
         {
             HandleTextAnalyticsApiCall();
         }
-
-        /// <summary>
-        /// Removes the PlaceHolder of the TextBlock.
-        /// Also updates foreground color.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnTextToAnalyseGotFocus(object sender, EventArgs e)
-        {
-            TextToAnalyseBox.Foreground = FindResource("TextDarkBlueBrush") as SolidColorBrush;
-            TextAnalyticsApp.TextToAnalyse = "";
-        }
-
-        /// <summary>
-        /// Insert default PlaceHolder providing some intel to the user.
-        /// Also updates foreground color.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void OnTextToAnalyseLostFocus(object sender, EventArgs e)
-        {
-            TextToAnalyseBox.Foreground = FindResource("TextGrayBrush") as SolidColorBrush;
-
-            if (String.IsNullOrWhiteSpace(TextAnalyticsApp.TextToAnalyse))
-                TextAnalyticsApp.TextToAnalyse = "Input some text here...";
-        }
-
+        
         #endregion
     }
 }
