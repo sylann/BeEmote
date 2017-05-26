@@ -100,7 +100,8 @@ namespace BeEmote.Client.WPF
         private void EmotionButton_Click(object sender, RoutedEventArgs e)
         {
             // Use the emotion control
-            MainFrame.Content = new EmotionView();
+            if (MainFrame.Content?.GetType() != typeof(EmotionView))
+                MainFrame.Content = new EmotionView();
         }
 
         /// <summary>
@@ -112,7 +113,8 @@ namespace BeEmote.Client.WPF
         private void TextAnalyticsButton_Click(object sender, RoutedEventArgs e)
         {
             // Use the text analytics control
-            MainFrame.Content = new TextAnalyticsView();
+            if (MainFrame.Content?.GetType() != typeof(TextAnalyticsView))
+                MainFrame.Content = new TextAnalyticsView();
         }
 
         /// <summary>
