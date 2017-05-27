@@ -5,19 +5,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace BeEmote.Services.Tests
 {
     [TestClass()]
     public class ByteArrayBuilderTests
     {
-        // Tested class instance
-        private readonly ByteArrayBuilder builder = new ByteArrayBuilder();
+        [TestMethod()]
+        public void FromImagePath_WhenValidImagePath_ReturnByteArray()
+        {
+            // Arrange
+            var imageFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "oberyn-wear-helmet.jpg");
+
+            // Act
+            var actual = ByteArrayBuilder.FromImagePath(imageFilePath);
+
+            // Assert
+            Assert.IsInstanceOfType(actual, typeof(byte[]));
+        }
 
         [TestMethod()]
-        public void FromImagePath_When_Return()
+        public void FromImagePath_WhenInvalidImagePath_ReturnNull()
         {
-            Assert.Fail();
+            // Arrange
+            var imageFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "invalid-image-path.jpg");
+
+            // Act
+            var actual = ByteArrayBuilder.FromImagePath(imageFilePath);
+
+            // Assert
+            Assert.IsNull(actual);
         }
 
         [TestMethod()]
