@@ -41,7 +41,7 @@ namespace BeEmote.Services
         /// <returns>A valid emotion request configuration or null</returns>
         public RequestConfiguration GetEmotionConfiguration(string imagePath)
         {
-            // Empty path is not handeled
+            // Empty path is not handled
             if (string.IsNullOrWhiteSpace(imagePath))
                 return null;
 
@@ -64,12 +64,12 @@ namespace BeEmote.Services
                 data = ByteArrayBuilder.FromJsonObject(body);
                 type = "application/json";
             }
-            
-            return new RequestConfiguration(
-                Uri: url,
-                Data: data,
-                ContentType: type,
-                CredentialKey: Credentials.EmotionKey);
+
+            // an invalid imagePath produce null data,
+            // in that case return null, else return the config.
+            return data is null
+                ? null
+                : new RequestConfiguration(url, data, type, Credentials.EmotionKey);
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace BeEmote.Services
                     break;
                 case "keyPhrases":
                 case "sentiment":
-                    if (language == null)
-                        throw new ArgumentNullException($"language shouldn't be null for a {query} request.");
+                    if (string.IsNullOrWhiteSpace(language))
+                        return null;
                     body = Json.GetTextAnalyticsJson(text, language);
                     break;
                 default:

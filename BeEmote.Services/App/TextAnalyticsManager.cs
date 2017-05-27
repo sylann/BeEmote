@@ -100,7 +100,7 @@ namespace BeEmote.Services
         /// <returns>The resulting state</returns>
         public RequestStates Reset()
         {
-            // Set start up state
+            // Set start up state and return it
             return State = RequestStates.NoData;
         }
 
@@ -117,7 +117,7 @@ namespace BeEmote.Services
 
         #endregion
 
-        #region ITextAnalyticsAPI
+        #region ITextAnalyticsAPI implementation
 
         /// <summary>
         /// Check the <paramref name="confType"/> and calls the proper method

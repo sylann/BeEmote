@@ -17,20 +17,14 @@
 /// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /// </License>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-
 namespace BeEmote.Services
 {
     public class RectangleDrawer
     {
 
         /// <summary>
-        /// Updates the distance between canvas's and image's lefts.
+        /// Gets the updated distance between canvas's and
+        /// image's lefts after a resize of the canvas.
         /// </summary>
         /// <param name="left">actual distance</param>
         /// <param name="canvasWidth">actual width of the canvas</param>
@@ -44,7 +38,8 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// Updates the distance between canvas's and image's tops
+        /// Gets the updated distance between canvas's
+        /// and image's tops after a resize of the canvas.
         /// </summary>
         /// <param name="top">actual distance between canvas's and image's tops</param>
         /// <param name="canvasHeight">actual height of the canvas</param>
@@ -58,7 +53,7 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// Re Evaluates a horizontal dimension after a resize of the canvas
+        /// Gets the updated horizontal dimension after a resize of the canvas.
         /// </summary>
         /// <param name="xValue">A horizontal dimension (left position or width)</param>
         /// <param name="initialWidth">initial width of the image</param>
@@ -71,7 +66,7 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// Re Evaluates a vertical dimension after a resize of the canvas
+        /// Gets the updated vertical dimension after a resize of the canvas.
         /// </summary>
         /// <param name="yValue">A vertical dimension (top position or height)</param>
         /// <param name="initialHeight">initial height of the image</param>

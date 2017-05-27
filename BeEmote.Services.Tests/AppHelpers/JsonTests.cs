@@ -1,9 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BeEmote.Services;
+﻿using BeEmote.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using BeEmote.Core;
 
 namespace BeEmote.Services.Tests
 {

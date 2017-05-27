@@ -25,7 +25,8 @@ using System.Text;
 namespace BeEmote.Services
 {
     /// <summary>
-    /// 
+    /// This class provides method that produce byte arrays from various sources.
+    /// Including Json strings and image paths.
     /// </summary>
     public class ByteArrayBuilder
     {

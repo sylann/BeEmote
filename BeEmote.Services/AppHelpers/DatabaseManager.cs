@@ -36,7 +36,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        private static string Connect(string name)
+        public static string Connect(string name)
         {
             return ConfigurationManager.ConnectionStrings[name].ConnectionString;
         }

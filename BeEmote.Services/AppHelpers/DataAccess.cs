@@ -45,8 +45,8 @@ namespace BeEmote.Services
         /// <returns>imgAnalysis AND emotion both succeeded?</returns>
         public bool UpdateEmotion(List<Face> faces, string imagePath)
         {
-            var idImg = InsertEmotion(faces.Count, imagePath);
-            var newEmotionEntries = InsertImgAnalysis(faces, idImg);
+            var idImg = InsertImgAnalysis(faces.Count, imagePath);
+            var newEmotionEntries = InsertEmotion(faces, idImg);
 
             return idImg != 0 && newEmotionEntries == faces.Count;
         }
@@ -62,26 +62,26 @@ namespace BeEmote.Services
             return idText != 0;
         }
 
-#endregion
+        #endregion
 
-#region Emotion Methods
+        #region Emotion Methods
 
         /// <summary>
-        /// Executes the insertinto_emotion stored procedure.
+        /// Executes the insertinto_imganalysis stored procedure.
         /// </summary>
         /// <param name="facesCount"></param>
         /// <returns></returns>
-        public int InsertEmotion(int facesCount, string imagePath)
+        public int InsertImgAnalysis(int facesCount, string imagePath)
         {
             try
             {
                 using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
                 {
                     int idImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new
-                    {
-                        NbFaces = facesCount,
-                        imagePath = imagePath
-                    }).SingleOrDefault();
+                        {
+                            NbFaces = facesCount,
+                            ImagePath = imagePath
+                        }).SingleOrDefault();
                     Console.WriteLine($"DB post-check: New entry in localhost.beemote.imganalysis: id={idImg}");
                     return idImg;
                 }
@@ -94,9 +94,9 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// Executes the insertinto_imganalysis stored procedure.
+        /// Executes the insertinto_emotion stored procedure.
         /// </summary>
-        public int InsertImgAnalysis(List<Face> faces, int idImg)
+        public int InsertEmotion(List<Face> faces, int idImg)
         {
             try
             {
@@ -106,11 +106,11 @@ namespace BeEmote.Services
                     int newEmotionEntries = 0;
                     foreach (Face f in faces)
                     {
-                        var Dominant = f.GetDominantEmotion();
+                        var dominant = f.GetDominantEmotion();
                         int idEmo = conn.Query<int>(DatabaseManager.InsertIntoEmotion, new
                         {
-                            idImg,
-                            Dominant,
+                            IdImg = idImg,
+                            Dominant = dominant,
                             RLeft = f.FaceRectangle.Left,
                             RTop = f.FaceRectangle.Top,
                             RWidth = f.FaceRectangle.Width,
