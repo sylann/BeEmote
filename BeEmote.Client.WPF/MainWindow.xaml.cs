@@ -1,5 +1,4 @@
-﻿using BeEmote.Services;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace BeEmote.Client.WPF
@@ -14,7 +13,7 @@ namespace BeEmote.Client.WPF
         /// <summary>
         /// Indicates if the application is in the home screen.
         /// </summary>
-        private bool IsAppInPresentationMode;
+        private bool _isAppInPresentationMode;
 
         #endregion
 
@@ -62,7 +61,7 @@ namespace BeEmote.Client.WPF
         {
             HideNavBar();
             MainFrame.Content = new PresentationView();
-            IsAppInPresentationMode = true;
+            _isAppInPresentationMode = true;
         }
 
         /// <summary>
@@ -73,7 +72,7 @@ namespace BeEmote.Client.WPF
         {
             ShowNavBar();
             MainFrame.Content = null;
-            IsAppInPresentationMode = false;
+            _isAppInPresentationMode = false;
         }
 
         #endregion
@@ -125,7 +124,7 @@ namespace BeEmote.Client.WPF
         /// <param name="e"></param>
         private void MainFrame_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (IsAppInPresentationMode)
+            if (_isAppInPresentationMode)
                 GetOffPresentationMode();
         }
 

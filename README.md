@@ -10,7 +10,7 @@ Once in the console, type:
 
     Update-Package -reinstall
 
-If asked wheter to override an existing files, simply **type A** (Override ALL)
+If asked whether to override an existing files, simply **type A** (Override ALL)
 
 List of packages installed:
 - Newtonsoft.Json
@@ -25,6 +25,10 @@ List of packages installed:
 ### Local Database
 
 We use MySql.
+
+You need to have mysql connector installed on your computer:
+
+    https://dev.mysql.com/get/Downloads/Connector-Net/mysql-connector-net-6.9.9.msi
 
 > I use the root user here but you may use another one depending on your mysql usage.
 
