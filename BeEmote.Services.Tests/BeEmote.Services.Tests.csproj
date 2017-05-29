@@ -78,6 +78,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Example.App.config" />
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

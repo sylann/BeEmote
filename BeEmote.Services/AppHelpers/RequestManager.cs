@@ -80,7 +80,7 @@ namespace BeEmote.Services
         /// <param name="query">The end of the Text Analytics API GET route</param>
         /// <param name="text">The text to analyse</param>
         /// <param name="language">The language of the text (may be null)</param>
-        public RequestConfiguration GetTextAnalyticsConfiguration(string query, string text, string language)
+        public RequestConfiguration GetTextAnalyticsConfiguration(string query, string text, string language = null)
         {
             var Json = new JsonManager();
             JObject body;
@@ -93,7 +93,7 @@ namespace BeEmote.Services
                 case "keyPhrases":
                 case "sentiment":
                     if (string.IsNullOrWhiteSpace(language))
-                        return null;
+                        throw new ArgumentException($"Language shouldn't be null for a {nameof(query)} query");
                     body = Json.GetTextAnalyticsJson(text, language);
                     break;
                 default:

@@ -30,7 +30,6 @@ namespace BeEmote.Services
     /// <summary>
     /// Handles the global functioning of the application with the Emotion API Context
     /// </summary>
-    [ImplementPropertyChanged]
     public class EmotionManager : ICognitiveApp<EmotionApiResponse>, IEmotionAPI, INotifyPropertyChanged
     {
 

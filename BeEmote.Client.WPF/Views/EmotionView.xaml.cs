@@ -79,6 +79,10 @@ namespace BeEmote.Client.WPF
         /// </summary>
         private async void HandleEmotionApiCall()
         {
+            //Need an ImagePath
+            if (string.IsNullOrWhiteSpace(emotionApp.ImagePath))
+                return;
+
             // Send the request
             await emotionApp.Start();
             // Data updates with Bindings,
