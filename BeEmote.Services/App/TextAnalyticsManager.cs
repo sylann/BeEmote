@@ -28,7 +28,6 @@ namespace BeEmote.Services
     /// <summary>
     /// Handles the global functionning of the application with the Text Analytics API Context
     /// </summary>
-    [ImplementPropertyChanged]
     public class TextAnalyticsManager : ICognitiveApp<TextAnalyticsApiResponse>, ITextAnalyticsAPI, INotifyPropertyChanged
     {
         #region Members
@@ -129,7 +128,7 @@ namespace BeEmote.Services
         {
             var Req = new RequestManager();
             if (confType == "languages")
-                return Req.GetTextAnalyticsConfiguration(confType, TextToAnalyse, null);
+                return Req.GetTextAnalyticsConfiguration(confType, TextToAnalyse);
 
             if (confType == "keyPhrases" ||
                 confType == "sentiment")

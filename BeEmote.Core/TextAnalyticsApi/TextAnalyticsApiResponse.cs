@@ -42,7 +42,12 @@ namespace BeEmote.Core
         /// The list of key phrases formatted as a single string.
         /// Key phrases are separated by comma.
         /// </summary>
-        public string FormattedLanguage { get => $"{Language.Name}[{Language.Iso6391Name}] ({Language.Confidence})"; }
+        public string FormattedLanguage
+        {
+            get => Language is null
+                ? "Unknown language"
+                : $"{Language.Name}[{Language.Iso6391Name}] ({Language.Confidence})";
+        }
 
         /// <summary>
         /// The list of key phrases formatted as a single string.
