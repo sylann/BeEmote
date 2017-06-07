@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace BeEmote.Services.Tests
 {
@@ -39,9 +40,39 @@ namespace BeEmote.Services.Tests
         }
 
         [TestMethod()]
-        public void FromJsonObject_When_Return()
+        public void FromJsonObject_When_Return_CheckType()
         {
-            Assert.Fail();
+            //Arrange
+            string json = "hello";
+            //Act
+            var result = Encoding.UTF8.GetBytes(json);
+
+            //Assert
+            Assert.IsInstanceOfType(result, typeof(byte[]));
+        }
+        [TestMethod()]
+
+        public void FromJsonObject_When_Return_CheckStringContent()
+        {
+            //Arrange
+            JObject toCompare = new JObject();
+            var result = ByteArrayBuilder.FromJsonObject(toCompare);
+            var resultFromTest = Encoding.UTF8.GetBytes(toCompare.ToString());
+            var textResult = "";
+            var secondTextResult = "";
+            //Act
+
+            foreach (var byteItem in result)
+            {
+                textResult += byteItem.ToString();
+            }
+
+            foreach (var byteItem in resultFromTest)
+            {
+                secondTextResult += byteItem.ToString();
+            }
+            //Assert
+            Assert.AreEqual(textResult, secondTextResult);
         }
     }
 }
