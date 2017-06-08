@@ -76,11 +76,13 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="20" Style="{StaticResource DefaultLabel}" />
+                                <Label Content="{Binding Stats.AverageCallsPerDay}" Style="{StaticResource DefaultLabel}" />
                             </StackPanel>
                             <!-- Calls / day and Score distribution -->
                             <StackPanel Grid.Column="0"  Orientation="Vertical" Margin="0,0,20,0">
-
+                                <ItemsControl>
+                                     
+                                </ItemsControl>
                                 <TextBlock Text="Score distribution" Style="{StaticResource SectionHeader}" />
 
                                 <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 
 namespace BeEmote.Core
 {
@@ -16,12 +16,12 @@ namespace BeEmote.Core
         /// <summary>
         /// Correspondence of a language name and its proportion in the database.
         /// </summary>
-        public List<LanguageRank> LanguageRanking { get; set; }
+        public ObservableCollection<LanguageRank> LanguageRanking { get; set; }
 
         /// <summary>
         /// Correspondence of a sentiment rank and its number of
         /// occurrences in the database.
         /// </summary>
-        public List<SentimentRank> SentimentDistribution { get; set; }
+        public ObservableCollection<SentimentRank> SentimentDistribution { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.ObjectModel;
 
 namespace BeEmote.Core
 {
@@ -22,6 +22,6 @@ namespace BeEmote.Core
         /// List of correspondence of an emotion name and its number of
         /// occurrences as a dominant emotion in the database.
         /// </summary>
-        public List<EmotionRank> DominantRanking { get; set; }
+        public ObservableCollection<EmotionRank> DominantRanking { get; set; }
     }
 }
