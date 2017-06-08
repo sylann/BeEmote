@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Moq;
+using BeEmote.Services;
 
 namespace BeEmote.Services.Tests
 {
@@ -40,20 +42,75 @@ namespace BeEmote.Services.Tests
         }
 
         [TestMethod()]
-        public void UpdateTextAnalytics_When_Return()
+        public void UpdateTextAnalytics_CorrectValues()
         {
-            Assert.Fail();
+            //Arrange 
+            Language language = new Language() {Name = "Anglais",
+                                                Iso6391Name = "en",
+                                                Score = 100};
+            double? sentiment = 50;
+            string textContent = "Hello world !";
+
+            //Act
+            var actual = db.UpdateTextAnalytics(language, sentiment, textContent);
+
+            //Assert
+            Assert.AreNotEqual(0, actual);
         }
 
         [TestMethod()]
-        public void InsertImgAnalysis_When_Return()
+        public void InsertImgAnalysis_Valid_IdImage()
         {
-            Assert.Fail();
+            //Arrange 
+            int facesCount = 4;
+            string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "oberyn-wear-helmet.jpg");
+            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+
+            mockHelper.Setup(e => e.InsertImgAnalysis(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(1);
+
+            //Act
+            DataAccess mockObject = mockHelper.Object;
+
+            //Assert
+            Assert.AreNotEqual(0, mockObject.InsertImgAnalysis(facesCount, imagePath));
         }
 
         [TestMethod()]
-        public void InsertEmotion_When_Return()
+        public void InsertImgAnalysis_Invalid_IdImage()
         {
+            //Arrange 
+            int facesCount = 4;
+            string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "oberyn-wear-helmet.jpg");
+            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+
+            mockHelper.Setup(e => e.InsertImgAnalysis(It.IsAny<int>(), It.IsAny<string>()))
+                .Returns(0);
+
+            //Act
+            DataAccess mockObject = mockHelper.Object;
+
+            //Assert
+            Assert.AreEqual(0, mockObject.InsertImgAnalysis(facesCount, imagePath));
+        }
+
+        [TestMethod()]
+        public void InsertEmotion_Valid_EmotionEntries()
+        {
+            //Arrange 
+
+            List<Face> faces;
+            int idImg = 1;
+            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+
+            mockHelper.Setup(e => e.InsertEmotion(It.IsAny<List<Face>>(), It.IsAny<int>()))
+                .Returns(0);
+
+            //Act
+            DataAccess mockObject = mockHelper.Object;
+
+            //Assert
+            Assert.AreEqual(0, mockObject.InsertImgAnalysis(facesCount, imagePath));
             Assert.Fail();
         }
 
