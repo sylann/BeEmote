@@ -40,7 +40,7 @@ namespace BeEmote.Services.Tests
         }
 
         [TestMethod()]
-        public void FromJsonObject_When_Return_CheckType()
+        public void FromJsonObject_CheckType()
         {
             //Arrange
             string json = "hello";
@@ -52,7 +52,7 @@ namespace BeEmote.Services.Tests
         }
         [TestMethod()]
 
-        public void FromJsonObject_When_Return_CheckStringContent()
+        public void FromJsonObject_CheckStringContent()
         {
             //Arrange
             JObject toCompare = new JObject();
