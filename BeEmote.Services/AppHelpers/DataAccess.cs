@@ -79,7 +79,7 @@ namespace BeEmote.Services
                 {
                     int idImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new
                         {
-                            NbFaces = facesCount,
+                            NbFaces   = facesCount,
                             ImagePath = imagePath
                         }).SingleOrDefault();
                     Console.WriteLine($"DB post-check: New entry in localhost.beemote.imganalysis: id={idImg}");
@@ -106,23 +106,22 @@ namespace BeEmote.Services
                     int newEmotionEntries = 0;
                     foreach (Face f in faces)
                     {
-                        var dominant = f.GetDominantEmotion();
                         int idEmo = conn.Query<int>(DatabaseManager.InsertIntoEmotion, new
                         {
-                            IdImg = idImg,
-                            Dominant = dominant,
-                            RLeft = f.FaceRectangle.Left,
-                            RTop = f.FaceRectangle.Top,
-                            RWidth = f.FaceRectangle.Width,
-                            RHeight = f.FaceRectangle.Height,
-                            Anger = f.Scores.Anger,
-                            Contempt = f.Scores.Contempt,
-                            Disgust = f.Scores.Disgust,
-                            Fear = f.Scores.Fear,
+                            IdImg     = idImg,
+                            Dominant  = f.GetDominantEmotion().ToString(),
+                            RLeft     = f.FaceRectangle.Left,
+                            RTop      = f.FaceRectangle.Top,
+                            RWidth    = f.FaceRectangle.Width,
+                            RHeight   = f.FaceRectangle.Height,
+                            Anger     = f.Scores.Anger,
+                            Contempt  = f.Scores.Contempt,
+                            Disgust   = f.Scores.Disgust,
+                            Fear      = f.Scores.Fear,
                             Happiness = f.Scores.Happiness,
-                            Neutral = f.Scores.Neutral,
-                            Sadness = f.Scores.Sadness,
-                            Surprise = f.Scores.Surprise
+                            Neutral   = f.Scores.Neutral,
+                            Sadness   = f.Scores.Sadness,
+                            Surprise  = f.Scores.Surprise
                         }).SingleOrDefault();
                         // increment only if a new id is returned from the database
                         Console.WriteLine(idEmo);
