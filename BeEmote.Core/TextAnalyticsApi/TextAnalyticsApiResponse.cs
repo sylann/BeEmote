@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace BeEmote.Core
@@ -9,7 +10,7 @@ namespace BeEmote.Core
     /// It concists of a detected <see cref="Core.Language"/>, a list of key phrases depending on the language
     /// and a score of sentiment for the overall text (depending on the language).
     /// </summary>
-    public class TextAnalyticsApiResponse : IDescribable
+    public class TextAnalyticsApiResponse : IDescribable, INotifyPropertyChanged
     {
         #region Public Properties
 
@@ -42,7 +43,7 @@ namespace BeEmote.Core
         /// The list of key phrases formatted as a single string.
         /// Key phrases are separated by comma.
         /// </summary>
-        public string FormattedLanguage
+        public string FormattedLanguage 
         {
             get => Language is null
                 ? "Unknown language"
@@ -53,7 +54,7 @@ namespace BeEmote.Core
         /// The list of key phrases formatted as a single string.
         /// Key phrases are separated by comma.
         /// </summary>
-        public string FormattedKeyPhrases { get => KeyPhrases?.Aggregate((result, k) => result == null ? $"'{k}'" : $"{result}, '{k}'"); }
+        public string FormattedKeyPhrases { get => KeyPhrases?.Aggregate((result, k) => result == null ? $"{k}" : $"{result}, {k}"); }
 
         /// <summary>
         /// Gets the number of key phrases (returns 0 if the list is null or empty)
@@ -84,5 +85,16 @@ namespace BeEmote.Core
         /// </summary>
 
         #endregion
+
+#region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void FormattedLanguageUpdated()
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(FormattedLanguage)));
+        }
+
+#endregion
     }
 }

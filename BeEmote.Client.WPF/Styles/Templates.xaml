@@ -75,6 +75,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSizeXXLarge}" />
         <Setter Property="Padding" Value="15,5"/>
         <Setter Property="Text" Value=""/>
+        <Setter Property="Visibility" Value="Collapsed"/>
         <Style.Triggers>
             <!-- RequestStates.AwaitingResponse -->
             <DataTrigger Binding="{Binding Path=State}" Value="1">

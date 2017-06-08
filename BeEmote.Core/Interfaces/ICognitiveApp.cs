@@ -7,12 +7,16 @@ namespace BeEmote.Core
     /// with the 2 following Microsoft's Cognitive APIs:
     /// Emotion and TextAnalytics.
     /// </summary>
-    public interface ICognitiveApp<T>
+    public interface ICognitiveApp<T, Y>
     {
         /// <summary>
         /// Contains the model for a typical Microsoft's Cognitive API Response.
         /// </summary>
         T Response { get; set; }
+        /// <summary>
+        /// Contains the model for the statistics retrievable from the database.
+        /// </summary>
+        Y Stats { get; set; }
         /// <summary>
         /// Indicates the state in which the app currently is
         /// </summary>
