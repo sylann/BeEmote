@@ -43,7 +43,7 @@ namespace BeEmote.Core
         /// The list of key phrases formatted as a single string.
         /// Key phrases are separated by comma.
         /// </summary>
-        public string FormattedLanguage
+        public string FormattedLanguage 
         {
             get => Language is null
                 ? "Unknown language"
@@ -54,7 +54,7 @@ namespace BeEmote.Core
         /// The list of key phrases formatted as a single string.
         /// Key phrases are separated by comma.
         /// </summary>
-        public string FormattedKeyPhrases { get => KeyPhrases?.Aggregate((result, k) => result == null ? $"'{k}'" : $"{result}, '{k}'"); }
+        public string FormattedKeyPhrases { get => KeyPhrases?.Aggregate((result, k) => result == null ? $"{k}" : $"{result}, {k}"); }
 
         /// <summary>
         /// Gets the number of key phrases (returns 0 if the list is null or empty)
