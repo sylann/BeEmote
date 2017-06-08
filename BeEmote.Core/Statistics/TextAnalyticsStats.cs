@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace BeEmote.Core
 {
@@ -16,12 +17,21 @@ namespace BeEmote.Core
         /// <summary>
         /// Correspondence of a language name and its proportion in the database.
         /// </summary>
-        public ObservableCollection<LanguageRank> LanguageRanking { get; set; }
+        public List<LanguageRank> LanguageRanking { get; set; }
 
         /// <summary>
         /// Correspondence of a sentiment rank and its number of
         /// occurrences in the database.
         /// </summary>
-        public ObservableCollection<SentimentRank> SentimentDistribution { get; set; }
+        public List<SentimentRank> SentimentDistribution { get; set; }
+
+        public override string ToString()
+        {
+            var text = $"Average calls per day: {AverageCallsPerDay}\nLanguageRanking:\n";
+            LanguageRanking.ForEach(x => text += $"- {x.ToString()}\n");
+            text += "SentimentDistribution:\n";
+            SentimentDistribution.ForEach(x => text += $"- {x.ToString()}\n");
+            return text;
+        }
     }
 }

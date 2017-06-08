@@ -18,7 +18,6 @@
 /// </License>
 
 using BeEmote.Core;
-using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +29,7 @@ namespace BeEmote.Services
     /// <summary>
     /// Handles the global functioning of the application with the Emotion API Context
     /// </summary>
-    public class EmotionManager : ICognitiveApp<EmotionApiResponse>, IEmotionAPI, INotifyPropertyChanged
+    public class EmotionManager : ICognitiveApp<EmotionApiResponse, EmotionStats>, IEmotionAPI, INotifyPropertyChanged
     {
 
         #region Members
@@ -63,6 +62,11 @@ namespace BeEmote.Services
         public EmotionApiResponse Response { get; set; }
 
         /// <summary>
+        /// Contains the model for the statistics of the imganalysis table.
+        /// </summary>
+        public EmotionStats Stats { get; set; }
+
+        /// <summary>
         /// Indicates the state in which the app currently is
         /// </summary>
         public RequestStates State { get; set; } = RequestStates.NoData;
@@ -86,10 +90,14 @@ namespace BeEmote.Services
             // Insert into database
             var DB = new DataAccess();
             var dbSuccess = DB.UpdateEmotion(Response.Faces, ImagePath);
+            
+            // Get stats
+            Stats = DB.GetEmotionStats();
+            Console.WriteLine(Stats);
+
             // Resolve final state
             if (dbSuccess)
                 State = RequestStates.DatabaseUpdated;
-            // TODO: GetStatistics
         }
 
         /// <summary>

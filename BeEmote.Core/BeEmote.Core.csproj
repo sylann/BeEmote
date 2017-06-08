@@ -50,6 +50,8 @@
     <Compile Include="EmotionApi\Faces\Scores.cs" />
     <Compile Include="EmotionApi\Faces\Face.cs" />
     <Compile Include="EmotionApi\EmotionApiResponse.cs" />
+    <Compile Include="Statistics\EmotionStats.cs" />
+    <Compile Include="Statistics\Base\EmotionRank.cs" />
     <Compile Include="Interfaces\ICognitiveApp.cs" />
     <Compile Include="Interfaces\IConfigurable.cs" />
     <Compile Include="Interfaces\IEmotionAPI.cs" />
@@ -57,13 +59,16 @@
     <Compile Include="Interfaces\IDescribable.cs" />
     <Compile Include="Interfaces\IRequest.cs" />
     <Compile Include="Interfaces\ITextAnalyticsAPI.cs" />
+    <Compile Include="Statistics\Base\LanguageRank.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmotionApi\Faces\FaceRectangle.cs" />
     <Compile Include="RequestService\RequestConfiguration.cs" />
     <Compile Include="RequestService\RequestStates.cs" />
+    <Compile Include="Statistics\Base\SentimentRank.cs" />
     <Compile Include="TextAnalyticsApi\Language.cs" />
     <Compile Include="TextAnalyticsApi\TextAnalyticsApiResponse.cs" />
     <Compile Include="Interfaces\ITextAnalyticsParser.cs" />
+    <Compile Include="Statistics\TextAnalyticsStats.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Diagrams\TextAnalyticsDiagram.cd" />

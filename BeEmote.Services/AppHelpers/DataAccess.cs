@@ -22,6 +22,7 @@ using Dapper;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 
@@ -62,9 +63,37 @@ namespace BeEmote.Services
             return idText != 0;
         }
 
-        #endregion
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public EmotionStats GetEmotionStats()
+        {
+            return new EmotionStats()
+            {
+                AverageCallsPerDay = GetImgAverageCallsPerDay(),
+                AverageFaceCount = GetAverageFaceCount(),
+                DominantRanking = GetDominantRanking()
+            };
+        }
 
-        #region Emotion Methods
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public TextAnalyticsStats GetTextAnalyticsStats()
+        {
+            return new TextAnalyticsStats()
+            {
+                AverageCallsPerDay = GetTextAverageCallsPerDay(),
+                LanguageRanking = GetLanguageRanking(),
+                SentimentDistribution = GetSentimentDistribution()
+            };
+        }
+
+#endregion
+
+#region Emotion Insertion Methods
 
         /// <summary>
         /// Executes the insertinto_imganalysis stored procedure.
@@ -124,7 +153,7 @@ namespace BeEmote.Services
                             Surprise  = f.Scores.Surprise
                         }).SingleOrDefault();
                         // increment only if a new id is returned from the database
-                        Console.WriteLine(idEmo);
+
                         if (idEmo != 0)
                             newEmotionEntries++;
                     }
@@ -139,9 +168,9 @@ namespace BeEmote.Services
             }
         }
 
-        #endregion
+#endregion
 
-        #region TextAnalytics Methods
+#region TextAnalytics Insertion Methods
 
         /// <summary>
         /// Executes the insertinto_textanalysis stored procedure.
@@ -175,5 +204,140 @@ namespace BeEmote.Services
         }
 
         #endregion
+
+#region Emotion Select Methods
+        
+        /// <summary>
+        /// Gets the average number of calls to the Emotion API
+        /// (based on the number of entries in the imganalysis table)
+        /// </summary>
+        /// <returns>Average calls per day (nullable)</returns>
+        public double? GetImgAverageCallsPerDay()
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    return conn.Query<double>(DatabaseManager.ImgAverageCallsPerDay).SingleOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public double? GetAverageFaceCount()
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    return conn.Query<double>(DatabaseManager.AverageFaceCount).SingleOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<EmotionRank> GetDominantRanking()
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    return conn.Query<EmotionRank>(DatabaseManager.DominantRanking).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return null;
+            }
+        }
+
+#endregion
+
+#region TextAnalytics Select Methods
+
+        /// <summary>
+        /// Gets the average number of calls to the Emotion API
+        /// (based on the number of entries in the imganalysis table)
+        /// </summary>
+        /// <returns>Average calls per day (nullable)</returns>
+        public double? GetTextAverageCallsPerDay()
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    return conn.Query<double?>(DatabaseManager.AverageCallsPerDayTextAnalysis).SingleOrDefault();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the proportion of each known language. Descending order.
+        /// </summary>
+        /// <returns></returns>
+        public List<LanguageRank> GetLanguageRanking()
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    return conn.Query<LanguageRank>(DatabaseManager.LanguageDistribution).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the number of Entries corresponding to each rank:
+        ///   0.00 - 0.30
+        ///   0.31 - 0.60
+        ///   0.61 - 1.00
+        /// </summary>
+        /// <returns></returns>
+        public List<SentimentRank> GetSentimentDistribution()
+        {
+            try
+            {
+                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                {
+                    var temp = conn.Query<SentimentRank>(DatabaseManager.SentimentDistribution).ToList();
+                    return temp;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DB post-check: Connection failure:\n{ex.Message}");
+                return null;
+            }
+        }
+
+#endregion
+
     }
 }

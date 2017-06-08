@@ -74,62 +74,38 @@
                         <StackPanel>
                             <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
 
+                            <!-- Calls per day -->
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
                                 <Label Content="{Binding Stats.AverageCallsPerDay}" Style="{StaticResource DefaultLabel}" />
                             </StackPanel>
-                            <!-- Calls / day and Score distribution -->
-                            <StackPanel Grid.Column="0"  Orientation="Vertical" Margin="0,0,20,0">
-                                <ItemsControl>
-                                     
-                                </ItemsControl>
-                                <TextBlock Text="Score distribution" Style="{StaticResource SectionHeader}" />
 
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="25" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="25" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-
-                                <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                    <Label Content="0-30 score:" Style="{StaticResource CompactLabel}" />
-                                    <Label Content="25" Style="{StaticResource CompactLabel}" />
-                                </StackPanel>
-                            </StackPanel>
-
-                            <!-- Emotion distribution -->
-                            <StackPanel Grid.Column="1"  Orientation="Vertical">
-                                <TextBlock Text="Language distribution" Style="{StaticResource SectionHeader}" />
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel Orientation="Vertical">
-
+                            <!-- Language distribution -->
+                            <TextBlock Text="Score distribution" Style="{StaticResource SectionHeader}" />
+                            <ItemsControl ItemsSource="{Binding Stats.LanguageRanking}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                            <Label Content="Anger:" Style="{StaticResource CompactLabel}" />
-                                            <Label Content="25%" Style="{StaticResource CompactLabel}" />
+                                            <Label Content="{Binding Name}" Style="{StaticResource CompactLabel}" />
+                                            <Label Content="{Binding Proportion}" Style="{StaticResource CompactLabel}" />
                                         </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
+                            <!-- Score distribution -->
+                            <TextBlock Text="Score distribution" Style="{StaticResource SectionHeader}" />
+                            <ItemsControl ItemsSource="{Binding Stats.SentimentDistribution}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                            <Label Content="Contempt:" Style="{StaticResource CompactLabel}" />
-                                            <Label Content="15%" Style="{StaticResource CompactLabel}" />
+                                            <Label Content="{Binding Rank}" Style="{StaticResource CompactLabel}" />
+                                            <Label Content="{Binding Count}" Style="{StaticResource CompactLabel}" />
                                         </StackPanel>
-
-                                        <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                            <Label Content="Disgust:" Style="{StaticResource CompactLabel}" />
-                                            <Label Content="10%" Style="{StaticResource CompactLabel}" />
-                                        </StackPanel>
-
-                                        <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                            <Label Content="Fear:" Style="{StaticResource CompactLabel}" />
-                                            <Label Content="7%" Style="{StaticResource CompactLabel}" />
-                                        </StackPanel>
-
-                                    </StackPanel>
-                                </StackPanel>
-                            </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            
                         </StackPanel>
                     </Border>
                 </Grid>

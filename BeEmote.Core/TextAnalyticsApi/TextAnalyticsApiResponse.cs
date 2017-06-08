@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace BeEmote.Core
@@ -9,7 +10,7 @@ namespace BeEmote.Core
     /// It concists of a detected <see cref="Core.Language"/>, a list of key phrases depending on the language
     /// and a score of sentiment for the overall text (depending on the language).
     /// </summary>
-    public class TextAnalyticsApiResponse : IDescribable
+    public class TextAnalyticsApiResponse : IDescribable, INotifyPropertyChanged
     {
         #region Public Properties
 
@@ -84,5 +85,16 @@ namespace BeEmote.Core
         /// </summary>
 
         #endregion
+
+#region Events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void FormattedLanguageUpdated()
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(FormattedLanguage)));
+        }
+
+#endregion
     }
 }

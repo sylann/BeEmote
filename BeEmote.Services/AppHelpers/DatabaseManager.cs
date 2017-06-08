@@ -51,17 +51,17 @@ namespace BeEmote.Services
         #region Stored Procedures INSERT INTO
 
         /// <summary>
-        /// Stored procedure signature INSERT INTO imganalysis
+        /// Stored procedure signature: insertinto_imganalysis(@NbFaces,@ImagePath)
         /// </summary>
         public static string InsertIntoImgAnalysis { get => "insertinto_imganalysis(@NbFaces,@ImagePath)"; }
 
         /// <summary>
-        /// Stored procedure signature INSERT INTO emotion
+        /// Stored procedure signature: insertinto_emotion(@IdImg,@Dominant,@RLeft,@RTop,@RWidth,@RHeight,@Anger,@Contempt,@Disgust,@Fear,@Happiness,@Neutral,@Sadness,@Surprise)
         /// </summary>
         public static string InsertIntoEmotion { get => "insertinto_emotion(@IdImg,@Dominant,@RLeft,@RTop,@RWidth,@RHeight,@Anger,@Contempt,@Disgust,@Fear,@Happiness,@Neutral,@Sadness,@Surprise)"; }
 
         /// <summary>
-        /// Stored procedure signature INSERT INTO textanalysis
+        /// Stored procedure signature: insertinto_textanalysis(@LangName,@LangISO,@LangScore,@TextScore,@TextContent)
         /// </summary>
         public static string InsertIntoTextAnalysis { get => "insertinto_textanalysis(@LangName,@LangISO,@LangScore,@TextScore,@TextContent)"; }
 
@@ -70,48 +70,38 @@ namespace BeEmote.Services
         #region Stored Procedures Emotion
 
         /// <summary>
-        /// Stored procedure idea: SELECT COUNT(*) FROM imganalysis GROUP BY "Day of year"
+        /// Stored procedure signature: averagecallsperday_emotion
         /// </summary>
-        public static string CallsPerDayEmotion { get => "callsperday_emotion()"; }
+        public static string ImgAverageCallsPerDay { get => "averagecallsperday_emotion()"; }
 
         /// <summary>
-        /// Stored procedure idea: SELECT Average of COUNT(*) FROM imganalysis GROUP BY "Day of year"
+        /// Stored procedure signature: averagefacecount_emotion
         /// </summary>
-        public static string AverageCallsPerDayEmotion { get => "averagecallsperday_emotion()"; }
+        public static string AverageFaceCount { get => "averagefacecount_emotion()"; }
 
         /// <summary>
-        /// Stored procedure idea: SELECT Average of COUNT(nbfaces) FROM imganalysis
+        /// Stored procedure signature: dominantdistribution_emotion
         /// </summary>
-        public static string AverageFaceCountEmotion { get => "averagefacecount_emotion()"; }
-
-        /// <summary>
-        /// Stored procedure idea: SELECT COUNT(dominant) FROM emotion for each distinct emotion (order desc)
-        /// </summary>
-        public static string DominantDistributionEmotion { get => "dominantdistribution_emotion()"; }
+        public static string DominantRanking { get => "dominantdistribution_emotion()"; }
 
         #endregion
 
         #region Stored Procedures TextAnaytics
 
         /// <summary>
-        /// Stored procedure idea: SELECT COUNT(*) FROM textanalysis GROUP BY "Day of year"
-        /// </summary>
-        public static string CallsPerDayTextAnalysis { get => "callsperday_textanalysis()"; }
-
-        /// <summary>
-        /// Stored procedure idea: SELECT Average of COUNT(*) FROM textanalysis GROUP BY "Day of year"
+        /// Stored procedure signature: averagecallsperday_textanalysis
         /// </summary>
         public static string AverageCallsPerDayTextAnalysis { get => "averagecallsperday_textanalysis()"; }
-        
+
         /// <summary>
-        /// Stored procedure idea: SELECT COUNT(langname) / COUNT(*) FROM textanalysis GROUP BY langname
+        /// Stored procedure signature: languagedistribution_textanalysis
         /// </summary>
-        public static string LanguageDistributionTextAnalysis { get => "languagedistribution_textanalysis()"; }
-        
+        public static string LanguageDistribution { get => "languagedistribution_textanalysis()"; }
+
         /// <summary>
-        /// Stored procedure idea: SELECT COUNT(*) FROM textanalysis
+        /// Stored procedure signature: sentimentdistribution_textanalysis
         /// </summary>
-        public static string SentimentDistributionTextAnalysis { get => "sentimentdistribution_textanalysis()"; }
+        public static string SentimentDistribution { get => "sentimentdistribution_textanalysis()"; }
 
         #endregion
     }

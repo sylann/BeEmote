@@ -6,13 +6,19 @@
     public class EmotionRank
     {
         /// <summary>
-        /// The emotion name.
+        /// The emotion name:
+        ///   <see cref="Emotions"/>.
         /// </summary>
-        public Emotions Dominant { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// The count of occurrences in the database.
         /// </summary>
         public int Count { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Name}: {Count}";
+        }
     }
 }

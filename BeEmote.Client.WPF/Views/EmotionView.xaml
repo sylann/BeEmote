@@ -84,20 +84,31 @@
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
 
+                            <!-- AverageCallsPerDay -->
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="20" Style="{StaticResource EmphaseLabel}" />
+                                <Label Content="{Binding Stats.AverageCallsPerDay}" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
+                            <!-- AverageFaceCount -->
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="2" Style="{StaticResource EmphaseLabel}" />
+                                <Label Content="{Binding Stats.AverageFaceCount}" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Dominant Emotion:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="Anger" Style="{StaticResource EmphaseLabel}" />
-                            </StackPanel>
+                            <!-- DominantRanking -->
+                            <TextBlock Text="Dominant Ranking" Style="{StaticResource SectionHeader}" />
+                            <ItemsControl ItemsSource="{Binding Stats.DominantRanking}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
+                                            <Label Content="{Binding Name}" Style="{StaticResource CompactLabel}" />
+                                            <Label Content="{Binding Count}" Style="{StaticResource CompactLabel}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            
                         </StackPanel>
                     </Border>
 

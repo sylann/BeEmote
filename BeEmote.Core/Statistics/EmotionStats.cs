@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace BeEmote.Core
 {
@@ -22,6 +23,13 @@ namespace BeEmote.Core
         /// List of correspondence of an emotion name and its number of
         /// occurrences as a dominant emotion in the database.
         /// </summary>
-        public ObservableCollection<EmotionRank> DominantRanking { get; set; }
+        public List<EmotionRank> DominantRanking { get; set; }
+
+        public override string ToString()
+        {
+            var text = $"Average calls per day: {AverageCallsPerDay}\nAverage face count: {AverageFaceCount}\nDominantRanking:\n";
+            DominantRanking.ForEach(x => text += $"- {x.ToString()}\n");
+            return text;
+        }
     }
 }

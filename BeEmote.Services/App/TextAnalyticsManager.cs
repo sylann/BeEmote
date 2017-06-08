@@ -18,7 +18,6 @@
 /// </License>
 
 using BeEmote.Core;
-using PropertyChanged;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -28,7 +27,7 @@ namespace BeEmote.Services
     /// <summary>
     /// Handles the global functionning of the application with the Text Analytics API Context
     /// </summary>
-    public class TextAnalyticsManager : ICognitiveApp<TextAnalyticsApiResponse>, ITextAnalyticsAPI, INotifyPropertyChanged
+    public class TextAnalyticsManager : ICognitiveApp<TextAnalyticsApiResponse, TextAnalyticsStats>, ITextAnalyticsAPI, INotifyPropertyChanged
     {
         #region Members
 
@@ -45,6 +44,11 @@ namespace BeEmote.Services
         /// Contains the model for a typical Text Analytics API Response.
         /// </summary>
         public TextAnalyticsApiResponse Response { get; set; }
+
+        /// <summary>
+        /// Contains the model for the statistics of the textanalysis table.
+        /// </summary>
+        public TextAnalyticsStats Stats { get; set; }
 
         /// <summary>
         /// Indicates the state in which the app currently is
@@ -86,10 +90,14 @@ namespace BeEmote.Services
             // Insert into database
             var DB = new DataAccess();
             var dbSuccess = DB.UpdateTextAnalytics(Response.Language, Response.Score, TextToAnalyse);
+
+            // Get stats
+            Stats = DB.GetTextAnalyticsStats();
+            Console.WriteLine(Stats);
+
             // Resolve final state
             if (dbSuccess)
                 State = RequestStates.DatabaseUpdated;
-            // TODO: GetStatistics
         }
 
         /// <summary>
@@ -148,10 +156,13 @@ namespace BeEmote.Services
             var json = new JsonManager();
             // Updates the model
             Response.Language = json.GetLanguageFromJson(jsonResponse);
+            Response.FormattedLanguageUpdated();
+
             // resolve the current state
-            return string.IsNullOrEmpty(Response?.Language?.Name)
+            var result = string.IsNullOrEmpty(Response?.Language?.Name)
                 ? RequestStates.EmptyResult
                 : RequestStates.PartialResult;
+            return result;
         }
 
         /// <summary>
