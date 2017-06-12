@@ -245,6 +245,7 @@ ModelManifest.xml
 *.sql
 !beemote_user.sql
 !beemote_db.sql
+!update_procedures.sql
 
 # Custom Credential Data
 
