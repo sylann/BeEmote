@@ -156,7 +156,7 @@ namespace BeEmote.Services
             var json = new JsonManager();
             // Updates the model
             Response.Language = json.GetLanguageFromJson(jsonResponse);
-            Response.FormattedLanguageUpdated();
+            Response.LanguageUpdated();
 
             // resolve the current state
             var result = string.IsNullOrEmpty(Response?.Language?.Name)
@@ -176,6 +176,7 @@ namespace BeEmote.Services
             var json = new JsonManager();
             // Updates the model
             Response.KeyPhrases = json.GetKeyPhrasesFromJson(jsonResponse);
+            Response.KeyPhrasesUpdated();
             // resolve the current state
             return RequestStates.PartialResult;
         }
@@ -191,6 +192,7 @@ namespace BeEmote.Services
             var json = new JsonManager();
             // Updates the model
             Response.Score = json.GetScoreFromJson(jsonResponse);
+            Response.ScoreUpdated();
             // resolve the current state (if any info is lacking => partial result)
             return Response.KeyPhrases?.Count == 0
                 || Response.Score == null

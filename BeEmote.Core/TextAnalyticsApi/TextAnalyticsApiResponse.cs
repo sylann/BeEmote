@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeEmote.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,7 +8,7 @@ namespace BeEmote.Core
 {
     /// <summary>
     /// Information resulting from sending a text request to the Microsoft's Text Analytics API.
-    /// It concists of a detected <see cref="Core.Language"/>, a list of key phrases depending on the language
+    /// It consists of a detected <see cref="Core.Language"/>, a list of key phrases depending on the language
     /// and a score of sentiment for the overall text (depending on the language).
     /// </summary>
     public class TextAnalyticsApiResponse : IDescribable, INotifyPropertyChanged
@@ -27,28 +28,16 @@ namespace BeEmote.Core
         public List<string> KeyPhrases { get; set; }
 
         /// <summary>
-        /// The sentiment score for the analysed text.
+        /// The sentiment score for the analyzed text.
         /// A higher value means the text feels more positive and reciprocally.
         /// Requires that the language be known. Not every languages are supported.
         /// </summary>
         public double? Score { get; set; }
 
         /// <summary>
-        /// The list of key phrases formatted as a single string.
-        /// Key phrases are separated by comma.
+        /// The <see cref="Score"/> in percent
         /// </summary>
-        public string Sentiment { get => (Score == null) ? "-" : $"{Math.Round((double)Score * 100, 2)}%"; }
-
-        /// <summary>
-        /// The list of key phrases formatted as a single string.
-        /// Key phrases are separated by comma.
-        /// </summary>
-        public string FormattedLanguage 
-        {
-            get => Language is null
-                ? "Unknown language"
-                : $"{Language.Name}[{Language.Iso6391Name}] ({Language.Confidence})";
-        }
+        public string Sentiment { get => Formatter.Percent(Score); }
 
         /// <summary>
         /// The list of key phrases formatted as a single string.
@@ -71,7 +60,7 @@ namespace BeEmote.Core
         public void Describe()
         {
             Console.WriteLine($"\n==========================\nText Analytics API Result:\n");
-            Console.WriteLine($"Language detected: {FormattedLanguage})");
+            Console.WriteLine($"Language detected: {Language})");
             Console.WriteLine($"Sentiment: {Sentiment}");
             Console.WriteLine($"Key phrases:\n{FormattedKeyPhrases}");
         }
@@ -90,11 +79,21 @@ namespace BeEmote.Core
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void FormattedLanguageUpdated()
+        public void LanguageUpdated()
         {
-            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(FormattedLanguage)));
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(Language)));
         }
 
-#endregion
+        public void KeyPhrasesUpdated()
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(KeyPhrases)));
+        }
+
+        public void ScoreUpdated()
+        {
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(Score)));
+        }
+
+        #endregion
     }
 }

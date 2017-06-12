@@ -90,13 +90,13 @@
                             <!-- AverageCallsPerDay -->
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="{Binding Stats.AverageCallsPerDay, Converter={StaticResource InPercent}}" Style="{StaticResource EmphaseLabel}" />
+                                <Label Content="{Binding Stats.AverageCallsPerDay}" ContentStringFormat="{}{0:F2}" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
                             <!-- AverageFaceCount -->
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="{Binding Stats.AverageFaceCount, Converter={StaticResource InPercent}}" Style="{StaticResource EmphaseLabel}" />
+                                <Label Content="{Binding Stats.AverageFaceCount}" ContentStringFormat="{}{0:F2}" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
                             <!-- DominantRanking -->

@@ -32,9 +32,9 @@ namespace BeEmote.Services.Tests
             //Arrange 
             Language language = new Language()
             {
-                Name = "Anglais",
+                Name = "English",
                 Iso6391Name = "en",
-                Score = 100
+                Score = 1
             };
             double? sentiment = 50;
             string textContent = "Hello world !";

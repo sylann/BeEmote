@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeEmote.Common;
+using System;
 
 namespace BeEmote.Core
 {
@@ -8,23 +9,30 @@ namespace BeEmote.Core
     public class Language
     {
         /// <summary>
-        /// Name of the language
+        /// Name of the language.
+        ///   Ex: 'English'
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// This is the 2 character norm notation corresponding to the laguage Name.
+        /// This is the 2 character norm notation corresponding to the language Name.
+        ///   Ex: 'en'
         /// </summary>
         public string Iso6391Name { get; set; }
 
         /// <summary>
-        /// The score represents the confidence in the language detection
+        /// The score represents the confidence in the language detection.
+        ///   Ex: 0.56
         /// </summary>
         public double Score { get; set; }
 
         /// <summary>
-        /// The confidence score of the language, formatted as a percentage.
+        /// Describes the class properties
         /// </summary>
-        public string Confidence { get => $"{Math.Round(Score * 100, 2)}%"; }
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return $"{Name}[{Iso6391Name}] ({Formatter.Percent(Score)})";
+        }
     }
 }

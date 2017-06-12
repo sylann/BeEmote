@@ -52,7 +52,7 @@ namespace BeEmote.Core.Tests
             string excepted = "Unknown language";
 
             // Act
-            string result = formatLang.FormattedLanguage;
+            string result = formatLang.ToString();
 
             // Assert
             Assert.AreEqual(excepted, result);
@@ -74,7 +74,7 @@ namespace BeEmote.Core.Tests
             string expected = "English[en] (50%)";
 
             // Act
-            string result = formatLang.FormattedLanguage;
+            string result = formatLang.ToString();
 
             // Assert
             Assert.AreEqual(expected, result);
