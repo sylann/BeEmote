@@ -100,7 +100,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="facesCount"></param>
         /// <returns></returns>
-        public int InsertImgAnalysis(int facesCount, string imagePath)
+        public virtual int InsertImgAnalysis(int facesCount, string imagePath)
         {
             try
             {
@@ -125,7 +125,7 @@ namespace BeEmote.Services
         /// <summary>
         /// Executes the insertinto_emotion stored procedure.
         /// </summary>
-        public int InsertEmotion(List<Face> faces, int idImg)
+        public virtual int InsertEmotion(List<Face> faces, int idImg)
         {
             try
             {
@@ -178,7 +178,7 @@ namespace BeEmote.Services
         /// <param name="language"></param>
         /// <param name="sentiment"></param>
         /// <returns></returns>
-        public int InsertTextAnalysis(Language language, double? sentiment, string textContent)
+        public virtual int InsertTextAnalysis(Language language, double? sentiment, string textContent)
         {
             try
             {
