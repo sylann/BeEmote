@@ -41,14 +41,14 @@ namespace BeEmote.Core.Tests
         }
 
         [TestMethod()]
-        public void Condifence_ReturnCorrectPercent()
+        public void ToString_Returns_Correct_Format()
         {
             // Arrange
             var lang = new Language() { Name = "English", Iso6391Name = "en", Score = 0.5 };
-            string expected = "50%";
+            string expected = "English[en] (50%)";
 
             // Act
-            string result = lang.Confidence;
+            string result = lang.ToString();
 
             // Assert
             Assert.AreEqual(expected, result);
