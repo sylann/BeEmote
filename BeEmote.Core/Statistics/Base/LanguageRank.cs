@@ -1,4 +1,6 @@
-﻿namespace BeEmote.Core
+﻿using BeEmote.Common;
+
+namespace BeEmote.Core
 {
     /// <summary>
     /// Associates a language name to its count of occurrences in the database
@@ -19,7 +21,7 @@
 
         public override string ToString()
         {
-            return $"{Name}: {Proportion}";
+            return $"{Name}: {Formatter.Percent(Proportion)}";
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using BeEmote.Core;
+﻿using BeEmote.Common;
+using BeEmote.Core;
 using BeEmote.Services;
 using Microsoft.Win32;
 using System;
@@ -132,14 +133,14 @@ namespace BeEmote.Client.WPF
         {
             var currentFace = emotionApp.Response.Faces.ElementAt(SelectedFaceIndex);
             DominantEmotionLabel.Content = currentFace.GetDominantEmotion();
-            AngerLabel.Content = currentFace.Scores.AngerHR;
-            ContemptLabel.Content = currentFace.Scores.ContemptHR;
-            DisgustLabel.Content = currentFace.Scores.DisgustHR;
-            FearLabel.Content = currentFace.Scores.FearHR;
-            HappinessLabel.Content = currentFace.Scores.HappinessHR;
-            NeutralLabel.Content = currentFace.Scores.NeutralHR;
-            SadnessLabel.Content = currentFace.Scores.SadnessHR;
-            SurpriseLabel.Content = currentFace.Scores.SurpriseHR;
+            AngerLabel.Content = Formatter.Percent(currentFace.Scores.Anger);
+            ContemptLabel.Content = Formatter.Percent(currentFace.Scores.Contempt);
+            DisgustLabel.Content = Formatter.Percent(currentFace.Scores.Disgust);
+            FearLabel.Content = Formatter.Percent(currentFace.Scores.Fear);
+            HappinessLabel.Content = Formatter.Percent(currentFace.Scores.Happiness);
+            NeutralLabel.Content = Formatter.Percent(currentFace.Scores.Neutral);
+            SadnessLabel.Content = Formatter.Percent(currentFace.Scores.Sadness);
+            SurpriseLabel.Content = Formatter.Percent(currentFace.Scores.Surprise);
         }
 
         /// <summary>

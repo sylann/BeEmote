@@ -14,9 +14,6 @@
         /// - Database_User_Name
         /// - Database_User_Password
         /// </summary>
-        internal static string MysqlBeEmote
-        {
-            get => "Server=Host_Name; Database=Database_Name; Uid=Database_User_Name; Pwd=Database_User_Password;";
-        }
+        internal const string MysqlBeEmote = "Server=Host_Name; Database=Database_Name; Uid=Database_User_Name; Pwd=Database_User_Password;";
     }
 }

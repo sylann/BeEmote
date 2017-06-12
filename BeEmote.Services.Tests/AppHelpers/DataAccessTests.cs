@@ -27,21 +27,6 @@ namespace BeEmote.Services.Tests
         // - stats for emotions or text analytics should not change
 
         [TestMethod()]
-        public void UpdateEmotion_When_Return()
-        {
-            // TODO: Test the database properly
-            // Arrange
-            var imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "invalid-image-path.jpg");
-            var faces = new List<Face>();
-
-            // Act
-            var actual = db.UpdateEmotion(faces, imagePath);
-
-            // Assert
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void UpdateTextAnalytics_CorrectValues()
         {
             //Arrange 
@@ -232,39 +217,123 @@ namespace BeEmote.Services.Tests
         }
 
         [TestMethod]
-        public void GetImgAverageCallsPerDay_When_Return()
+        public void GetImgAverageCallsPerDay_Returns_Correct_Type()
         {
-            Assert.Fail();
+            // Arrange
+            var expected = typeof(double);
+
+            // Act
+            var actual = db.GetImgAverageCallsPerDay().GetType();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void GetAverageFaceCount_When_Return()
+        public void GetAverageFaceCount_Returns_Correct_Type()
         {
-            Assert.Fail();
+            // Arrange
+            var expected = typeof(double);
+
+            // Act
+            var actual = db.GetAverageFaceCount().GetType();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void GetDominantRanking_When_Return()
+        public void GetDominantRanking_Returns_Correct_Type()
         {
-            Assert.Fail();
+            // Arrange
+            var expected = typeof(List<EmotionRank>);
+
+            // Act
+            var actual = db.GetDominantRanking().GetType();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void GetTextAverageCallsPerDay_When_Return()
+        public void GetTextAverageCallsPerDay_Returns_Correct_Type()
         {
-            Assert.Fail();
+            // Arrange
+            var expected = typeof(double);
+
+            // Act
+            var actual = db.GetTextAverageCallsPerDay().GetType();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void GetLanguageRanking_When_Return()
+        public void GetLanguageRanking_Returns_Correct_Type()
         {
-            Assert.Fail();
+            // Arrange
+            var expected = typeof(List<LanguageRank>);
+
+            // Act
+            var actual = db.GetLanguageRanking().GetType();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod]
-        public void GetSentimentDistribution_When_Return()
+        public void GetSentimentDistribution_Returns_Correct_Type()
         {
-            Assert.Fail();
+            // Arrange
+            var expected = typeof(List<SentimentRank>);
+
+            // Act
+            var actual = db.GetSentimentDistribution().GetType();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void GetEmotionStats_When_Return()
+        {
+            //Arrange
+            var expected = new EmotionStats
+            {
+                AverageCallsPerDay = 7.5f,
+                AverageFaceCount = 0.7f,
+                DominantRanking = new List<EmotionRank>() { }
+            };
+            var dbMock = new Mock<DataAccess>();
+            dbMock.Setup(e => e.GetEmotionStats()).Returns(expected);
+            DataAccess mockObject = dbMock.Object;
+
+            //Act
+            var actual = mockObject.GetEmotionStats();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod()]
+        public void GetTextAnalyticsStats_When_Return()
+        {
+            //Arrange
+            var expected = new TextAnalyticsStats
+            {
+                AverageCallsPerDay = 7.5f,
+                LanguageRanking = new List<LanguageRank>() { },
+                SentimentDistribution = new List<SentimentRank>() { }
+            };
+            var dbMock = new Mock<DataAccess>();
+            dbMock.Setup(e => e.GetTextAnalyticsStats()).Returns(expected);
+            DataAccess mockObject = dbMock.Object;
+
+            //Act
+            var actual = mockObject.GetTextAnalyticsStats();
+
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
     }
 }

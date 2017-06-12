@@ -8,7 +8,10 @@
              d:DesignHeight="515" d:DesignWidth="750">
 
     <Grid Background="Transparent">
-
+        <Grid.Resources>
+            <ZoomPercentageConverter x:Key="InPercent" />
+        </Grid.Resources>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
@@ -87,24 +90,21 @@
                             <!-- AverageCallsPerDay -->
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="{Binding Stats.AverageCallsPerDay}" Style="{StaticResource EmphaseLabel}" />
+                                <Label Content="{Binding Stats.AverageCallsPerDay, Converter={StaticResource InPercent}}" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
                             <!-- AverageFaceCount -->
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="{Binding Stats.AverageFaceCount}" Style="{StaticResource EmphaseLabel}" />
+                                <Label Content="{Binding Stats.AverageFaceCount, Converter={StaticResource InPercent}}" Style="{StaticResource EmphaseLabel}" />
                             </StackPanel>
 
                             <!-- DominantRanking -->
-                            <TextBlock Text="Dominant Ranking" Style="{StaticResource SectionHeader}" />
+                            <TextBlock Text="Dominant Ranking:" Style="{StaticResource SectionHeader}" />
                             <ItemsControl ItemsSource="{Binding Stats.DominantRanking}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Style="{StaticResource CompactStack}">
-                                            <Label Content="{Binding Name}" Style="{StaticResource CompactLabel}" />
-                                            <Label Content="{Binding Count}" Style="{StaticResource CompactLabel}" />
-                                        </StackPanel>
+                                        <Label Content="{Binding}" Style="{StaticResource EmphaseLabel}" />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

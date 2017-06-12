@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BeEmote.Client.WPF"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="550" MinHeight="550"
+        Height="600" MinHeight="600"
         Width="750" MinWidth="750"
         WindowStartupLocation="CenterScreen">
 

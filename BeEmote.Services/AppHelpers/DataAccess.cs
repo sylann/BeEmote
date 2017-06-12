@@ -19,11 +19,8 @@
 
 using BeEmote.Core;
 using Dapper;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
 using System.Linq;
 
 namespace BeEmote.Services
@@ -35,7 +32,9 @@ namespace BeEmote.Services
     /// </summary>
     public class DataAccess
     {
-#region Main public methods
+        MySqlConnectionFactory DB = new MySqlConnectionFactory();
+
+        #region Main public methods
 
         /// <summary>
         /// Generates an entry in imganalysis table.
@@ -44,7 +43,7 @@ namespace BeEmote.Services
         /// </summary>
         /// <param name="faces">List of faces from the image</param>
         /// <returns>imgAnalysis AND emotion both succeeded?</returns>
-        public bool UpdateEmotion(List<Face> faces, string imagePath)
+        public virtual bool UpdateEmotion(List<Face> faces, string imagePath)
         {
             var idImg = InsertImgAnalysis(faces.Count, imagePath);
             var newEmotionEntries = InsertEmotion(faces, idImg);
@@ -56,7 +55,7 @@ namespace BeEmote.Services
         /// Generates an entry in textanalysis table.
         /// </summary>
         /// <returns>all procedures succeeded</returns>
-        public bool UpdateTextAnalytics(Language language, double? sentiment, string textContent)
+        public virtual bool UpdateTextAnalytics(Language language, double? sentiment, string textContent)
         {
             var idText = InsertTextAnalysis(language, sentiment, textContent);
 
@@ -64,10 +63,13 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// 
+        /// Returns an <see cref="EmotionStats"/> object with the following properties:
+        ///   AverageCallsPerDay,
+        ///   AverageFaceCount,
+        ///   DominantRanking
         /// </summary>
         /// <returns></returns>
-        public EmotionStats GetEmotionStats()
+        public virtual EmotionStats GetEmotionStats()
         {
             return new EmotionStats()
             {
@@ -78,10 +80,13 @@ namespace BeEmote.Services
         }
 
         /// <summary>
-        /// 
+        /// Returns an <see cref="TextAnalyticsStats"/> object with the following properties:
+        ///   AverageCallsPerDay,
+        ///   LanguageRanking,
+        ///   SentimentDistribution
         /// </summary>
         /// <returns></returns>
-        public TextAnalyticsStats GetTextAnalyticsStats()
+        public virtual TextAnalyticsStats GetTextAnalyticsStats()
         {
             return new TextAnalyticsStats()
             {
@@ -104,9 +109,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    int idImg = conn.Query<int>(DatabaseManager.InsertIntoImgAnalysis, new
+                    int idImg = conn.Query<int>(DatabaseProcedures.InsertIntoImgAnalysis, new
                         {
                             NbFaces   = facesCount,
                             ImagePath = imagePath
@@ -129,13 +134,13 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
                     Console.WriteLine($"DB pre-check: Number of faces in the image: {faces.Count}");
                     int newEmotionEntries = 0;
                     foreach (Face f in faces)
                     {
-                        int idEmo = conn.Query<int>(DatabaseManager.InsertIntoEmotion, new
+                        int idEmo = conn.Query<int>(DatabaseProcedures.InsertIntoEmotion, new
                         {
                             IdImg     = idImg,
                             Dominant  = f.GetDominantEmotion().ToString(),
@@ -182,9 +187,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    int idText = conn.Query<int>(DatabaseManager.InsertIntoTextAnalysis, new
+                    int idText = conn.Query<int>(DatabaseProcedures.InsertIntoTextAnalysis, new
                     {
                         LangName = language.Name,
                         LangISO = language.Iso6391Name,
@@ -203,7 +208,7 @@ namespace BeEmote.Services
             }
         }
 
-        #endregion
+#endregion
 
 #region Emotion Select Methods
         
@@ -216,9 +221,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    return conn.Query<double>(DatabaseManager.ImgAverageCallsPerDay).SingleOrDefault();
+                    return conn.Query<double>(DatabaseProcedures.ImgAverageCallsPerDay).SingleOrDefault();
                 }
             }
             catch (Exception ex)
@@ -236,9 +241,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    return conn.Query<double>(DatabaseManager.AverageFaceCount).SingleOrDefault();
+                    return conn.Query<double>(DatabaseProcedures.AverageFaceCount).SingleOrDefault();
                 }
             }
             catch (Exception ex)
@@ -256,9 +261,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    return conn.Query<EmotionRank>(DatabaseManager.DominantRanking).ToList();
+                    return conn.Query<EmotionRank>(DatabaseProcedures.DominantRanking).ToList();
                 }
             }
             catch (Exception ex)
@@ -281,9 +286,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    return conn.Query<double?>(DatabaseManager.AverageCallsPerDayTextAnalysis).SingleOrDefault();
+                    return conn.Query<double?>(DatabaseProcedures.AverageCallsPerDayTextAnalysis).SingleOrDefault();
                 }
             }
             catch (Exception ex)
@@ -301,9 +306,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    return conn.Query<LanguageRank>(DatabaseManager.LanguageDistribution).ToList();
+                    return conn.Query<LanguageRank>(DatabaseProcedures.LanguageDistribution).ToList();
                 }
             }
             catch (Exception ex)
@@ -324,9 +329,9 @@ namespace BeEmote.Services
         {
             try
             {
-                using (IDbConnection conn = new MySqlConnection(DatabaseManager.MySql_BeEmote))
+                using (var conn = DB.CreateConnection())
                 {
-                    var temp = conn.Query<SentimentRank>(DatabaseManager.SentimentDistribution).ToList();
+                    var temp = conn.Query<SentimentRank>(DatabaseProcedures.SentimentDistribution).ToList();
                     return temp;
                 }
             }

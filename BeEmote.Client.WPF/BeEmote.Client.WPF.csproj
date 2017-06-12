@@ -129,8 +129,6 @@
     </EmbeddedResource>
     <Resource Include="Fonts\Courgette-Regular.ttf" />
     <Resource Include="Fonts\DancingScript.ttf" />
-    <None Include="App.config" />
-    <None Include="Example.App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -139,6 +137,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BeEmote.Common\BeEmote.Common.csproj">
+      <Project>{5b17e76f-fa9b-4d3f-9ed2-f74d022ea4c6}</Project>
+      <Name>BeEmote.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BeEmote.Core\BeEmote.Core.csproj">
       <Project>{53842a7f-b2eb-44b3-ab29-4215b8559fda}</Project>
       <Name>BeEmote.Core</Name>

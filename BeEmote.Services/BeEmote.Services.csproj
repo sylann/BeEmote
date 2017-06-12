@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="AppHelpers\ByteArrayBuilder.cs" />
     <Compile Include="AppHelpers\DataAccess.cs" />
-    <Compile Include="AppHelpers\DatabaseManager.cs" />
+    <Compile Include="AppHelpers\MySqlConnectionFactory.cs" />
     <Compile Include="AppHelpers\RectangleDrawer.cs" />
     <Compile Include="App\EmotionManager.cs" />
     <Compile Include="Security\Example.ConnectionStrings.cs" />

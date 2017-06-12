@@ -65,11 +65,11 @@
     <Compile Include="AppHelpers\ByteArrayBuilderTests.cs" />
     <Compile Include="AppHelpers\DataAccessTests.cs" />
     <Compile Include="AppHelpers\JsonTests.cs" />
+    <Compile Include="AppHelpers\MySqlConnectionFactoryTests.cs" />
     <Compile Include="AppHelpers\RectangleDrawerTests.cs" />
     <Compile Include="AppHelpers\RequestManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App\EmotionAppTests.cs" />
-    <Compile Include="AppHelpers\DatabaseManagerTests.cs" />
     <Compile Include="App\TextAnalyticsAppTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,8 +83,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Example.App.config" />
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

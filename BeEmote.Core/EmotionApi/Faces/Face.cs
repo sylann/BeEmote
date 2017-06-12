@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BeEmote.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -54,15 +55,15 @@ namespace BeEmote.Core
                 , FaceRectangle.Width
                 , FaceRectangle.Height);
             Console.WriteLine("| Surprise:   {0,6} | Contempt:  {1,6} | Disgust:  {2,6} | Fear:   {3,6} |"
-                , Scores.SurpriseHR
-                , Scores.ContemptHR
-                , Scores.DisgustHR
-                , Scores.FearHR);
+                , Formatter.Percent(Scores.Surprise)
+                , Formatter.Percent(Scores.Contempt)
+                , Formatter.Percent(Scores.Disgust)
+                , Formatter.Percent(Scores.Fear));
             Console.WriteLine("| Happiness:  {0,6} | Neutral:   {1,6} | Sadness:  {2,6} | Anger:  {3,6} |\n"
-                , Scores.HappinessHR
-                , Scores.NeutralHR
-                , Scores.SadnessHR
-                , Scores.AngerHR);
+                , Formatter.Percent(Scores.Happiness)
+                , Formatter.Percent(Scores.Neutral)
+                , Formatter.Percent(Scores.Sadness)
+                , Formatter.Percent(Scores.Anger));
         }
 
         #endregion

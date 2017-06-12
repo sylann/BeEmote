@@ -8,11 +8,11 @@
         /// <summary>
         /// A valid activation key for the Emotion Api Cognitive Services.
         /// </summary>
-        public static string EmotionKey { get => "Valid_Microsoft_Emotion_API_Key"; }
+        public const string EmotionKey = "Valid_Microsoft_Emotion_API_Key";
 
         /// <summary>
         /// A valid activation key for the Emotion Api Cognitive Services.
         /// </summary>
-        public static string TextAnalyticsKey { get => "Valid_Microsoft_Text_Analytics_API_Key"; }
+        public const string TextAnalyticsKey = "Valid_Microsoft_Text_Analytics_API_Key";
     }
 }

@@ -44,12 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\JsonExamples.cs" />
+    <Compile Include="DatabaseProcedures.cs" />
     <Compile Include="EmotionApi\Base\Emotion.cs" />
     <Compile Include="EmotionApi\Base\Emotions.cs" />
     <Compile Include="EmotionApi\Faces\Scores.cs" />
     <Compile Include="EmotionApi\Faces\Face.cs" />
     <Compile Include="EmotionApi\EmotionApiResponse.cs" />
+    <Compile Include="Interfaces\IDbConnectioFactory.cs" />
     <Compile Include="Statistics\EmotionStats.cs" />
     <Compile Include="Statistics\Base\EmotionRank.cs" />
     <Compile Include="Interfaces\ICognitiveApp.cs" />
@@ -71,10 +72,10 @@
     <Compile Include="Statistics\TextAnalyticsStats.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Diagrams\TextAnalyticsDiagram.cd" />
-    <None Include="Diagrams\EmotionDiagram.cd" />
-    <None Include="Data\EmotionApiResponse1.json" />
-    <None Include="Data\EmotionApiResponse2.json" />
+    <ProjectReference Include="..\BeEmote.Common\BeEmote.Common.csproj">
+      <Project>{5b17e76f-fa9b-4d3f-9ed2-f74d022ea4c6}</Project>
+      <Name>BeEmote.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

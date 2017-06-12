@@ -57,7 +57,8 @@
 
     <Style TargetType="{x:Type TextBlock}" x:Key="SectionHeader" BasedOn="{StaticResource EmoteTextBlock}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}" />
-        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="TextDecorations" Value="Underline"/>
         <Setter Property="Margin" Value="10,3,0,1" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="HorizontalAlignment" Value="Left" />
@@ -218,7 +219,7 @@
 
     <Style TargetType="{x:Type Label}" x:Key="CompactLabel" BasedOn="{StaticResource BaseStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
-        <Setter Property="Foreground" Value="{StaticResource WhiteBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
         <Setter Property="Padding" Value="5,0"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
