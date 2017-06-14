@@ -1,10 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BeEmote.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BeEmote.Services.Tests
 {
@@ -18,21 +12,18 @@ namespace BeEmote.Services.Tests
         public void LeftResize_Change_With_ValidValues()
         {
             //Arrange
+            var drawer = new RectangleDrawer();
             int left = 20;
-            double canvaWidth = 10;
+            double canvasWidth = 10;
             double imageWidth = 8;
             double initialWidth = 4;
-            double offset = 3;
-            double result1;
-            double result2;
+            var expected = 0.5d;
 
             //Act
-            result1 = (canvaWidth - imageWidth) / 2;
-            result2 = offset + (left / initialWidth / imageWidth);
+            var actual = drawer.LeftResize(left, canvasWidth, imageWidth, initialWidth);
 
             //Assert
-            Assert.AreEqual(result1, 1);
-            Assert.AreEqual(result2, 3.625);
+            Assert.AreEqual(expected, actual);
         }
 
         [TestMethod()]

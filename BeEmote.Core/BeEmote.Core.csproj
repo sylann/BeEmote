@@ -50,6 +50,7 @@
     <Compile Include="EmotionApi\Faces\Scores.cs" />
     <Compile Include="EmotionApi\Faces\Face.cs" />
     <Compile Include="EmotionApi\EmotionApiResponse.cs" />
+    <Compile Include="Interfaces\IDbAccess.cs" />
     <Compile Include="Interfaces\IDbConnectioFactory.cs" />
     <Compile Include="Statistics\EmotionStats.cs" />
     <Compile Include="Statistics\Base\EmotionRank.cs" />

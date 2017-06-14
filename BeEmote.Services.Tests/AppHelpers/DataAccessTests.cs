@@ -52,13 +52,13 @@ namespace BeEmote.Services.Tests
             //Arrange 
             int facesCount = 4;
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "oberyn-wear-helmet.jpg");
-            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+            var mockHelper = new Mock<IDbAccess>();
 
             mockHelper.Setup(e => e.InsertImgAnalysis(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(1);
 
             //Act
-            DataAccess mockObject = mockHelper.Object;
+            IDbAccess mockObject = mockHelper.Object;
 
             //Assert
             Assert.AreNotEqual(0, mockObject.InsertImgAnalysis(facesCount, imagePath));
@@ -70,13 +70,13 @@ namespace BeEmote.Services.Tests
             //Arrange 
             int facesCount = 4;
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "oberyn-wear-helmet.jpg");
-            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+            var mockHelper = new Mock<IDbAccess>();
 
             mockHelper.Setup(e => e.InsertImgAnalysis(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(0);
 
             //Act
-            DataAccess mockObject = mockHelper.Object;
+            IDbAccess mockObject = mockHelper.Object;
 
             //Assert
             Assert.AreEqual(0, mockObject.InsertImgAnalysis(facesCount, imagePath));
@@ -111,13 +111,13 @@ namespace BeEmote.Services.Tests
             };
             List<Face> faces = new List<Face>() { face };
             int idImg = 1;
-            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+            var mockHelper = new Mock<IDbAccess>();
 
             mockHelper.Setup(e => e.InsertEmotion(It.IsAny<List<Face>>(), It.IsAny<int>()))
                 .Returns(idImg);
 
             //Act
-            DataAccess mockObject = mockHelper.Object;
+            IDbAccess mockObject = mockHelper.Object;
 
             //Assert
             Assert.AreNotEqual(0, mockObject.InsertEmotion(faces, idImg));
@@ -152,13 +152,13 @@ namespace BeEmote.Services.Tests
             };
             List<Face> faces = new List<Face>() { face };
             int idImg = 0;
-            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+            var mockHelper = new Mock<IDbAccess>();
 
             mockHelper.Setup(e => e.InsertEmotion(It.IsAny<List<Face>>(), It.IsAny<int>()))
                 .Returns(idImg);
 
             //Act
-            DataAccess mockObject = mockHelper.Object;
+            IDbAccess mockObject = mockHelper.Object;
 
             //Assert
             Assert.AreEqual(0, mockObject.InsertEmotion(faces, idImg));
@@ -178,13 +178,13 @@ namespace BeEmote.Services.Tests
             string textContent = "Hello world !";
             int idText = 1;
 
-            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+            var mockHelper = new Mock<IDbAccess>();
 
             //Act
 
             mockHelper.Setup(e => e.InsertTextAnalysis(It.IsAny<Language>(), It.IsAny<double?>(), It.IsAny<string>()))
                 .Returns(idText);
-            DataAccess mockObject = mockHelper.Object;
+            IDbAccess mockObject = mockHelper.Object;
 
             //Assert
             Assert.AreNotEqual(0, mockObject.InsertTextAnalysis(lang, sentiment, textContent));
@@ -204,13 +204,12 @@ namespace BeEmote.Services.Tests
             string textContent = "Hello world !";
             int idText = 0;
 
-            Mock<DataAccess> mockHelper = new Mock<DataAccess>();
+            var mockHelper = new Mock<IDbAccess>();
 
             //Act
-
             mockHelper.Setup(e => e.InsertTextAnalysis(It.IsAny<Language>(), It.IsAny<double?>(), It.IsAny<string>()))
                 .Returns(idText);
-            DataAccess mockObject = mockHelper.Object;
+            IDbAccess mockObject = mockHelper.Object;
 
             //Assert
             Assert.AreEqual(0, mockObject.InsertTextAnalysis(lang, sentiment, textContent));
@@ -304,9 +303,9 @@ namespace BeEmote.Services.Tests
                 AverageFaceCount = 0.7f,
                 DominantRanking = new List<EmotionRank>() { }
             };
-            var dbMock = new Mock<DataAccess>();
+            var dbMock = new Mock<IDbAccess>();
             dbMock.Setup(e => e.GetEmotionStats()).Returns(expected);
-            DataAccess mockObject = dbMock.Object;
+            IDbAccess mockObject = dbMock.Object;
 
             //Act
             var actual = mockObject.GetEmotionStats();
@@ -325,9 +324,9 @@ namespace BeEmote.Services.Tests
                 LanguageRanking = new List<LanguageRank>() { },
                 SentimentDistribution = new List<SentimentRank>() { }
             };
-            var dbMock = new Mock<DataAccess>();
+            var dbMock = new Mock<IDbAccess>();
             dbMock.Setup(e => e.GetTextAnalyticsStats()).Returns(expected);
-            DataAccess mockObject = dbMock.Object;
+            IDbAccess mockObject = dbMock.Object;
 
             //Act
             var actual = mockObject.GetTextAnalyticsStats();
