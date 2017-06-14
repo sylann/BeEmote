@@ -7,9 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="600" MinHeight="600"
-        Width="750" MinWidth="750"
+        Width="1250" MinWidth="1250"
         WindowStartupLocation="CenterScreen">
-
     <Grid>
 
         <!-- CONTENT OF PAGES -->

@@ -22,6 +22,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
 
             <!-- Left View: text input -->
@@ -31,47 +32,48 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
                         <TextBlock Grid.Row="0" Text="Text input" Style="{StaticResource ControlHeader}" />
                         <TextBox Grid.Row="1" Style="{StaticResource BigTextBox}" x:Name="TextToAnalyseBox" Text="{Binding TextToAnalyse}"/>
                         <Button Grid.Row="1" Style="{StaticResource AnalyzeTextButton}" Click="AnalyzeTextButton_Click"/>
+                        <TextBlock Grid.Row="2" Text="{Binding State}" Style="{StaticResource ImageRequestFeedback}"/>
                     </Grid>
                 </Border>
             </Border>
 
-            <!-- Right View: Statistics and results -->
-            <Border Grid.Column="1" Margin="5,10,10,10">
+            <!-- Statistics and results -->
+            <Border Grid.Column="1" Margin="5,10,5,10">
                 <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Right View: Top: Analyze results -->
-                        <Border Grid.Row="0" Style="{StaticResource PaddedWhiteSubControl}">
-                            <StackPanel>
-                                <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label Content="{Binding Response.Language}" Style="{StaticResource EmphaseLabel}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
-                                    <Label Content="{Binding Response.Score, Mode=OneWay}" ContentStringFormat="{}{0:P}"  Style="{StaticResource EmphaseLabel}"/>
-                                </StackPanel>
-                                <TextBlock Text="key Phrases:" Style="{StaticResource SectionHeader}" />
-                                <ItemsControl ItemsSource="{Binding Response.KeyPhrases, Mode=TwoWay}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Label Content="{Binding}" Style="{StaticResource EmphaseLabel}" />
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                    <!-- Middle View: Analyze results -->
+                    <Border Style="{StaticResource PaddedWhiteSubControl}">
+                        <StackPanel>
+                            <TextBlock Text="Text Analytics results" Style="{StaticResource SubControlHeader}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Language:" Style="{StaticResource DefaultLabel}"/>
+                                <Label Content="{Binding Response.Language}" Style="{StaticResource EmphaseLabel}"/>
                             </StackPanel>
-                        </Border>
-                        <!-- Right View: Bottom: Statistics -->
-                    <Border Grid.Row="1" Style="{StaticResource PaddedWhiteSubControl}">
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Sentiment:" Style="{StaticResource DefaultLabel}"/>
+                                <Label Content="{Binding Response.Score, Mode=OneWay}" ContentStringFormat="{}{0:P}"  Style="{StaticResource EmphaseLabel}"/>
+                            </StackPanel>
+                            <TextBlock Text="key Phrases:" Style="{StaticResource SectionHeader}" />
+                            <ItemsControl ItemsSource="{Binding Response.KeyPhrases, Mode=TwoWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding}" Style="{StaticResource CompactLabel}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border Grid.Column="2" Margin="5,10,10,10">
+                <Grid>
+                    <!-- Right View: Statistics -->
+                    <Border Style="{StaticResource PaddedWhiteSubControl}">
                         <StackPanel>
                             <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
                             <!-- Calls per day -->

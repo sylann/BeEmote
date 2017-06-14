@@ -25,7 +25,8 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
 
             <!-- Left part of the screen -->
@@ -75,118 +76,112 @@
             </Border>
 
             <!-- Right part of the screen -->
-            <Border Grid.Column="1" Padding="5,10,10,10">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+            <Border Grid.Column="1" Padding="5,10,5,10">
+                <!-- Analyse result -->
+                <Border Style="{StaticResource PaddedWhiteSubControl}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Image analyze result" Style="{StaticResource SubControlHeader}" />
 
-                    <!-- Statistics -->
-                    <Border Grid.Row="0" Style="{StaticResource PaddedWhiteSubControl}">
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
-
-                            <!-- AverageCallsPerDay -->
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="{Binding Stats.AverageCallsPerDay}" ContentStringFormat="{}{0:F2}" Style="{StaticResource EmphaseLabel}" />
-                            </StackPanel>
-
-                            <!-- AverageFaceCount -->
-                            <StackPanel Orientation="Horizontal">
-                                <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
-                                <Label Content="{Binding Stats.AverageFaceCount}" ContentStringFormat="{}{0:F2}" Style="{StaticResource EmphaseLabel}" />
-                            </StackPanel>
-
-                            <!-- DominantRanking -->
-                            <TextBlock Text="Dominant Ranking:" Style="{StaticResource SectionHeader}" />
-                            <ItemsControl ItemsSource="{Binding Stats.DominantRanking}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Label Content="{Binding}" Style="{StaticResource EmphaseLabel}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            
+                        <!-- Number of faces -->
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                            <Label Content="Face N° " Style="{StaticResource DefaultLabel}" />
+                            <Label x:Name="SelectedFaceLabel" Style="{StaticResource EmphaseLabel}" />
                         </StackPanel>
-                    </Border>
-
-                    <!-- Analyse result -->
-                    <Border Grid.Row="1" Style="{StaticResource PaddedWhiteSubControl}">
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                            <TextBlock Text="Image analyze result" Style="{StaticResource SubControlHeader}" />
-
-                            <!-- Number of faces -->
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <Label Content="Face N° " Style="{StaticResource DefaultLabel}" />
-                                <Label x:Name="SelectedFaceLabel" Style="{StaticResource EmphaseLabel}" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                                <Label Content=" The dominant emotion is " Style="{StaticResource DefaultLabel}" />
-                                <Label x:Name="DominantEmotionLabel" Style="{StaticResource EmphaseLabel}" />
-                            </StackPanel>
-
-                            <!-- Emotion table -->
-                            <Grid Margin="10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-
-                                <DockPanel Grid.Row="0" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Anger:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="AngerLabel" Style="{StaticResource EmotionScore}" />
-                                </DockPanel>
-
-                                <DockPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Contempt:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="ContemptLabel" Style="{StaticResource EmotionScore}" />
-                                </DockPanel>
-
-                                <DockPanel Grid.Row="2" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Disgust:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="DisgustLabel" Style="{StaticResource EmotionScore}" />
-                                </DockPanel>
-
-                                <DockPanel Grid.Row="3" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Fear:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="FearLabel" Style="{StaticResource EmotionScore}" />
-                                </DockPanel>
-
-                                <DockPanel Grid.Row="0" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Happiness:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="HappinessLabel" Style="{StaticResource EmotionScore}" />
-                                </DockPanel>
-
-                                <DockPanel Grid.Row="1" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Neutral:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="NeutralLabel" Style="{StaticResource EmotionScore}" />
-                                </DockPanel>
-
-                                <DockPanel Grid.Row="2" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Sadness:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="SadnessLabel" Style="{StaticResource EmotionScore}" />
-                                </DockPanel>
-
-                                <DockPanel Grid.Row="3" Grid.Column="1" Style="{StaticResource EmotionLabelContainer}">
-                                    <Label Content="Surprise:" Style="{StaticResource EmotionLabel}" />
-                                    <Label x:Name="SurpriseLabel" Style="{StaticResource EmotionScore}"/>
-                                </DockPanel>
-                            </Grid>
-
+                        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                            <Label Content="Dominant: " Style="{StaticResource DefaultLabel}" />
+                            <Label x:Name="DominantEmotionLabel" Style="{StaticResource EmphaseLabel}" />
                         </StackPanel>
-                    </Border>
 
-                </Grid>
+                        <!-- Emotion table -->
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <DockPanel Grid.Row="0" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Anger:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="AngerLabel" Style="{StaticResource EmotionScore}" />
+                            </DockPanel>
+
+                            <DockPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Contempt:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="ContemptLabel" Style="{StaticResource EmotionScore}" />
+                            </DockPanel>
+
+                            <DockPanel Grid.Row="2" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Disgust:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="DisgustLabel" Style="{StaticResource EmotionScore}" />
+                            </DockPanel>
+
+                            <DockPanel Grid.Row="3" Grid.Column="0" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Fear:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="FearLabel" Style="{StaticResource EmotionScore}" />
+                            </DockPanel>
+
+                            <DockPanel Grid.Row="4" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Happiness:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="HappinessLabel" Style="{StaticResource EmotionScore}" />
+                            </DockPanel>
+
+                            <DockPanel Grid.Row="5" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Neutral:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="NeutralLabel" Style="{StaticResource EmotionScore}" />
+                            </DockPanel>
+
+                            <DockPanel Grid.Row="6" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Sadness:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="SadnessLabel" Style="{StaticResource EmotionScore}" />
+                            </DockPanel>
+
+                            <DockPanel Grid.Row="7" Style="{StaticResource EmotionLabelContainer}">
+                                <Label Content="Surprise:" Style="{StaticResource EmotionLabel}" />
+                                <Label x:Name="SurpriseLabel" Style="{StaticResource EmotionScore}"/>
+                            </DockPanel>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
             </Border>
 
+            <!-- Right part of the screen -->
+            <Border Grid.Column="2" Padding="5,10,10,10">
+                <!-- Statistics -->
+                <Border Style="{StaticResource PaddedWhiteSubControl}">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="Statistics" Style="{StaticResource SubControlHeader}" />
+
+                        <!-- AverageCallsPerDay -->
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Calls per day:" Style="{StaticResource DefaultLabel}" />
+                            <Label Content="{Binding Stats.AverageCallsPerDay}" ContentStringFormat="{}{0:F2}" Style="{StaticResource EmphaseLabel}" />
+                        </StackPanel>
+
+                        <!-- AverageFaceCount -->
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Faces per call:" Style="{StaticResource DefaultLabel}" />
+                            <Label Content="{Binding Stats.AverageFaceCount}" ContentStringFormat="{}{0:F2}" Style="{StaticResource EmphaseLabel}" />
+                        </StackPanel>
+
+                        <!-- DominantRanking -->
+                        <TextBlock Text="Dominant Ranking:" Style="{StaticResource SectionHeader}" />
+                        <ItemsControl ItemsSource="{Binding Stats.DominantRanking}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding}" Style="{StaticResource EmphaseLabel}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+                </Border>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>

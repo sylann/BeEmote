@@ -83,17 +83,20 @@
                 <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
                 <Setter Property="Foreground" Value="{StaticResource TextBlueBrush}"/>
                 <Setter Property="Text" Value="Analyzing"/>
+                <Setter Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <!-- RequestStates.EmptyResult -->
             <DataTrigger Binding="{Binding Path=State}" Value="2">
                 <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
                 <Setter Property="Foreground" Value="Red"/>
                 <Setter Property="Text" Value="Analysis failed"/>
+                <Setter Property="Visibility" Value="Visible"/>
             </DataTrigger>
             <!-- No image in the image container -->
             <DataTrigger Binding="{Binding ElementName=EmotionImage, Path=Source}" Value="{x:Null}">
                 <Setter Property="Background" Value="{StaticResource DarkGrayMaskBrush}"/>
                 <Setter Property="Text" Value="No image loaded!" />
+                <Setter Property="Visibility" Value="Visible"/>
             </DataTrigger>
         </Style.Triggers>
     </Style>
@@ -218,10 +221,10 @@
     </Style>
 
     <Style TargetType="{x:Type Label}" x:Key="CompactLabel" BasedOn="{StaticResource BaseStyle}">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
         <Setter Property="Foreground" Value="{StaticResource TextDarkBlueBrush}"/>
         <Setter Property="Padding" Value="5,0"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
 

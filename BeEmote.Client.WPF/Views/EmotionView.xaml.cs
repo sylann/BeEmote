@@ -66,8 +66,6 @@ namespace BeEmote.Client.WPF
             DataContext = emotionApp;
             // Listen to window resizing to update rectangles size
             ImageContainer.SizeChanged += OnCanvasSizeChanged;
-            // Dummy data for testing purposes
-            emotionApp.ImagePath = "http://s.eatthis-cdn.com/media/images/ext/543627202/happy-people-friends.jpg";
         }
 
         #endregion
